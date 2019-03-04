@@ -35,9 +35,11 @@ Features
 Contribute
 ----------
 
-* python3 -m venv ~/.venv-py3
-* source ~/.venv-py3/bin/activate.fish (<= adjust)
-* pip install -r requirements_dev.txt
+```bash
+python3 -m venv ~/.venv-py3
+source ~/.venv-py3/bin/activate.fish # <= adjust
+pip install -r requirements_dev.txt
+```
 
 Credits
 -------

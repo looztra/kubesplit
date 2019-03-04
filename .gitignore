@@ -103,3 +103,6 @@ ENV/
 
 # sample files
 samples/
+
+# vscode
+.vscode/
