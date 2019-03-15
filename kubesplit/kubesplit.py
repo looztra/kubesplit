@@ -201,8 +201,9 @@ def create_root_dir(root_directory: str) -> None:
 
 
 def clean_root_dir(root_directory: str) -> None:
-    shutil.rmtree(root_directory)
-    os.makedirs(root_directory)
+    if os.path.isdir(root_directory):
+        shutil.rmtree(root_directory)
+        os.makedirs(root_directory)
 
 
 def save_descriptors_to_dir(descriptors, root_directory, yaml_instance=YAML(typ="rt")):
@@ -262,12 +263,16 @@ def get_opinionated_yaml_writer(writer_config: YamlWriterConfig = YamlWriterConf
     return yaml
 
 
-def convert_input_to_files_in_directory(input, root_directory: str):
+def convert_input_to_files_in_directory(input, root_directory: str) -> None:
     yaml = get_opinionated_yaml_writer()
     descriptors = convert_input_to_descriptors(input, yaml)
-    namespaces = get_all_namespace(descriptors)
-    prepare_namespace_directories(root_directory, namespaces)
-    save_descriptors_to_dir(descriptors, root_directory, yaml)
+    if len(descriptors) > 0:
+        namespaces = get_all_namespace(descriptors)
+        prepare_namespace_directories(root_directory, namespaces)
+        save_descriptors_to_dir(descriptors, root_directory, yaml)
+    else:
+        logging.error(
+            "Nothing found in provided input, check for previous errors")
 
 
 def main():
