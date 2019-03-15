@@ -6,6 +6,7 @@ import logging
 import shutil
 import argparse
 from ruamel.yaml import YAML
+from ruamel.yaml.scanner import ScannerError
 from typing import Dict, Set
 
 
@@ -14,16 +15,19 @@ class YamlWriterConfig:
     Config stanza for ruamel.yaml.YAML parser/writer with opinionated defaults
     """
 
-    def __init__(self, explicit_start: bool = True,
-                 explicit_end: bool = False,
-                 default_flow_style: bool = False,
-                 dash_inwards: bool = True,
-                 quotes_preserved: bool = True,
-                 parsing_mode: str = 'rt'):
+    def __init__(
+        self,
+        explicit_start: bool = True,
+        explicit_end: bool = False,
+        default_flow_style: bool = False,
+        dash_inwards: bool = True,
+        quotes_preserved: bool = True,
+        parsing_mode: str = "rt",
+    ):
         """
             Args:
 
-            explicit_start: write the start of the yaml doc even when there is \
+            explicit_start: write the start of the yaml doc even when there is\
                 only one done in the file
             default_flow_style: if False, block style will be used for nested \
                     arrays/maps
@@ -62,7 +66,8 @@ class K8SDescriptor:
         else:
             ns_or_cluster_wide = namespace
         self.id = "ns:{0}/kind:{1}/name:{2}".format(
-            ns_or_cluster_wide, kind, name)
+            ns_or_cluster_wide, kind, name
+        )
 
     def hasNamespace(self) -> bool:
         return self.namespace is not None
@@ -77,18 +82,24 @@ class K8SDescriptor:
         return "{0}{1}--{2}.yml".format(
             self.get_order_prefix(),
             self.kind.lower(),
-            self.name.lower().replace(":", "-")
+            self.name.lower().replace(":", "-"),
         )
 
     def get_order_prefix(self) -> str:
         if self.kind.lower() in K8SDescriptor._order_prefixes:
-            return "{0}--".format(K8SDescriptor._order_prefixes[self.kind.lower()])
+            return "{0}--".format(
+                K8SDescriptor._order_prefixes[self.kind.lower()]
+            )
         else:
-            return ''
+            return ""
 
     def compute_filename_with_namespace(self, root_directory) -> str:
-        if(self.hasNamespace()):
-            return os.path.join(root_directory, self.compute_namespace_dirname(), self.compute_filename())
+        if self.hasNamespace():
+            return os.path.join(
+                root_directory,
+                self.compute_namespace_dirname(),
+                self.compute_filename(),
+            )
         else:
             return os.path.join(root_directory, self.compute_filename())
 
@@ -97,85 +108,123 @@ def parse_cli():
     """Parse the cli args"""
     my_args = dict()
     parser = argparse.ArgumentParser(
-        description='''Split a set of Kubernetes descriptors to a set of files.
-            The yaml format of the generated files can be tuned using the same \
+        description="""Split a set of Kubernetes descriptors to a set of files.
+            The yaml format of the generated files can be tuned using the same\
                 parameters as the one used by Yamkix.
             By default, explicit_start is `On`, explicit_end is `Off`\
             and array elements are pushed inwards the start of the \
             matching sequence. Comments are preserved thanks to default \
             parsing mode `rt`.
-        ''')
-    parser.add_argument('-i',
-                        '--input',
-                        required=False,
-                        help='the file to parse, or STDIN if not specified or if value is -')
-    parser.add_argument('-t',
-                        '--typ',
-                        required=False,
-                        default='rt',
-                        help='the yaml parser mode. Can be `safe` or `rt`')
-    parser.add_argument('-o', '--output-dir',
-                        required=True,
-                        help='the name of the output target directory.\
-                            The target directory will be created if it does not exist \
-                                if it\'s possible')
-    parser.add_argument('-n', '--no-explicit-start',
-                        action='store_true',
-                        help='by default, explicit start (---) of the yaml doc \
-                                is `On`, you can disable it with this option')
-    parser.add_argument('-e', '--explicit-end',
-                        action='store_true',
-                        help='by default, explicit end (...) of the yaml doc \
-                                is `Off`, you can enable it with this option')
-    parser.add_argument('-q', '--no-quotes-preserved',
-                        action='store_true',
-                        help='by default, quotes are preserved \
-                                you can disable this with this option')
-    parser.add_argument('-f', '--default-flow-style',
-                        action='store_true',
-                        help='enable the default flow style \
-                                `Off` by default. In default flow style \
-                                (with typ=`rt`), maps and lists are written \
-                                like json')
-    parser.add_argument('-d', '--no-dash-inwards',
-                        action='store_true',
-                        help='by default, dash are pushed inwards \
-                                use `--no-dash-inwards` to have the dash \
-                                start at the sequence level')
-    parser.add_argument('-c', '--clean-output-dir',
-                        action='store_true',
-                        help='clean the output directory (rmtree) if set (default is False)')
+        """
+    )
+    parser.add_argument(
+        "-i",
+        "--input",
+        required=False,
+        help="the file to parse, or STDIN if not specified or if value is -",
+    )
+    parser.add_argument(
+        "-t",
+        "--typ",
+        required=False,
+        default="rt",
+        help="the yaml parser mode. Can be `safe` or `rt`",
+    )
+    parser.add_argument(
+        "-o",
+        "--output-dir",
+        required=True,
+        help="the name of the output target directory.\
+                The target directory will be created if it does not\
+                exist if it's possible",
+    )
+    parser.add_argument(
+        "-n",
+        "--no-explicit-start",
+        action="store_true",
+        help="by default, explicit start (---) of the yaml doc \
+                is `On`, you can disable it with this option",
+    )
+    parser.add_argument(
+        "-e",
+        "--explicit-end",
+        action="store_true",
+        help="by default, explicit end (...) of the yaml doc \
+                is `Off`, you can enable it with this option",
+    )
+    parser.add_argument(
+        "-q",
+        "--no-quotes-preserved",
+        action="store_true",
+        help="by default, quotes are preserved \
+                you can disable this with this option",
+    )
+    parser.add_argument(
+        "-f",
+        "--default-flow-style",
+        action="store_true",
+        help="enable the default flow style \
+                `Off` by default. In default flow style \
+                (with typ=`rt`), maps and lists are written \
+                like json",
+    )
+    parser.add_argument(
+        "-d",
+        "--no-dash-inwards",
+        action="store_true",
+        help="by default, dash are pushed inwards \
+                use `--no-dash-inwards` to have the dash \
+                start at the sequence level",
+    )
+    parser.add_argument(
+        "-c",
+        "--clean-output-dir",
+        action="store_true",
+        help="clean the output directory (rmtree) if set (default is False)",
+    )
 
     args = parser.parse_args()
 
     input_display_name = "STDIN"
-    if args.input is None or args.input == '-':
-        my_args['input'] = None
+    if args.input is None or args.input == "-":
+        my_args["input"] = None
     else:
-        my_args['input'] = args.input
-        input_display_name = my_args['input']
+        my_args["input"] = args.input
+        input_display_name = my_args["input"]
 
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
             "'%s' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'" % args.type)
-    my_args['output_dir'] = args.output_dir
-    my_args['typ'] = args.typ
-    my_args['explicit_start'] = not args.no_explicit_start
-    my_args['explicit_end'] = args.explicit_end
-    my_args['default_flow_style'] = args.default_flow_style
-    my_args['dash_inwards'] = not args.no_dash_inwards
-    my_args['quotes_preserved'] = not args.no_quotes_preserved
-    my_args['clean_output_dir'] = args.clean_output_dir
-    print("Processing: input=" + input_display_name +
-          ", output_dir=" + my_args['output_dir'] +
-          ", clean_output_dir=" + str(my_args['clean_output_dir']) +
-          ", typ=" + my_args['typ'] +
-          ", explicit_start=" + str(my_args['explicit_start']) +
-          ", explicit_end=" + str(my_args['explicit_end']) +
-          ", default_flow_style=" + str(my_args['default_flow_style']) +
-          ", quotes_preserved=" + str(my_args['quotes_preserved']) +
-          ", dash_inwards=" + str(my_args['dash_inwards']))
+            "Allowed values are 'safe' and 'rt'" % args.type
+        )
+    my_args["output_dir"] = args.output_dir
+    my_args["typ"] = args.typ
+    my_args["explicit_start"] = not args.no_explicit_start
+    my_args["explicit_end"] = args.explicit_end
+    my_args["default_flow_style"] = args.default_flow_style
+    my_args["dash_inwards"] = not args.no_dash_inwards
+    my_args["quotes_preserved"] = not args.no_quotes_preserved
+    my_args["clean_output_dir"] = args.clean_output_dir
+    print(
+        "Processing: input="
+        + input_display_name
+        + ", output_dir="
+        + my_args["output_dir"]
+        + ", clean_output_dir="
+        + str(my_args["clean_output_dir"])
+        + ", typ="
+        + my_args["typ"]
+        + ", explicit_start="
+        + str(my_args["explicit_start"])
+        + ", explicit_end="
+        + str(my_args["explicit_end"])
+        + ", default_flow_style="
+        + str(my_args["default_flow_style"])
+        + ", quotes_preserved="
+        + str(my_args["quotes_preserved"])
+        + ", dash_inwards="
+        + str(my_args["dash_inwards"])
+    )
     return my_args
 
 
@@ -187,7 +236,9 @@ def get_all_namespace(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
     return all_namespaces
 
 
-def prepare_namespace_directories(root_directory: str, namespaces: str) -> None:
+def prepare_namespace_directories(
+    root_directory: str, namespaces: str
+) -> None:
     for ns in namespaces:
         ns_dir = os.path.join(root_directory, ns)
         if not os.path.exists(ns_dir):
@@ -206,10 +257,14 @@ def clean_root_dir(root_directory: str) -> None:
         os.makedirs(root_directory)
 
 
-def save_descriptors_to_dir(descriptors, root_directory, yaml_instance=YAML(typ="rt")):
+def save_descriptors_to_dir(
+    descriptors, root_directory, yaml_instance=YAML(typ="rt")
+):
     """save input descriptors to files in dir"""
     for desc_id, desc in descriptors.items():
-        with open(desc.compute_filename_with_namespace(root_directory), "wt") as out:
+        with open(
+            desc.compute_filename_with_namespace(root_directory), "wt"
+        ) as out:
             yaml_instance.dump(desc.as_yaml, out)
 
 
@@ -241,7 +296,9 @@ def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
     return descriptors
 
 
-def get_opinionated_yaml_writer(writer_config: YamlWriterConfig = YamlWriterConfig()) -> YAML:
+def get_opinionated_yaml_writer(
+    writer_config: YamlWriterConfig = YamlWriterConfig()
+) -> YAML:
     """
     Configure a yaml parser/formatter the yamkix way
 
@@ -272,7 +329,8 @@ def convert_input_to_files_in_directory(input, root_directory: str) -> None:
         save_descriptors_to_dir(descriptors, root_directory, yaml)
     else:
         logging.error(
-            "Nothing found in provided input, check for previous errors")
+            "Nothing found in provided input, check for previous errors"
+        )
 
 
 def main():
@@ -281,12 +339,13 @@ def main():
     """
 
     parsed_args = parse_cli()
-    root_directory = parsed_args['output_dir']
+    root_directory = parsed_args["output_dir"]
     create_root_dir(root_directory)
-    if parsed_args['clean_output_dir']:
+    if parsed_args["clean_output_dir"]:
         clean_root_dir(root_directory)
     convert_input_to_files_in_directory(
-        input=parsed_args['input'], root_directory=root_directory)
+        input=parsed_args["input"], root_directory=root_directory
+    )
 
 
 if __name__ == "__main__":
