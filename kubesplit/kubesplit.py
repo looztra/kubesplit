@@ -237,7 +237,7 @@ def split_input_to_files(
 
     Args:
         root_directory: the directory where files and namespace directories\
-             will be created
+            will be created
         input_name: the name of the input file to read. If None, then STDIN\
             will be used
         clean_output_dir: do we cleanup the target directory before processing?

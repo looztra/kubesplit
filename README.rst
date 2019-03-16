@@ -15,8 +15,8 @@ kubesplit
 
 
 .. image:: https://pyup.io/repos/github/looztra/kubesplit/shield.svg
-     :target: https://pyup.io/repos/github/looztra/kubesplit/
-     :alt: Updates
+    :target: https://pyup.io/repos/github/looztra/kubesplit/
+    :alt: Updates
 
 
 
