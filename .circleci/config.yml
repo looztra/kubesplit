@@ -21,21 +21,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install requirements
+          name: Let's test
           command: |
             set -x
-            python3 -m venv .venv
+            python3 -m venv ~/.venv
             source ~/.venv/bin/activate
             pip install -r requirements_dev.txt
-      - run:
-          name: Lint
-          command: |
-            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
             make lint
-      - run:
-          name: Tests
-          command: |
-            set -x
             make test test-flake8
   python-checks-36:
     docker:
@@ -43,37 +36,27 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install requirements
+          name: Let's test
           command: |
             set -x
-            python3 -m venv .venv
+            python3 -m venv ~/.venv
             source ~/.venv/bin/activate
             pip install -r requirements_dev.txt
-      - run:
-          name: Lint
-          command: |
-            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
             make lint
-      - run:
-          name: Tests
-          command: |
-            set -x
             make test-py36
   python-publish:
     docker:
-      - image: circleci/python:2.7.15-stretch-node
+      - image: circleci/python:3.7-stretch-node
     steps:
       - checkout
       - run:
           name: Install requirements
           command: |
             set -x
-            pip install --user requests-toolbelt
-            pip install --user twine
-      - run:
-          name: Publish
-          command: |
-            set -x
+            python3 -m venv ~/.venv
+            source ~/.venv/bin/activate
+            pip install -r requirements_dev.txt
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
             make clean dist dist-check dist-upload
