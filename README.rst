@@ -36,8 +36,8 @@ Contribute
 ----------
 
 ```bash
-python3 -m venv ~/.venv-py3
-source ~/.venv-py3/bin/activate.fish # <= adjust
+python3 -m venv ~/.venv
+source ~/.venv/bin/activate.fish # <= adjust
 pip install -r requirements_dev.txt
 ```
 

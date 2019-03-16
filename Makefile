@@ -54,10 +54,13 @@ lint: ## check style with flake8
 	flake8 kubesplit tests
 
 test: ## run tests quickly with the default Python
-	tox -e py
+	tox -e py37
 
-test-all: ## run tests on every Python version with tox
-	tox
+test-py36: ## run tests quickly with the default Python
+	tox -e py36
+
+test-flake8: ## run tests on every Python version with tox
+	tox -e flake8
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source kubesplit -m pytest
