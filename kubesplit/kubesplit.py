@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Main module."""
+
 import sys
 import os
 import logging
@@ -8,100 +9,12 @@ import argparse
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 from typing import Dict, Set
-
-
-class YamlWriterConfig:
-    """
-    Config stanza for ruamel.yaml.YAML parser/writer with opinionated defaults
-    """
-
-    def __init__(
-        self,
-        explicit_start: bool = True,
-        explicit_end: bool = False,
-        default_flow_style: bool = False,
-        dash_inwards: bool = True,
-        quotes_preserved: bool = True,
-        parsing_mode: str = "rt",
-    ):
-        """
-            Args:
-
-            explicit_start: write the start of the yaml doc even when there is\
-                only one done in the file
-            default_flow_style: if False, block style will be used for nested \
-                    arrays/maps
-            dash_inwards: push dash inwards if True
-            quotes_preserved: preserve quotes if True
-            parsing_typ: safe or roundtrip (rt)
-        """
-        self.explicit_start = explicit_start
-        self.explicit_end = explicit_end
-        self.default_flow_style = default_flow_style
-        self.dash_inwards = dash_inwards
-        self.quotes_preserved = quotes_preserved
-        self.parsing_mode = parsing_mode
-
-
-class K8SDescriptor:
-    """Kubernetes descriptor"""
-
-    _cluster_wide_str_rep = "__clusterwide__"
-    _order_prefixes = {
-        "namespace": "00",
-        "serviceaccount": "01",
-        "clusterrole": "02",
-        "role": "03",
-        "clusterrolebinding": "04",
-        "rolebinding": "05",
-    }
-
-    def __init__(self, name: str, kind: str, namespace: str, as_yaml):
-        self.name = name
-        self.kind = kind
-        self.namespace = namespace
-        self.as_yaml = as_yaml
-        if namespace is None:
-            ns_or_cluster_wide = K8SDescriptor._cluster_wide_str_rep
-        else:
-            ns_or_cluster_wide = namespace
-        self.id = "ns:{0}/kind:{1}/name:{2}".format(
-            ns_or_cluster_wide, kind, name
-        )
-
-    def hasNamespace(self) -> bool:
-        return self.namespace is not None
-
-    def compute_namespace_dirname(self) -> str:
-        if self.hasNamespace():
-            return self.namespace.lower()
-        else:
-            return None
-
-    def compute_filename(self) -> str:
-        return "{0}{1}--{2}.yml".format(
-            self.get_order_prefix(),
-            self.kind.lower(),
-            self.name.lower().replace(":", "-"),
-        )
-
-    def get_order_prefix(self) -> str:
-        if self.kind.lower() in K8SDescriptor._order_prefixes:
-            return "{0}--".format(
-                K8SDescriptor._order_prefixes[self.kind.lower()]
-            )
-        else:
-            return ""
-
-    def compute_filename_with_namespace(self, root_directory) -> str:
-        if self.hasNamespace():
-            return os.path.join(
-                root_directory,
-                self.compute_namespace_dirname(),
-                self.compute_filename(),
-            )
-        else:
-            return os.path.join(root_directory, self.compute_filename())
+from yaml_writer_config import (
+    YamlWriterConfig,
+    build_yaml_writer_config_from_args,
+    get_opinionated_yaml_writer,
+)
+from k8s_descriptor import K8SDescriptor
 
 
 def parse_cli():
@@ -296,33 +209,13 @@ def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
     return descriptors
 
 
-def get_opinionated_yaml_writer(
-    writer_config: YamlWriterConfig = YamlWriterConfig()
-) -> YAML:
-    """
-    Configure a yaml parser/formatter the yamkix way
-
-    Args:
-
-        writer_config: a YamlWriterConfig instance
-
-    Returns:
-
-        a ruamel.yaml object
-    """
-    yaml = YAML(typ=writer_config.parsing_mode)
-    yaml.explicit_start = writer_config.explicit_start
-    yaml.explicit_end = writer_config.explicit_end
-    yaml.default_flow_style = writer_config.default_flow_style
-    yaml.preserve_quotes = writer_config.quotes_preserved
-    if writer_config.dash_inwards:
-        yaml.indent(mapping=2, sequence=4, offset=2)
-    return yaml
-
-
-def convert_input_to_files_in_directory(input, root_directory: str) -> None:
-    yaml = get_opinionated_yaml_writer()
-    descriptors = convert_input_to_descriptors(input, yaml)
+def convert_input_to_files_in_directory(
+    input_name: str,
+    root_directory: str,
+    writer_config: YamlWriterConfig = YamlWriterConfig(),
+) -> None:
+    yaml = get_opinionated_yaml_writer(writer_config)
+    descriptors = convert_input_to_descriptors(input_name, yaml)
     if len(descriptors) > 0:
         namespaces = get_all_namespace(descriptors)
         prepare_namespace_directories(root_directory, namespaces)
@@ -333,18 +226,48 @@ def convert_input_to_files_in_directory(input, root_directory: str) -> None:
         )
 
 
-def main():
+def split_input_to_files(
+    root_directory: str,
+    input_name: str,
+    clean_output_dir: bool = True,
+    writer_config: YamlWriterConfig = YamlWriterConfig(),
+) -> None:
     """
     split input to files
+
+    Args:
+        root_directory: the directory where files and namespace directories\
+             will be created
+        input_name: the name of the input file to read. If None, then STDIN\
+            will be used
+        clean_output_dir: do we cleanup the target directory before processing?
+        writer_config: YamlWriterConfig object describing how to format the\
+            yaml files that will be written
+    """
+    create_root_dir(root_directory)
+    if clean_output_dir:
+        clean_root_dir(root_directory)
+    convert_input_to_files_in_directory(
+        input_name=input_name,
+        root_directory=root_directory,
+        writer_config=writer_config,
+    )
+
+
+def main():
+    """
+    Parse args and call the split mojo
     """
 
     parsed_args = parse_cli()
     root_directory = parsed_args["output_dir"]
-    create_root_dir(root_directory)
-    if parsed_args["clean_output_dir"]:
-        clean_root_dir(root_directory)
-    convert_input_to_files_in_directory(
-        input=parsed_args["input"], root_directory=root_directory
+    clean_output_dir = parsed_args["clean_output_dir"]
+    input_name = parsed_args["input"]
+    split_input_to_files(
+        root_directory=root_directory,
+        input_name=input_name,
+        clean_output_dir=clean_output_dir,
+        writer_config=build_yaml_writer_config_from_args(parsed_args),
     )
 
 
