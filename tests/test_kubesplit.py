@@ -2,24 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """Tests for `kubesplit` package."""
-
-import pytest
-
-
-from kubesplit import kubesplit
+from kubesplit.k8s_descriptor import K8SDescriptor
+from kubesplit.kubesplit import get_all_namespaces
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
-
-
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+def test_get_all_namespace():
+    descriptors = dict()
+    k8s_descriptor = K8SDescriptor(
+        name="dummy", kind="Service", namespace="default", as_yaml=""
+    )
+    descriptors[k8s_descriptor.id] = k8s_descriptor
+    res = get_all_namespaces(descriptors)
+    assert len(res) == 1

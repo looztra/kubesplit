@@ -9,12 +9,12 @@ import argparse
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 from typing import Dict, Set
-from yaml_writer_config import (
+from .yaml_writer_config import (
     YamlWriterConfig,
     build_yaml_writer_config_from_args,
     get_opinionated_yaml_writer,
 )
-from k8s_descriptor import K8SDescriptor
+from .k8s_descriptor import K8SDescriptor
 
 
 def parse_cli():
@@ -141,7 +141,7 @@ def parse_cli():
     return my_args
 
 
-def get_all_namespace(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
+def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
     all_namespaces = set()
     for desc_id, descriptor in descriptors.items():
         if descriptor.hasNamespace():
@@ -217,7 +217,7 @@ def convert_input_to_files_in_directory(
     yaml = get_opinionated_yaml_writer(writer_config)
     descriptors = convert_input_to_descriptors(input_name, yaml)
     if len(descriptors) > 0:
-        namespaces = get_all_namespace(descriptors)
+        namespaces = get_all_namespaces(descriptors)
         prepare_namespace_directories(root_directory, namespaces)
         save_descriptors_to_dir(descriptors, root_directory, yaml)
     else:
