@@ -35,16 +35,54 @@ class YamlWriterConfig:
         self.parsing_mode = parsing_mode
 
 
+class YamlWriterConfigKey:
+    @property
+    def explicit_start(self) -> str:
+        return "explicit_start"
+
+    @property
+    def explicit_end(self) -> str:
+        return "explicit_end"
+
+    @property
+    def default_flow_style(self) -> str:
+        return "default_flow_style"
+
+    @property
+    def dash_inwards(self) -> str:
+        return "dash_inwards"
+
+    @property
+    def quotes_preserved(self) -> str:
+        return "quotes_preserved"
+
+    @property
+    def typ(self) -> str:
+        return "typ"
+
+
 def build_yaml_writer_config_from_args(
     args: Dict[str, any]
 ) -> YamlWriterConfig:
     return YamlWriterConfig(
-        explicit_start=args["explicit_start"],
-        explicit_end=args["explicit_end"],
-        default_flow_style=args["default_flow_style"],
-        dash_inwards=args["dash_inwards"],
-        quotes_preserved=args["quotes_preserved"],
-        parsing_mode=args["typ"],
+        explicit_start=args[YamlWriterConfigKey.explicit_start]
+        if YamlWriterConfigKey.explicit_start in args
+        else True,
+        explicit_end=args[YamlWriterConfigKey.explicit_end]
+        if YamlWriterConfigKey.explicit_end in args
+        else False,
+        default_flow_style=args[YamlWriterConfigKey.default_flow_style]
+        if YamlWriterConfigKey.default_flow_style in args
+        else False,
+        dash_inwards=args[YamlWriterConfigKey.dash_inwards]
+        if YamlWriterConfigKey.dash_inwards in args
+        else True,
+        quotes_preserved=args[YamlWriterConfigKey.quotes_preserved]
+        if YamlWriterConfigKey.quotes_preserved in args
+        else True,
+        parsing_mode=args[YamlWriterConfigKey.typ]
+        if YamlWriterConfigKey.typ in args
+        else "rt",
     )
 
 
@@ -60,7 +98,7 @@ def get_opinionated_yaml_writer(
 
     Returns:
 
-        a ruamel.yaml object
+        a ruamel.yaml YAML instance
     """
     yaml = YAML(typ=writer_config.parsing_mode)
     yaml.explicit_start = writer_config.explicit_start

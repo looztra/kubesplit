@@ -21,12 +21,14 @@ class K8SDescriptor:
         namespace: str,
         as_yaml,
         use_order_prefix: bool = True,
+        extension: str = "yml",
     ):
         self.name = name
         self.kind = kind
         self.namespace = namespace
         self.as_yaml = as_yaml
         self.use_order_prefix = use_order_prefix
+        self.extension = extension
         if namespace is None:
             ns_or_cluster_wide = K8SDescriptor._cluster_wide_str_rep
         else:
@@ -45,10 +47,11 @@ class K8SDescriptor:
             return None
 
     def compute_filename(self) -> str:
-        return "{0}{1}--{2}.yml".format(
+        return "{0}{1}--{2}.{3}".format(
             self.get_order_prefix(),
             self.kind.lower(),
             self.name.lower().replace(":", "-"),
+            self.extension,
         )
 
     def get_order_prefix(self) -> str:

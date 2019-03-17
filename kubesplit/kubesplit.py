@@ -11,6 +11,7 @@ from ruamel.yaml.scanner import ScannerError
 from typing import Dict, Set
 from .yaml_writer_config import (
     YamlWriterConfig,
+    YamlWriterConfigKey,
     build_yaml_writer_config_from_args,
     get_opinionated_yaml_writer,
 )
@@ -111,12 +112,14 @@ def parse_cli():
             "Allowed values are 'safe' and 'rt'" % args.type
         )
     my_args["output_dir"] = args.output_dir
-    my_args["typ"] = args.typ
-    my_args["explicit_start"] = not args.no_explicit_start
-    my_args["explicit_end"] = args.explicit_end
-    my_args["default_flow_style"] = args.default_flow_style
-    my_args["dash_inwards"] = not args.no_dash_inwards
-    my_args["quotes_preserved"] = not args.no_quotes_preserved
+    my_args[YamlWriterConfigKey.typ] = args.typ
+    my_args[YamlWriterConfigKey.explicit_start] = not args.no_explicit_start
+    my_args[YamlWriterConfigKey.explicit_end] = args.explicit_end
+    my_args[YamlWriterConfigKey.default_flow_style] = args.default_flow_style
+    my_args[YamlWriterConfigKey.dash_inwards] = not args.no_dash_inwards
+    my_args[
+        YamlWriterConfigKey.quotes_preserved
+    ] = not args.no_quotes_preserved
     my_args["clean_output_dir"] = args.clean_output_dir
     print(
         "Processing: input="
@@ -126,17 +129,17 @@ def parse_cli():
         + ", clean_output_dir="
         + str(my_args["clean_output_dir"])
         + ", typ="
-        + my_args["typ"]
+        + my_args[YamlWriterConfigKey.typ]
         + ", explicit_start="
-        + str(my_args["explicit_start"])
+        + str(my_args[YamlWriterConfigKey.explicit_start])
         + ", explicit_end="
-        + str(my_args["explicit_end"])
+        + str(my_args[YamlWriterConfigKey.explicit_end])
         + ", default_flow_style="
-        + str(my_args["default_flow_style"])
+        + str(my_args[YamlWriterConfigKey.default_flow_style])
         + ", quotes_preserved="
-        + str(my_args["quotes_preserved"])
+        + str(my_args[YamlWriterConfigKey.quotes_preserved])
         + ", dash_inwards="
-        + str(my_args["dash_inwards"])
+        + str(my_args[YamlWriterConfigKey.dash_inwards])
     )
     return my_args
 

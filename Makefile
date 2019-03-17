@@ -50,6 +50,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
+style: ## force style with black
+	black --line-length 79 tests kubesplit
+
 lint: ## check style with flake8
 	flake8 kubesplit tests
 
