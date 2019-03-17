@@ -9,14 +9,14 @@ def test_has_namespace_when_true():
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace="default", as_yaml=""
     )
-    assert k8s_default_svc_dummy.hasNamespace()
+    assert k8s_default_svc_dummy.has_namespace()
 
 
 def test_has_namespace_when_false():
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace=None, as_yaml=""
     )
-    assert not k8s_default_svc_dummy.hasNamespace()
+    assert not k8s_default_svc_dummy.has_namespace()
 
 
 def test_compute_namespace_dirname_when_has_namespace():

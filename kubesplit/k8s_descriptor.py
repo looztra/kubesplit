@@ -35,11 +35,11 @@ class K8SDescriptor:
             ns_or_cluster_wide, kind, name
         )
 
-    def hasNamespace(self) -> bool:
+    def has_namespace(self) -> bool:
         return self.namespace is not None
 
     def compute_namespace_dirname(self) -> str:
-        if self.hasNamespace():
+        if self.has_namespace():
             return self.namespace.lower()
         else:
             return None
@@ -63,7 +63,7 @@ class K8SDescriptor:
             return ""
 
     def compute_filename_with_namespace(self, root_directory) -> str:
-        if self.hasNamespace():
+        if self.has_namespace():
             return os.path.join(
                 root_directory,
                 self.compute_namespace_dirname(),

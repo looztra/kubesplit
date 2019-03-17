@@ -144,7 +144,7 @@ def parse_cli():
 def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
     all_namespaces = set()
     for desc_id, descriptor in descriptors.items():
-        if descriptor.hasNamespace():
+        if descriptor.has_namespace():
             all_namespaces.add(descriptor.compute_namespace_dirname())
     return all_namespaces
 
