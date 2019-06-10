@@ -7,11 +7,25 @@ class K8SDescriptor:
     _cluster_wide_str_rep = "__clusterwide__"
     _order_prefixes = {
         "namespace": "00",
-        "serviceaccount": "01",
-        "clusterrole": "02",
-        "role": "03",
-        "clusterrolebinding": "04",
+        "clusterrole": "01",
+        "clusterrolebinding": "02",
+        "serviceaccount": "03",
+        "role": "04",
         "rolebinding": "05",
+        "secret": "10",
+        "configmap": "11",
+        "persistentvolumeclaim": "12",
+        "persistentvolume": "13",
+        "deployment": "20",
+        "daemonset": "21",
+        "statefulset": "22",
+        "job": "23",
+        "cronjob": "24",
+        "service": "30",
+        "ingress": "31",
+        "networkpolicy": "40",
+        "poddisruptionbudget": "41",
+        "priorityclass": "42",
     }
 
     def __init__(
@@ -61,7 +75,7 @@ class K8SDescriptor:
                     K8SDescriptor._order_prefixes[self.kind.lower()]
                 )
             else:
-                return ""
+                return "99--".format(self.kind.lower())
         else:
             return ""
 
