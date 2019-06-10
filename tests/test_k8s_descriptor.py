@@ -5,16 +5,16 @@ import pytest
 from kubesplit.k8s_descriptor import K8SDescriptor
 
 data_for_test_get_order_prefix = [
-    ("Namespace", True),
-    ("ServiceAccount", True),
-    ("ClusterRole", True),
-    ("Role", True),
-    ("ClusterRoleBinding", True),
-    ("RoleBinding", True),
-    ("Deployment", False),
-    ("Service", False),
-    ("Ingress", False),
-    ("StatefulSet", False),
+    ("Namespace"),
+    ("ServiceAccount"),
+    ("ClusterRole"),
+    ("Role"),
+    ("ClusterRoleBinding"),
+    ("RoleBinding"),
+    ("Deployment"),
+    ("Service"),
+    ("Ingress"),
+    ("StatefulSet"),
 ]
 
 
@@ -46,8 +46,8 @@ def test_compute_namespace_dirname_when_no_namespace():
     assert k8s_default_svc_dummy.compute_namespace_dirname() is None
 
 
-@pytest.mark.parametrize("kind,not_expected", data_for_test_get_order_prefix)
-def test_get_order_prefix(kind: str, not_expected: bool):
+@pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
+def test_get_order_prefix(kind: str):
     d = K8SDescriptor(
         name="for_test",
         kind=kind,
@@ -55,4 +55,16 @@ def test_get_order_prefix(kind: str, not_expected: bool):
         as_yaml=None,
         use_order_prefix=True,
     )
-    assert (d.get_order_prefix() == "") is not not_expected
+    assert (d.get_order_prefix() == "") is False
+
+
+@pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
+def test_get_order_prefix_when_disabled(kind: str):
+    d = K8SDescriptor(
+        name="for_test",
+        kind=kind,
+        namespace=None,
+        as_yaml=None,
+        use_order_prefix=False,
+    )
+    assert (d.get_order_prefix() == "") is True

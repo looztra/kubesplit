@@ -75,7 +75,7 @@ class K8SDescriptor:
                     K8SDescriptor._order_prefixes[self.kind.lower()]
                 )
             else:
-                return "99--".format(self.kind.lower())
+                return "99--"
         else:
             return ""
 
