@@ -193,18 +193,42 @@ def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
         parsed = yaml_reader.load_all(sys.stdin.read())
     descriptors = dict()
     try:
+        nb_empty_resources = 0
+        nb_invalid_resources = 0
+        nb_valid_resources = 0
         # Read the parsed content to force the scanner to issue errors if any
         for full_resource in parsed:
-            resource_name = full_resource["metadata"]["name"]
-            resource_kind = full_resource["kind"]
-            if "namespace" in full_resource["metadata"]:
-                resource_namespace = full_resource["metadata"]["namespace"]
+            if full_resource:
+                if (
+                    "metadata" in full_resource
+                    and "kind" in full_resource
+                    and "name" in full_resource["metadata"]
+                ):
+                    resource_name = full_resource["metadata"]["name"]
+                    resource_kind = full_resource["kind"]
+                    if "namespace" in full_resource["metadata"]:
+                        resource_namespace = full_resource["metadata"][
+                            "namespace"
+                        ]
+                    else:
+                        resource_namespace = None
+                    k8s_descriptor = K8SDescriptor(
+                        resource_name,
+                        resource_kind,
+                        resource_namespace,
+                        full_resource,
+                    )
+                    descriptors[k8s_descriptor.id] = k8s_descriptor
+                    nb_valid_resources = nb_valid_resources + 1
+                else:
+                    nb_invalid_resources = nb_invalid_resources + 1
             else:
-                resource_namespace = None
-            k8s_descriptor = K8SDescriptor(
-                resource_name, resource_kind, resource_namespace, full_resource
+                nb_empty_resources = nb_empty_resources + 1
+        print(
+            "Found [{0}] valid / [{1}] invalid / [{2}] empty resources".format(
+                nb_valid_resources, nb_invalid_resources, nb_empty_resources
             )
-            descriptors[k8s_descriptor.id] = k8s_descriptor
+        )
     except ScannerError as e:
         print("Something is wrong in the input, got error from Scanner")
         print(e)
