@@ -27,6 +27,7 @@ class K8SDescriptor:
         "networkpolicy": "40",
         "poddisruptionbudget": "41",
         "priorityclass": "42",
+        "__unknown__": "99",
     }
 
     def __init__(
@@ -76,7 +77,9 @@ class K8SDescriptor:
                     K8SDescriptor._order_prefixes[self.kind.lower()]
                 )
             else:
-                return "99--"
+                return "{0}--".format(
+                    K8SDescriptor._order_prefixes["__unknown__"]
+                )
         else:
             return ""
 
