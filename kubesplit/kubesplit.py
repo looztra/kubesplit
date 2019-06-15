@@ -173,6 +173,10 @@ def clean_root_dir(root_directory: str) -> None:
         os.makedirs(root_directory)
 
 
+def save_descriptor_to_stream(descriptor, out, yaml_instance=YAML(typ="rt")):
+    yaml_instance.dump(descriptor.as_yaml, out)
+
+
 def save_descriptors_to_dir(
     descriptors, root_directory, yaml_instance=YAML(typ="rt")
 ):
@@ -181,16 +185,12 @@ def save_descriptors_to_dir(
         with open(
             desc.compute_filename_with_namespace(root_directory), "wt"
         ) as out:
-            yaml_instance.dump(desc.as_yaml, out)
+            save_descriptor_to_stream(desc, out)
 
 
 def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
-    """convert input (file or STDIN) to a dict of descriptors"""
-    if input is not None:
-        with open(input, "rt") as f_input:
-            parsed = yaml_reader.load_all(f_input.read())
-    else:
-        parsed = yaml_reader.load_all(sys.stdin.read())
+    """convert input to a dict of descriptors"""
+    parsed = yaml_reader.load_all(input.read())
     descriptors = dict()
     try:
         nb_empty_resources = 0
@@ -242,7 +242,12 @@ def convert_input_to_files_in_directory(
     writer_config: YamlWriterConfig = YamlWriterConfig(),
 ) -> None:
     yaml = get_opinionated_yaml_writer(writer_config)
-    descriptors = convert_input_to_descriptors(input_name, yaml)
+    if input_name is not None:
+        with open(input_name, "rt") as f_input:
+            descriptors = convert_input_to_descriptors(f_input, yaml)
+    else:
+        descriptors = convert_input_to_descriptors(sys.stdin, yaml)
+
     if len(descriptors) > 0:
         namespaces = get_all_namespaces(descriptors)
         prepare_namespace_directories(root_directory, namespaces)
