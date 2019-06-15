@@ -226,7 +226,7 @@ metadata:
     assert res[k].namespace is None
 
 
-def test_roundtrip_with_string():
+def test_roundtrip_when_preserve_quotes_true():
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
 kind: ReplicaSet
@@ -234,9 +234,15 @@ metadata:
   name: tname
   namespace: tns
   annotations:
-    string1: frontend
-    string2: "frontend"
-    string3: 'frontend'
+    string_no_quotes: frontend
+    string_single_quotes: 'frontend'
+    string_double_quotes: "frontend"
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: "true"
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: "1"
 """
     yaml = YAML(typ="rt")
     yaml.explicit_start = True
@@ -251,12 +257,12 @@ metadata:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml)
     s_output = output.getvalue()
-    print("input=>[{0}]".format(s_input))
-    print("output=>[{0}]".format(s_output))
+    print("input  => [{0}]".format(s_input))
+    print("output => [{0}]".format(s_output))
     assert s_output == s_input
 
 
-def test_roundtrip_with_string_preserve_false():
+def test_roundtrip_when_preserve_quotes_false():
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
 kind: ReplicaSet
@@ -264,9 +270,15 @@ metadata:
   name: tname
   namespace: tns
   annotations:
-    string1: frontend
-    string2: "frontend"
-    string3: 'frontend'
+    string_no_quotes: frontend
+    string_single_quotes: 'frontend'
+    string_double_quotes: "frontend"
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: "true"
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: "1"
 """
     s_expected = """---
 apiVersion: extensions/v1beta1 # with comment
@@ -275,9 +287,15 @@ metadata:
   name: tname
   namespace: tns
   annotations:
-    string1: frontend
-    string2: frontend
-    string3: frontend
+    string_no_quotes: frontend
+    string_single_quotes: frontend
+    string_double_quotes: frontend
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: 'true'
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: '1'
 """
     yaml = YAML(typ="rt")
     yaml.explicit_start = True
@@ -292,7 +310,7 @@ metadata:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml)
     s_output = output.getvalue()
-    print("input=>[{0}]".format(s_input))
-    print("expected=>[{0}]".format(s_expected))
-    print("output=>[{0}]".format(s_output))
+    print("input    => [{0}]".format(s_input))
+    print("expected => [{0}]".format(s_expected))
+    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected
