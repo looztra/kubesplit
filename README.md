@@ -118,28 +118,27 @@ You can find some input and output examples in the [examples](https://github.com
 Processing: input=examples/all-in-one/source/all-in-one.yml, output_dir=examples/all-in-one/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [16] valid / [0] invalid / [0] empty resources
 
-
-╰─» tree examples/all-in-one/generated/
+╰(.venv)─» tree --dirsfirst examples/all-in-one/generated/
 examples/all-in-one/generated/
+├── apps-demo
+│   └── 05--rolebinding--example-ns-demo-developer-binding.yml
+├── apps-integration
+│   └── 05--rolebinding--example-ns-integration-developer-binding.yml
+├── ingress-controllers
+│   ├── 03--serviceaccount--traefik-ingress-controller.yml
+│   ├── 11--configmap--traefik-conf.yml
+│   ├── 12--persistentvolumeclaim--traefik-acme.yml
+│   ├── 20--deployment--traefik-ingress-controller.yml
+│   ├── 30--service--traefik-ingress-endpoint.yml
+│   ├── 30--service--traefik-web-ui.yml
+│   └── 31--ingress--traefik-web-ui.yml
 ├── 00--namespace--apps-demo.yml
 ├── 00--namespace--apps-integration.yml
 ├── 00--namespace--ingress-controllers.yml
 ├── 01--clusterrole--example-node-viewer.yml
 ├── 01--clusterrole--example-traefik-ingress-controller.yml
 ├── 02--clusterrolebinding--example-node-viewer-developer.yml
-├── 02--clusterrolebinding--example-traefik-ingress-controller.yml
-├── apps-demo
-│   └── 05--rolebinding--example-ns-demo-developer-binding.yml
-├── apps-integration
-│   └── 05--rolebinding--example-ns-integration-developer-binding.yml
-└── ingress-controllers
-    ├── 03--serviceaccount--traefik-ingress-controller.yml
-    ├── 11--configmap--traefik-conf.yml
-    ├── 12--persistentvolumeclaim--traefik-acme.yml
-    ├── 20--deployment--traefik-ingress-controller.yml
-    ├── 30--service--traefik-ingress-endpoint.yml
-    ├── 30--service--traefik-web-ui.yml
-    └── 31--ingress--traefik-web-ui.yml
+└── 02--clusterrolebinding--example-traefik-ingress-controller.yml
 
 ```
 
@@ -150,16 +149,12 @@ examples/all-in-one/generated/
 Processing: input=examples/all-in-one-no-prefix/source/all-in-one.yml, output_dir=examples/all-in-one-no-prefix/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=False
 Found [16] valid / [0] invalid / [0] empty resources
 
-╰(.venv)─» tree examples/all-in-one-no-prefix/generated/
+╰(.venv)─» tree --dirsfirst examples/all-in-one-no-prefix/generated/
 examples/all-in-one-no-prefix/generated/
 ├── apps-demo
 │   └── rolebinding--example-ns-demo-developer-binding.yml
 ├── apps-integration
 │   └── rolebinding--example-ns-integration-developer-binding.yml
-├── clusterrolebinding--example-node-viewer-developer.yml
-├── clusterrolebinding--example-traefik-ingress-controller.yml
-├── clusterrole--example-node-viewer.yml
-├── clusterrole--example-traefik-ingress-controller.yml
 ├── ingress-controllers
 │   ├── configmap--traefik-conf.yml
 │   ├── deployment--traefik-ingress-controller.yml
@@ -168,9 +163,14 @@ examples/all-in-one-no-prefix/generated/
 │   ├── serviceaccount--traefik-ingress-controller.yml
 │   ├── service--traefik-ingress-endpoint.yml
 │   └── service--traefik-web-ui.yml
+├── clusterrolebinding--example-node-viewer-developer.yml
+├── clusterrolebinding--example-traefik-ingress-controller.yml
+├── clusterrole--example-node-viewer.yml
+├── clusterrole--example-traefik-ingress-controller.yml
 ├── namespace--apps-demo.yml
 ├── namespace--apps-integration.yml
 └── namespace--ingress-controllers.yml
+
 
 ```
 
@@ -181,12 +181,12 @@ examples/all-in-one-no-prefix/generated/
 Processing: input=examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=examples/mixed-content/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [2] valid / [1] invalid / [1] empty resources
 
-╰─» tree examples/mixed-content/generated/
+╰(.venv)─» tree --dirsfirst examples/mixed-content/generated/
 examples/mixed-content/generated/
 ├── akira
-│   └── 99--replicaset--bididididi.yml
+│   └── 25--replicaset--bididididi.yml
 └── yolo
-    └── 99--replicaset--frontend.yml
+    └── 25--replicaset--frontend.yml
 
 ```
 
