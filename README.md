@@ -52,7 +52,7 @@ All tags available at <https://cloud.docker.com/repository/docker/looztra/kubesp
 ```bash
 ╰(.venv)─» kubesplit -h
 usage: kubesplit [-h] [-i INPUT] [-t TYP] -o OUTPUT_DIR [-n] [-e] [-q] [-f]
-                 [-d] [-c]
+                   [-d] [-c] [-p]
 
 Split a set of Kubernetes descriptors to a set of files. The yaml format of
 the generated files can be tuned using the same parameters as the one used by
@@ -88,6 +88,10 @@ optional arguments:
   -c, --clean-output-dir
                         clean the output directory (rmtree) if set (default is
                         False)
+  -p, --no-resource-prefix
+                        by default, resource files are number prefixed, you
+                        can disable this behaviour with this flag
+
 
 ```
 
@@ -108,12 +112,13 @@ optional arguments:
 
 You can find some input and output examples in the [examples](https://github.com/looztra/kubesplit/tree/master/examples) directory
 
-### Several valid resources
+### Several valid resources (no quotes preserved)
 
 ```bash
-╰─» kubesplit -i examples/all-in-one/source/all-in-one.yml -q -o examples/all-in-one/generated
-Processing: input=examples/all-in-one/source/all-in-one.yml, output_dir=examples/all-in-one/generated, clean_output_dir=False, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True
+╰(.venv)─» python -m kubesplit -i examples/all-in-one/source/all-in-one.yml -o examples/all-in-one/generated/ -c -q
+Processing: input=examples/all-in-one/source/all-in-one.yml, output_dir=examples/all-in-one/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [16] valid / [0] invalid / [0] empty resources
+
 
 ╰─» tree examples/all-in-one/generated/
 examples/all-in-one/generated/
@@ -139,11 +144,42 @@ examples/all-in-one/generated/
 
 ```
 
-### Mixed content : valid, invalid and empty resources
+### Several valid resources (no prefix, no quotes preserved)
 
 ```bash
-╰─» kubesplit -i examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml -q -o examples/mixed-content/generated
-Processing: input=examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=examples/mixed-content/generated, clean_output_dir=False, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True
+╰(.venv)─» python -m kubesplit -i examples/all-in-one-no-prefix/source/all-in-one.yml -o examples/all-in-one-no-prefix/generated/ -c -q -p
+Processing: input=examples/all-in-one-no-prefix/source/all-in-one.yml, output_dir=examples/all-in-one-no-prefix/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=False
+Found [16] valid / [0] invalid / [0] empty resources
+
+╰(.venv)─» tree examples/all-in-one-no-prefix/generated/
+examples/all-in-one-no-prefix/generated/
+├── apps-demo
+│   └── rolebinding--example-ns-demo-developer-binding.yml
+├── apps-integration
+│   └── rolebinding--example-ns-integration-developer-binding.yml
+├── clusterrolebinding--example-node-viewer-developer.yml
+├── clusterrolebinding--example-traefik-ingress-controller.yml
+├── clusterrole--example-node-viewer.yml
+├── clusterrole--example-traefik-ingress-controller.yml
+├── ingress-controllers
+│   ├── configmap--traefik-conf.yml
+│   ├── deployment--traefik-ingress-controller.yml
+│   ├── ingress--traefik-web-ui.yml
+│   ├── persistentvolumeclaim--traefik-acme.yml
+│   ├── serviceaccount--traefik-ingress-controller.yml
+│   ├── service--traefik-ingress-endpoint.yml
+│   └── service--traefik-web-ui.yml
+├── namespace--apps-demo.yml
+├── namespace--apps-integration.yml
+└── namespace--ingress-controllers.yml
+
+```
+
+### Mixed content : valid, invalid and empty resources (no quotes preserved)
+
+```bash
+╰(.venv)─» python -m kubesplit -i examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml  -o examples/mixed-content/generated/ -c -q
+Processing: input=examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=examples/mixed-content/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [2] valid / [1] invalid / [1] empty resources
 
 ╰─» tree examples/mixed-content/generated/

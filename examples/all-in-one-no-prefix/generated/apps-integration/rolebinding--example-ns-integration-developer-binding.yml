@@ -1,0 +1,18 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  annotations:
+    owner: example
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: namespaces/integration
+  name: example:ns-integration-developer-binding
+  namespace: apps-integration
+roleRef:
+  apiGroup: ''
+  kind: ClusterRole
+  name: edit
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: peter.parker@example.com
