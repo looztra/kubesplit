@@ -4,7 +4,9 @@
 
 [<img src="https://img.shields.io/pypi/v/kubesplit.svg">](https://pypi.python.org/pypi/kubesplit)
 
-Split multidoc yaml formatted [kubernetes](https://kubernetes.io/) descriptors to a set of single resource files
+Split multidoc yaml formatted [kubernetes](https://kubernetes.io/) descriptors to a set of single resource files.
+
+If you just want an opinionated yaml formatter, you can have a look at [yamkix](https://github.com/looztra/yamkix).
 
 ## Installation
 
@@ -96,7 +98,7 @@ optional arguments:
 - Each resource found in the input is stored in a file with a name reflecting the name of the resource and its _kubernetes_ kind
 - Cluster-wide resources (namespaces, clusterroles, clusterrolebindings) are stored in the root directory of the output, namespaced resources are stored in a subdirectory named like the namespace
 - By default, resources are prefixed
-- By default, quotes are preserved, use `--no-quotes-preserved` to disable quotes unless needed (for boolean and numbers if they were provided in the output as for the moment Kubesplit is not aware of the fact that only kubernetes annotations and environment variables require string)
+- By default, quotes are preserved, use `--no-quotes-preserved` to disable quotes unless needed (for boolean and numbers if they were provided in the input as for the moment Kubesplit is not aware of the fact that only kubernetes annotations and environment variables require string)
 - By default, dash elements in list are pushed inwards, you can disable this behaviour with the `-d`/`--no-dash-inwards` option
 - Comments are preserved
 - The output directory will be created if it doesn't exist (if the user running the command as sufficient rights)
@@ -104,7 +106,7 @@ optional arguments:
 
 ## Examples
 
-You can find some input and output examples in the `examples` directory
+You can find some input and output examples in the [examples](https://github.com/looztra/kubesplit/tree/master/examples) directory
 
 ### Several valid resources
 
@@ -170,6 +172,14 @@ helm template --namespace target-ns --values config.yml my-chart | kubesplit -q 
 ```
 
 ## To preserve or not to preserve quotes?
+
+- _Quotes preserved_ means : if there were quotes in the input, they will also be present in the output, and it will be the same type (single/double) of quotes
+- _Quotes not preserved_ means :
+  - if quotes are not necessary (around _pure_ strings), they will be removed
+  - if quotes are present around booleans and numbers, they will be converted to default (single quotes)
+  - if quotes are not present around booleans and numbers, there will be no quotes in the output too
+
+**Note**: there is no option for the moment to force the usage of double quotes when `-q`/`--no-quotes-preserved` is used.
 
 ### Quotes preserved (default behaviour)
 
@@ -289,5 +299,5 @@ make test
 
 ## Credits
 
-- This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage)_ project template.
+- This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
 - Kubesplit uses the awesome [ruamel.yaml](https://yaml.readthedocs.io/en/latest/pyyaml.html) python lib.
