@@ -1,0 +1,21 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: rbac/shared
+    example.com/target: devel
+  labels:
+    owner: example
+  name: example:node-viewer
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - nodes
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch

@@ -1,0 +1,329 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: namespaces/demo
+    source-single: 'single'
+    source-double: "double"
+    source-boolean-single: 'true'
+    source-boolean-double: "true"
+    source-int-single: '1'
+    source-int-double: "2"
+  labels:
+    example.com/editors: ci
+  name: apps-demo
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: namespaces/integration
+  labels:
+    example.com/editors: developers
+  name: apps-integration
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    example.com/access: restricted
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    example.com/editors: ops
+    example.com/ns-owner: example
+  name: ingress-controllers
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-ingress-controller
+  namespace: ingress-controllers
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: rbac/shared
+    example.com/target: devel
+  labels:
+    owner: example
+  name: example:node-viewer
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    owner: example
+  name: example:traefik-ingress-controller
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  annotations:
+    owner: example
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: namespaces/demo
+  name: example:ns-demo-developer-binding
+  namespace: apps-demo
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: view
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: peter.parker@example.com
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  annotations:
+    owner: example
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: namespaces/integration
+  name: example:ns-integration-developer-binding
+  namespace: apps-integration
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: edit
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: peter.parker@example.com
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    owner: example
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: rbac/developers
+  name: example:node-viewer-developer
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: example:node-viewer
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: peter.parker@example.com
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    owner: example
+  name: example:traefik-ingress-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: example:traefik-ingress-controller
+subjects:
+  - kind: ServiceAccount
+    name: traefik-ingress-controller
+    namespace: ingress-controllers
+---
+apiVersion: v1
+data:
+  traefik.toml: |
+    insecureSkipVerify = true
+    defaultEntryPoints = ["http","https"]
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
+      [entryPoints.http.redirect]
+      entryPoint = "https"
+      [entryPoints.https]
+      address = ":443"
+      [entryPoints.https.tls]
+    [acme]
+    email = "ops@example.com"
+    storageFile = "/acme/acme.json"
+    entryPoint = "https"
+    onDemand = true
+    onHostRule = true
+    [acme.httpChallenge]
+      entryPoint = "http"
+kind: ConfigMap
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-conf
+  namespace: ingress-controllers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-ingress-endpoint
+  namespace: ingress-controllers
+spec:
+  loadBalancerIP: 192.168.10.10
+  ports:
+    - name: main-http
+      port: 80
+      targetPort: main-http
+    - name: main-https
+      port: 443
+      targetPort: main-https
+  selector:
+    app: traefik-ingress-lb
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-web-ui
+  namespace: ingress-controllers
+spec:
+  ports:
+    - name: admin
+      port: 8080
+      targetPort: admin
+  selector:
+    app: traefik-ingress-lb
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    app: traefik-ingress-lb
+  name: traefik-ingress-controller
+  namespace: ingress-controllers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-ingress-lb
+  template:
+    metadata:
+      annotations:
+        example.com/generated-by: kustomize
+        example.com/kustomize-component: ingresses
+        example.com/owner: ops
+      labels:
+        app: traefik-ingress-lb
+    spec:
+      containers:
+        - args:
+            - --configfile=/config/traefik.toml
+            - --web
+            - --kubernetes
+          image: traefik:v1.7.9
+          imagePullPolicy: Always
+          name: traefik
+          ports:
+            - containerPort: 80
+              name: main-http
+            - containerPort: 443
+              name: main-https
+            - containerPort: 8080
+              name: admin
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /acme
+              name: traefik-acme
+            - mountPath: /config
+              name: traefik-config
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: traefik-acme
+          persistentVolumeClaim:
+            claimName: traefik-acme
+        - configMap:
+            name: traefik-conf
+          name: traefik-config
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/auth-secret: traefik-ui-auth
+    ingress.kubernetes.io/auth-type: basic
+    kubernetes.io/ingress.class: traefik
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-web-ui
+  namespace: ingress-controllers
+spec:
+  rules:
+    - host: traefik-ui.dev.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: traefik-web-ui
+              servicePort: admin
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+    example.com/what: Store Let's Encrypt TLS certificates
+  name: traefik-acme
+  namespace: ingress-controllers
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: standard

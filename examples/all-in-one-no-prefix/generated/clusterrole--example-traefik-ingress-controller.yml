@@ -1,0 +1,29 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    owner: example
+  name: example:traefik-ingress-controller
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch

@@ -1,0 +1,58 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    app: traefik-ingress-lb
+  name: traefik-ingress-controller
+  namespace: ingress-controllers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-ingress-lb
+  template:
+    metadata:
+      annotations:
+        example.com/generated-by: kustomize
+        example.com/kustomize-component: ingresses
+        example.com/owner: ops
+      labels:
+        app: traefik-ingress-lb
+    spec:
+      containers:
+        - args:
+            - --configfile=/config/traefik.toml
+            - --web
+            - --kubernetes
+          image: traefik:v1.7.9
+          imagePullPolicy: Always
+          name: traefik
+          ports:
+            - containerPort: 80
+              name: main-http
+            - containerPort: 443
+              name: main-https
+            - containerPort: 8080
+              name: admin
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /acme
+              name: traefik-acme
+            - mountPath: /config
+              name: traefik-config
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: traefik-acme
+          persistentVolumeClaim:
+            claimName: traefik-acme
+        - configMap:
+            name: traefik-conf
+          name: traefik-config
