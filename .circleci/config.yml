@@ -30,6 +30,7 @@ jobs:
             export PATH=$PATH:/home/circleci/.local/bin
             make lint
             make test test-flake8
+            make clean dist
   python-checks-36:
     docker:
       - image: circleci/python:3.6-stretch-node
