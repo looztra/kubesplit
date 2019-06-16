@@ -96,7 +96,13 @@ def parse_cli():
         action="store_true",
         help="clean the output directory (rmtree) if set (default is False)",
     )
-
+    parser.add_argument(
+        "-p",
+        "--no-resource-prefix",
+        action="store_true",
+        help="by default, resource files are number prefixed, you can disable \
+            this behaviour with this flag",
+    )
     args = parser.parse_args()
 
     input_display_name = "STDIN"
@@ -121,6 +127,7 @@ def parse_cli():
         YamlWriterConfigKey.quotes_preserved
     ] = not args.no_quotes_preserved
     my_args["clean_output_dir"] = args.clean_output_dir
+    my_args["prefix_resource_files"] = not args.no_resource_prefix
     print(
         "Processing: input="
         + input_display_name
@@ -140,6 +147,8 @@ def parse_cli():
         + str(my_args[YamlWriterConfigKey.quotes_preserved])
         + ", dash_inwards="
         + str(my_args[YamlWriterConfigKey.dash_inwards])
+        + ", prefix_resource_files="
+        + str(my_args["prefix_resource_files"])
     )
     return my_args
 
@@ -188,7 +197,9 @@ def save_descriptors_to_dir(
             save_descriptor_to_stream(desc, out)
 
 
-def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
+def convert_input_to_descriptors(
+    input, yaml_reader=YAML(typ="rt"), prefix_resource_files: bool = True
+):
     """convert input to a dict of descriptors"""
     parsed = yaml_reader.load_all(input.read())
     descriptors = dict()
@@ -213,10 +224,11 @@ def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
                     else:
                         resource_namespace = None
                     k8s_descriptor = K8SDescriptor(
-                        resource_name,
-                        resource_kind,
-                        resource_namespace,
-                        full_resource,
+                        name=resource_name,
+                        kind=resource_kind,
+                        namespace=resource_namespace,
+                        as_yaml=full_resource,
+                        use_order_prefix=prefix_resource_files,
                     )
                     descriptors[k8s_descriptor.id] = k8s_descriptor
                     nb_valid_resources = nb_valid_resources + 1
@@ -239,14 +251,19 @@ def convert_input_to_descriptors(input, yaml_reader=YAML(typ="rt")):
 def convert_input_to_files_in_directory(
     input_name: str,
     root_directory: str,
+    prefix_resource_files: bool = True,
     writer_config: YamlWriterConfig = YamlWriterConfig(),
 ) -> None:
     yaml = get_opinionated_yaml_writer(writer_config)
     if input_name is not None:
         with open(input_name, "rt") as f_input:
-            descriptors = convert_input_to_descriptors(f_input, yaml)
+            descriptors = convert_input_to_descriptors(
+                f_input, yaml, prefix_resource_files=prefix_resource_files
+            )
     else:
-        descriptors = convert_input_to_descriptors(sys.stdin, yaml)
+        descriptors = convert_input_to_descriptors(
+            sys.stdin, yaml, prefix_resource_files=prefix_resource_files
+        )
 
     if len(descriptors) > 0:
         namespaces = get_all_namespaces(descriptors)
@@ -262,6 +279,7 @@ def split_input_to_files(
     root_directory: str,
     input_name: str,
     clean_output_dir: bool = True,
+    prefix_resource_files: bool = True,
     writer_config: YamlWriterConfig = YamlWriterConfig(),
 ) -> None:
     """
@@ -282,6 +300,7 @@ def split_input_to_files(
     convert_input_to_files_in_directory(
         input_name=input_name,
         root_directory=root_directory,
+        prefix_resource_files=prefix_resource_files,
         writer_config=writer_config,
     )
 
@@ -294,11 +313,13 @@ def main():
     parsed_args = parse_cli()
     root_directory = parsed_args["output_dir"]
     clean_output_dir = parsed_args["clean_output_dir"]
+    prefix_resource_files = parsed_args["prefix_resource_files"]
     input_name = parsed_args["input"]
     split_input_to_files(
         root_directory=root_directory,
         input_name=input_name,
         clean_output_dir=clean_output_dir,
+        prefix_resource_files=prefix_resource_files,
         writer_config=build_yaml_writer_config_from_args(parsed_args),
     )
 
