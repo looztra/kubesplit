@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -23,35 +24,35 @@ spec:
         app: traefik-ingress-lb
     spec:
       containers:
-      - args:
-        - --configfile=/config/traefik.toml
-        - --web
-        - --kubernetes
-        image: traefik:v1.7.9
-        imagePullPolicy: Always
-        name: traefik
-        ports:
-        - containerPort: 80
-          name: main-http
-        - containerPort: 443
-          name: main-https
-        - containerPort: 8080
-          name: admin
-        resources:
-          limits:
-            cpu: 200m
-            memory: 64Mi
-        volumeMounts:
-        - mountPath: /acme
-          name: traefik-acme
-        - mountPath: /config
-          name: traefik-config
+        - args:
+            - --configfile=/config/traefik.toml
+            - --web
+            - --kubernetes
+          image: traefik:v1.7.9
+          imagePullPolicy: Always
+          name: traefik
+          ports:
+            - containerPort: 80
+              name: main-http
+            - containerPort: 443
+              name: main-https
+            - containerPort: 8080
+              name: admin
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /acme
+              name: traefik-acme
+            - mountPath: /config
+              name: traefik-config
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
       volumes:
-      - name: traefik-acme
-        persistentVolumeClaim:
-          claimName: traefik-acme
-      - configMap:
-          name: traefik-conf
-        name: traefik-config
+        - name: traefik-acme
+          persistentVolumeClaim:
+            claimName: traefik-acme
+        - configMap:
+            name: traefik-conf
+          name: traefik-config

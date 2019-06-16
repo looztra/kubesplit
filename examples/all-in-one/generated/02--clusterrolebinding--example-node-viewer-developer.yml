@@ -1,3 +1,4 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -11,6 +12,6 @@ roleRef:
   kind: ClusterRole
   name: example:node-viewer
 subjects:
-- apiGroup: rbac.authorization.k8s.io
-  kind: User
-  name: peter.parker@example.com
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: peter.parker@example.com
