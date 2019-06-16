@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/auth-secret: traefik-ui-auth
+    ingress.kubernetes.io/auth-type: basic
+    kubernetes.io/ingress.class: traefik
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  name: traefik-web-ui
+  namespace: ingress-controllers
+spec:
+  rules:
+  - host: traefik-ui.dev.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: traefik-web-ui
+          servicePort: admin

@@ -1,0 +1,7 @@
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: bididididi
+  namespace: akira
+  annotations:
+    boubou: frontend

@@ -1,0 +1,46 @@
+---
+apiVersion: extensions/v1beta1 # I am a valid resource
+kind: ReplicaSet
+metadata:
+  name: frontend
+  namespace: yolo
+  annotations:
+    boubou: frontend
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: env
+        operator: "In"
+        values: ["int", "rd"]
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      name: frontend
+      labels:
+        app: frontend
+        env: int
+    spec:
+      containers:
+        - name: nginx-fe-4-rs
+          image: nginx:stable-alpine
+          ports:
+            - containerPort: 80
+---
+# I am a empty resource
+---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: bididididi
+  namespace: akira
+  annotations:
+    boubou: frontend
+---
+apiVersion: extensions/v1beta1 # I am an invalid resource because I have no kind
+metadata:
+  name: bididididi
+  namespace: akira
+  annotations:
+    boubou: frontend
