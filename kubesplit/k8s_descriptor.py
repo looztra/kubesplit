@@ -21,6 +21,7 @@ class K8SDescriptor:
         "statefulset": "22",
         "job": "23",
         "cronjob": "24",
+        "replicaset": "25",
         "service": "30",
         "ingress": "31",
         "networkpolicy": "40",
