@@ -45,6 +45,7 @@ jobs:
             export PATH=$PATH:/home/circleci/.local/bin
             make lint
             make test-py36
+
   python-publish:
     docker:
       - image: circleci/python:3.7-stretch-node
@@ -59,7 +60,7 @@ jobs:
             pip install -r requirements_dev.txt
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist dist-check dist-upload
+            make clean dist release
             rm ~/.pypirc
 
   docker-build-and-push:
@@ -70,30 +71,17 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build Exec Image
+          name: Build FTW!
           command: |
             set -x
             docker version
-            echo "Sleep for 30s to let pypi update its cache"
-            sleep 30s
-            make build
-      - run:
-          name: Build CircleCI compatible image
-          command: |
-            set -x
-            docker version
-            make build-circleci
+            make docker-build-pip
       - docker-publish/check
       - run:
           name: Push Exec Image
           command: |
             set -x
-            make push push-latest
-      - run:
-          name: Push CircleCI compatible image
-          command: |
-            set -x
-            make push-circleci push-circleci-latest
+            make docker-push-pip
 
 workflows:
   version: 2
@@ -106,18 +94,18 @@ workflows:
       - python-checks-37:
           requires:
             - eclint
-#      - python-publish:
-#          requires:
-#            - python-checks-36
-#            - python-checks-37
-#          filters:
-#            branches:
-#              only:
-#                - master
-#      - docker-build-and-push:
-#          requires:
-#            - python-publish
-#          filters:
-#            branches:
-#              only:
-#                - master
+      - python-publish:
+          requires:
+            - python-checks-36
+            - python-checks-37
+          filters:
+            branches:
+              only:
+                - master
+      - docker-build-and-push:
+          requires:
+            - python-publish
+          filters:
+            branches:
+              only:
+                - master

@@ -102,7 +102,8 @@ install: clean ## install the package to the active Python's site-packages
 	@echo "+ $@"
 	python setup.py install
 
-docker-pip: ## build docker image from pip package
+docker-build-pip: ## build docker image from pip package
+	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg KUBESPLIT_VERSION=${KUBESPLIT_VERSION} \
@@ -114,7 +115,20 @@ ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
-docker-local: clean ## build docker image from local sources
+docker-push-pip: ## build docker image from pip package
+	@echo "+ $@"
+	@echo "Tag ${TAG}"
+ifdef GIT_DIRTY
+	@echo "Cannot push a dirty image"
+	exit 1
+else
+	@echo "Let's push ${IMG} (please check that you are logged in)"
+	@docker image push ${IMG}
+	@docker image push ${IMG_LATEST}
+endif
+
+docker-build-local: clean ## build docker image from local sources
+	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg KUBESPLIT_VERSION=${KUBESPLIT_VERSION} \
