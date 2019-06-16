@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,12 +10,12 @@ metadata:
 spec:
   loadBalancerIP: 192.168.10.10
   ports:
-  - name: main-http
-    port: 80
-    targetPort: main-http
-  - name: main-https
-    port: 443
-    targetPort: main-https
+    - name: main-http
+      port: 80
+      targetPort: main-http
+    - name: main-https
+      port: 443
+      targetPort: main-https
   selector:
     app: traefik-ingress-lb
   type: LoadBalancer

@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -11,9 +12,9 @@ metadata:
   namespace: ingress-controllers
 spec:
   rules:
-  - host: traefik-ui.dev.example.com
-    http:
-      paths:
-      - backend:
-          serviceName: traefik-web-ui
-          servicePort: admin
+    - host: traefik-ui.dev.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: traefik-web-ui
+              servicePort: admin
