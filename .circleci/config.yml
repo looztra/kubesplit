@@ -1,0 +1,111 @@
+---
+version: 2.1
+orbs:
+  docker-publish: circleci/docker-publish@0.1.4
+jobs:
+  eclint:
+    docker:
+      - image: qima/eclint:circleci-2.8.1-7c65341
+    steps:
+      - checkout
+      - run:
+          name: Validate Editor Config rules
+          command: |
+            set -x
+            ls -l
+            git ls-files
+            eclint check $(git ls-files)
+  python-checks-37:
+    docker:
+      - image: circleci/python:3.7-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Let's test
+          command: |
+            set -x
+            python3 -m venv ~/.venv
+            source ~/.venv/bin/activate
+            pip install -r requirements_dev.txt
+            export PATH=$PATH:/home/circleci/.local/bin
+            make lint
+            make test test-flake8
+  python-checks-36:
+    docker:
+      - image: circleci/python:3.6-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Let's test
+          command: |
+            set -x
+            python3 -m venv ~/.venv
+            source ~/.venv/bin/activate
+            pip install -r requirements_dev.txt
+            export PATH=$PATH:/home/circleci/.local/bin
+            make lint
+            make test-py36
+
+  python-publish:
+    docker:
+      - image: circleci/python:3.7-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Install requirements
+          command: |
+            set -x
+            python3 -m venv ~/.venv
+            source ~/.venv/bin/activate
+            pip install -r requirements_dev.txt
+            export PATH=$PATH:/home/circleci/.local/bin
+            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
+            make clean dist release
+            rm ~/.pypirc
+
+  docker-build-and-push:
+    docker:
+      - image: circleci/golang:1.11.5-stretch-node
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build FTW!
+          command: |
+            set -x
+            docker version
+            make docker-build-pip
+      - docker-publish/check
+      - run:
+          name: Push Exec Image
+          command: |
+            set -x
+            make docker-push-pip
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - eclint
+      - python-checks-36:
+          requires:
+            - eclint
+      - python-checks-37:
+          requires:
+            - eclint
+      - python-publish:
+          requires:
+            - python-checks-36
+            - python-checks-37
+          filters:
+            branches:
+              only:
+                - master
+      - docker-build-and-push:
+          requires:
+            - python-publish
+          filters:
+            branches:
+              only:
+                - master

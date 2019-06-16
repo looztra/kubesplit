@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    example.com/access: restricted
+    example.com/generated-by: kustomize
+    example.com/kustomize-component: ingresses
+  labels:
+    example.com/editors: ops
+    example.com/ns-owner: example
+  name: ingress-controllers

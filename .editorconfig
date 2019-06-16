@@ -1,0 +1,25 @@
+# http://editorconfig.org
+
+root = true
+
+[{*.py,*.rst}]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+end_of_line = lf
+
+[*.bat]
+indent_style = tab
+end_of_line = crlf
+
+[LICENSE]
+insert_final_newline = true
+
+[Makefile]
+indent_style = tab
+
+[test_kubesplit.py]
+indent_size = none
+indent_style = none
