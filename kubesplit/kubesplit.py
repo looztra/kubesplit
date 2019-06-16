@@ -190,11 +190,14 @@ def save_descriptors_to_dir(
     descriptors, root_directory, yaml_instance=YAML(typ="rt")
 ):
     """save input descriptors to files in dir"""
+
     for desc_id, desc in descriptors.items():
         with open(
             desc.compute_filename_with_namespace(root_directory), "wt"
         ) as out:
-            save_descriptor_to_stream(desc, out)
+            save_descriptor_to_stream(
+                descriptor=desc, out=out, yaml_instance=yaml_instance
+            )
 
 
 def convert_input_to_descriptors(
