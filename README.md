@@ -92,7 +92,6 @@ optional arguments:
                         by default, resource files are number prefixed, you
                         can disable this behaviour with this flag
 
-
 ```
 
 ## Features
@@ -101,7 +100,7 @@ optional arguments:
 - Empty resources are ignored
 - Each resource found in the input is stored in a file with a name reflecting the name of the resource and its _kubernetes_ kind
 - Cluster-wide resources (namespaces, clusterroles, clusterrolebindings) are stored in the root directory of the output, namespaced resources are stored in a subdirectory named like the namespace
-- By default, resources are prefixed
+- By default, resources are prefixed, use `--no-resource-prefix` to disable order prefixes
 - By default, quotes are preserved, use `--no-quotes-preserved` to disable quotes unless needed (for boolean and numbers if they were provided in the input as for the moment Kubesplit is not aware of the fact that only kubernetes annotations and environment variables require string)
 - By default, dash elements in list are pushed inwards, you can disable this behaviour with the `-d`/`--no-dash-inwards` option
 - Comments are preserved
@@ -112,7 +111,7 @@ optional arguments:
 
 You can find some input and output examples in the [examples](https://github.com/looztra/kubesplit/tree/master/examples) directory
 
-### Several valid resources (no quotes preserved)
+### Valid resources, no quotes preserved
 
 ```bash
 ╰(.venv)─» python -m kubesplit -i examples/all-in-one/source/all-in-one.yml -o examples/all-in-one/generated/ -c -q
@@ -144,7 +143,7 @@ examples/all-in-one/generated/
 
 ```
 
-### Several valid resources (no prefix, no quotes preserved)
+### Valid resources, no prefix, no quotes preserved
 
 ```bash
 ╰(.venv)─» python -m kubesplit -i examples/all-in-one-no-prefix/source/all-in-one.yml -o examples/all-in-one-no-prefix/generated/ -c -q -p
@@ -175,7 +174,7 @@ examples/all-in-one-no-prefix/generated/
 
 ```
 
-### Mixed content : valid, invalid and empty resources (no quotes preserved)
+### Mixed content : valid, invalid and empty resources, no quotes preserved
 
 ```bash
 ╰(.venv)─» python -m kubesplit -i examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml  -o examples/mixed-content/generated/ -c -q
@@ -311,7 +310,6 @@ metadata:
 
 ## TODO
 
-- Provide an option to disable order prefix
 - Provide an option to enforce the quote type (by default, with `--no-quotes-preserved` boolean and integers are forced with single quotes) Hint => <https://stackoverflow.com/questions/56588374/when-using-ruamel-yaml-and-preserve-quotes-true-is-there-a-way-to-force-roundtri/56592388#56592388>
 
 ## Contribute
