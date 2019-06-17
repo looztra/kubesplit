@@ -73,13 +73,10 @@ class K8SDescriptor:
     def get_order_prefix(self) -> str:
         if self.use_order_prefix:
             if self.kind.lower() in K8SDescriptor._order_prefixes:
-                return "{0}--".format(
-                    K8SDescriptor._order_prefixes[self.kind.lower()]
-                )
+                k = self.kind.lower()
             else:
-                return "{0}--".format(
-                    K8SDescriptor._order_prefixes["__unknown__"]
-                )
+                k = "__unknown__"
+            return "{0}--".format(K8SDescriptor._order_prefixes[k])
         else:
             return ""
 
