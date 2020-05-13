@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+"""Test the K8SDescriptor wrapper."""
 import pytest
 from kubesplit.k8s_descriptor import K8SDescriptor
 
@@ -19,6 +17,7 @@ data_for_test_get_order_prefix = [
 
 
 def test_has_namespace_when_true():
+    """test_has_namespace_when_true."""
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace="default", as_yaml=""
     )
@@ -26,6 +25,7 @@ def test_has_namespace_when_true():
 
 
 def test_has_namespace_when_false():
+    """test_has_namespace_when_false."""
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace=None, as_yaml=""
     )
@@ -33,6 +33,7 @@ def test_has_namespace_when_false():
 
 
 def test_compute_namespace_dirname_when_has_namespace():
+    """test_compute_namespace_dirname_when_has_namespace."""
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace="default", as_yaml=""
     )
@@ -40,6 +41,7 @@ def test_compute_namespace_dirname_when_has_namespace():
 
 
 def test_compute_namespace_dirname_when_no_namespace():
+    """test_compute_namespace_dirname_when_no_namespace."""
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace=None, as_yaml=""
     )
@@ -48,6 +50,7 @@ def test_compute_namespace_dirname_when_no_namespace():
 
 @pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
 def test_get_order_prefix(kind: str):
+    """test_get_order_prefix."""
     d = K8SDescriptor(
         name="for_test",
         kind=kind,
@@ -60,6 +63,7 @@ def test_get_order_prefix(kind: str):
 
 @pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
 def test_get_order_prefix_when_disabled(kind: str):
+    """test_get_order_prefix_when_disabled."""
     d = K8SDescriptor(
         name="for_test",
         kind=kind,

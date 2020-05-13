@@ -6,20 +6,25 @@ import os
 import logging
 import shutil
 import argparse
+from typing import Dict, Set
+
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
-from typing import Dict, Set
+
 from .yaml_writer_config import (
-    YamlWriterConfig,
-    YamlWriterConfigKey,
     build_yaml_writer_config_from_args,
     get_opinionated_yaml_writer,
+    YamlWriterConfig,
+    YamlWriterConfigKey,
 )
 from .k8s_descriptor import K8SDescriptor
 
+default_yaml = YAML(typ="rt")
+default_yaml_writer_config = YamlWriterConfig()
+
 
 def parse_cli():
-    """Parse the cli args"""
+    """Parse the cli args."""
     my_args = dict()
     parser = argparse.ArgumentParser(
         description="""Split a set of Kubernetes descriptors to a set of files.
@@ -154,8 +159,9 @@ def parse_cli():
 
 
 def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
+    """get_all_namespaces."""
     all_namespaces = set()
-    for desc_id, descriptor in descriptors.items():
+    for _desc_id, descriptor in descriptors.items():
         if descriptor.has_namespace():
             all_namespaces.add(descriptor.compute_namespace_dirname())
     return all_namespaces
@@ -164,34 +170,37 @@ def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
 def prepare_namespace_directories(
     root_directory: str, namespaces: str
 ) -> None:
-    for ns in namespaces:
-        ns_dir = os.path.join(root_directory, ns)
+    """prepare_namespace_directories."""
+    for namespace in namespaces:
+        ns_dir = os.path.join(root_directory, namespace)
         if not os.path.exists(ns_dir):
-            logging.info("Creating directory [{0}]".format(ns_dir))
+            logging.info("Creating directory [%s]", ns_dir)
             os.makedirs(ns_dir)
 
 
 def create_root_dir(root_directory: str) -> None:
+    """create_root_dir."""
     if not os.path.exists(root_directory):
         os.makedirs(root_directory)
 
 
 def clean_root_dir(root_directory: str) -> None:
+    """clean_root_dir."""
     if os.path.isdir(root_directory):
         shutil.rmtree(root_directory)
         os.makedirs(root_directory)
 
 
-def save_descriptor_to_stream(descriptor, out, yaml_instance=YAML(typ="rt")):
+def save_descriptor_to_stream(descriptor, out, yaml_instance=default_yaml):
+    """save_descriptor_to_stream."""
     yaml_instance.dump(descriptor.as_yaml, out)
 
 
 def save_descriptors_to_dir(
-    descriptors, root_directory, yaml_instance=YAML(typ="rt")
+    descriptors, root_directory, yaml_instance=default_yaml
 ):
-    """save input descriptors to files in dir"""
-
-    for desc_id, desc in descriptors.items():
+    """Save input descriptors to files in dir."""
+    for _desc_id, desc in descriptors.items():
         with open(
             desc.compute_filename_with_namespace(root_directory), "wt"
         ) as out:
@@ -201,10 +210,10 @@ def save_descriptors_to_dir(
 
 
 def convert_input_to_descriptors(
-    input, yaml_reader=YAML(typ="rt"), prefix_resource_files: bool = True
+    input_ref, yaml_reader=default_yaml, prefix_resource_files: bool = True
 ):
-    """convert input to a dict of descriptors"""
-    parsed = yaml_reader.load_all(input.read())
+    """Convert input_ref to a dict of descriptors."""
+    parsed = yaml_reader.load_all(input_ref.read())
     descriptors = dict()
     try:
         nb_empty_resources = 0
@@ -244,9 +253,9 @@ def convert_input_to_descriptors(
                 nb_valid_resources, nb_invalid_resources, nb_empty_resources
             )
         )
-    except ScannerError as e:
+    except ScannerError as scanner_error:
         print("Something is wrong in the input, got error from Scanner")
-        print(e)
+        print(scanner_error)
         return dict()
     return descriptors
 
@@ -255,8 +264,9 @@ def convert_input_to_files_in_directory(
     input_name: str,
     root_directory: str,
     prefix_resource_files: bool = True,
-    writer_config: YamlWriterConfig = YamlWriterConfig(),
+    writer_config: YamlWriterConfig = default_yaml_writer_config,
 ) -> None:
+    """convert_input_to_files_in_directory."""
     yaml = get_opinionated_yaml_writer(writer_config)
     if input_name is not None:
         with open(input_name, "rt") as f_input:
@@ -283,10 +293,9 @@ def split_input_to_files(
     input_name: str,
     clean_output_dir: bool = True,
     prefix_resource_files: bool = True,
-    writer_config: YamlWriterConfig = YamlWriterConfig(),
+    writer_config: YamlWriterConfig = default_yaml_writer_config,
 ) -> None:
-    """
-    split input to files
+    """Split input to files.
 
     Args:
         root_directory: the directory where files and namespace directories\
@@ -309,10 +318,7 @@ def split_input_to_files(
 
 
 def main():
-    """
-    Parse args and call the split mojo
-    """
-
+    """Parse args and call the split mojo."""
     parsed_args = parse_cli()
     root_directory = parsed_args["output_dir"]
     clean_output_dir = parsed_args["clean_output_dir"]

@@ -3,16 +3,19 @@
 
 """Tests for `kubesplit` package."""
 from io import StringIO
+
 from ruamel.yaml import YAML
+
 from kubesplit.k8s_descriptor import K8SDescriptor
 from kubesplit.kubesplit import (
-    get_all_namespaces,
     convert_input_to_descriptors,
+    get_all_namespaces,
     save_descriptor_to_stream,
 )
 
 
 def test_get_all_namespace():
+    """test_get_all_namespace."""
     descriptors = dict()
     k8s_default_svc_dummy = K8SDescriptor(
         name="dummy", kind="Service", namespace="default", as_yaml=""
@@ -38,12 +41,14 @@ def test_get_all_namespace():
 
 
 def test_get_all_namespace_when_no_descriptors():
+    """test_get_all_namespace_when_no_descriptors."""
     descriptors = dict()
     res = get_all_namespaces(descriptors)
     assert len(res) == 0
 
 
 def test_convert_input_to_descriptors():
+    """test_convert_input_to_descriptors."""
     sut = StringIO()
     sut.write(
         """---
@@ -87,6 +92,7 @@ spec:
 
 
 def test_convert_input_to_descriptors_when_input_is_empty():
+    """test_convert_input_to_descriptors_when_input_is_empty."""
     sut = StringIO()
     sut.write(
         """---
@@ -98,6 +104,7 @@ def test_convert_input_to_descriptors_when_input_is_empty():
 
 
 def test_convert_input_to_descriptors_when_input_is_invalid_no_metadata():
+    """test_convert_input_to_descriptors_when_input_is_invalid_no_metadata."""
     sut = StringIO()
     sut.write(
         """---
@@ -111,6 +118,7 @@ kind: ReplicaSet
 
 
 def test_convert_input_to_descriptors_when_input_is_invalid_no_kind():
+    """test_convert_input_to_descriptors_when_input_is_invalid_no_kind."""
     sut = StringIO()
     sut.write(
         """---
@@ -129,6 +137,7 @@ metadata:
 
 
 def test_convert_input_to_descriptors_when_input_is_invalid_no_name():
+    """test_convert_input_to_descriptors_when_input_is_invalid_no_name."""
     sut = StringIO()
     sut.write(
         """---
@@ -147,6 +156,7 @@ metadata:
 
 
 def test_convert_input_to_descriptors_when_content_is_mixed():
+    """test_convert_input_to_descriptors_when_content_is_mixed."""
     sut = StringIO()
     sut.write(
         """---
@@ -203,6 +213,7 @@ metadata:
 
 
 def test_convert_input_to_descriptors_when_content_has_no_namespace():
+    """test_convert_input_to_descriptors_when_content_has_no_namespace."""
     sut = StringIO()
     sut.write(
         """---
@@ -227,6 +238,7 @@ metadata:
 
 
 def test_roundtrip_when_preserve_quotes_true():
+    """test_roundtrip_when_preserve_quotes_true."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
 kind: ReplicaSet
@@ -263,6 +275,7 @@ metadata:
 
 
 def test_roundtrip_when_preserve_quotes_false():
+    """test_roundtrip_when_preserve_quotes_false."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
 kind: ReplicaSet

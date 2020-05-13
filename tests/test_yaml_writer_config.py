@@ -1,9 +1,11 @@
+"""Tests for the YamlWriterConfig wrapper."""
 from kubesplit.yaml_writer_config import YamlWriterConfig
 from kubesplit.yaml_writer_config import get_opinionated_yaml_writer
 from ruamel.yaml import YAML
 
 
 def test_default_values():
+    """Test default values."""
     sut: YamlWriterConfig = YamlWriterConfig()
     assert sut.parsing_mode == "rt"
     assert sut.explicit_start
@@ -14,6 +16,7 @@ def test_default_values():
 
 
 def test_get_opinionated_yaml_writer_with_defaults():
+    """Test the default writer."""
     sut: YAML = get_opinionated_yaml_writer()
     assert sut.typ == ["rt"]
     assert sut.explicit_start
