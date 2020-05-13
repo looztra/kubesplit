@@ -1,8 +1,9 @@
+"""Provides a wrapper for a Kubernetes descriptor."""
 import os
 
 
 class K8SDescriptor:
-    """Kubernetes descriptor"""
+    """Kubernetes descriptor."""
 
     _cluster_wide_str_rep = "__clusterwide__"
     _order_prefixes = {
@@ -29,6 +30,7 @@ class K8SDescriptor:
         "priorityclass": "42",
         "__unknown__": "99",
     }
+    # pylint: disable=too-many-arguments
 
     def __init__(
         self,
@@ -39,6 +41,7 @@ class K8SDescriptor:
         use_order_prefix: bool = True,
         extension: str = "yml",
     ):
+        """Init."""
         self.name = name
         self.kind = kind
         self.namespace = namespace
@@ -49,20 +52,23 @@ class K8SDescriptor:
             ns_or_cluster_wide = K8SDescriptor._cluster_wide_str_rep
         else:
             ns_or_cluster_wide = namespace
+        # pylint: disable=invalid-name
         self.id = "ns:{0}/kind:{1}/name:{2}".format(
             ns_or_cluster_wide, kind, name
         )
 
     def has_namespace(self) -> bool:
+        """has_namespace."""
         return self.namespace is not None
 
     def compute_namespace_dirname(self) -> str:
+        """compute_namespace_dirname."""
         if self.has_namespace():
             return self.namespace.lower()
-        else:
-            return None
+        return None
 
     def compute_filename(self) -> str:
+        """compute_filename."""
         return "{0}{1}--{2}.{3}".format(
             self.get_order_prefix(),
             self.kind.lower(),
@@ -71,21 +77,21 @@ class K8SDescriptor:
         )
 
     def get_order_prefix(self) -> str:
+        """get_order_prefix."""
         if self.use_order_prefix:
             if self.kind.lower() in K8SDescriptor._order_prefixes:
                 k = self.kind.lower()
             else:
                 k = "__unknown__"
             return "{0}--".format(K8SDescriptor._order_prefixes[k])
-        else:
-            return ""
+        return ""
 
     def compute_filename_with_namespace(self, root_directory) -> str:
+        """compute_filename_with_namespace."""
         if self.has_namespace():
             return os.path.join(
                 root_directory,
                 self.compute_namespace_dirname(),
                 self.compute_filename(),
             )
-        else:
-            return os.path.join(root_directory, self.compute_filename())
+        return os.path.join(root_directory, self.compute_filename())

@@ -1,0 +1,7 @@
+[run]
+parallel = True
+branch = True
+source =
+  kubesplit
+omit =
+  .tox
