@@ -1,7 +1,7 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
 
-NAME := looztra/kubesplit
+PROG_NAME ?= kubesplit
+NAME := looztra/$(PROG_NAME)
 CI_PLATFORM := circleci
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
@@ -36,9 +36,11 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+.PHONY: clean
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 	@echo "+ $@"
 
+.PHONY: clean-build
 clean-build: ## remove build artifacts
 	@echo "+ $@"
 	rm -fr build/
@@ -47,6 +49,7 @@ clean-build: ## remove build artifacts
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
+.PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "+ $@"
 	find . -name '*.pyc' -exec rm -f {} +
@@ -54,6 +57,7 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
+.PHONY: clean-test
 clean-test: ## remove test and coverage artifacts
 	@echo "+ $@"
 	rm -fr .tox/
@@ -61,47 +65,56 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
+.PHONY: style
 style: ## force style with black
 	@echo "+ $@"
-	black --line-length 79 tests kubesplit
+	black --line-length 79 tests $(PROG_NAME)
 
+.PHONY: lint
 lint: ## check style with flake8
-	@echo "+ $@"
-	flake8 kubesplit tests
-
-test: ## run tests quickly with the default Python
-	@echo "+ $@"
-	tox -e py37
-
-test-py36: ## run tests quickly with the default Python
-	@echo "+ $@"
-	tox -e py36
-
-test-flake8: ## run tests on every Python version with tox
 	@echo "+ $@"
 	tox -e flake8
 
+.PHONY: tests
+tests: ## run tests quickly with the default Python
+	@echo "+ $@"
+	tox -e py3
+
+.PHONY: test
+test: tests ## wrapper
+	@echo "+ $@"
+
+.PHONY: coverage
 coverage: ## check code coverage quickly with the default Python
 	@echo "+ $@"
-	coverage run --source kubesplit -m pytest
+	coverage run --source $(PROG_NAME) -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
+.PHONY: release
 release: dist ## package and upload a release
 	@echo "+ $@"
 	twine upload dist/*
 
+.PHONY: dist
 dist: clean ## builds source and wheel package
 	@echo "+ $@"
 	python setup.py sdist
 	python setup.py bdist_wheel
-	ls -l dist
 
+.PHONY: dist-check
+dist-check: ## Check the python3 package
+	@echo "+ $@"
+	twine check dist/$(PROG_NAME)-${KUBESPLIT_VERSION}-py2.py3-none-any.whl
+	twine check dist/$(PROG_NAME)-${KUBESPLIT_VERSION}.tar.gz
+
+.PHONY: install
 install: clean ## install the package to the active Python's site-packages
 	@echo "+ $@"
 	python setup.py install
 
+.PHONY: docker-build-pip
 docker-build-pip: ## build docker image from pip package
 	@echo "+ $@"
 	docker image build \
@@ -115,6 +128,7 @@ ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
+.PHONY: docker-push-pip
 docker-push-pip: ## build docker image from pip package
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
@@ -127,6 +141,7 @@ else
 	@docker image push ${IMG_LATEST}
 endif
 
+.PHONY: docker-build-local
 docker-build-local: clean ## build docker image from local sources
 	@echo "+ $@"
 	docker image build \
@@ -139,7 +154,6 @@ docker-build-local: clean ## build docker image from local sources
 ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
-
 
 .PHONY: help
 help:

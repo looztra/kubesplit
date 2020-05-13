@@ -15,7 +15,7 @@ def test_default_values():
 
 def test_get_opinionated_yaml_writer_with_defaults():
     sut: YAML = get_opinionated_yaml_writer()
-    assert sut.typ == "rt"
+    assert sut.typ == ["rt"]
     assert sut.explicit_start
     assert not sut.explicit_end
     assert not sut.default_flow_style
