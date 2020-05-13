@@ -73,7 +73,7 @@ style: ## force style with black
 .PHONY: lint
 lint: ## check style with flake8
 	@echo "+ $@"
-	tox -e flake8
+	tox -e linters
 
 .PHONY: tests
 tests: ## run tests quickly with the default Python
