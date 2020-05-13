@@ -1,3 +1,4 @@
+"""Helper to deal with Yamkix configuration of the YAML instance."""
 from typing import Dict
 from ruamel.yaml import YAML
 
