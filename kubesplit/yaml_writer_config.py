@@ -88,7 +88,7 @@ def build_yaml_writer_config_from_args(
 
 
 def get_opinionated_yaml_writer(
-    writer_config: YamlWriterConfig = YamlWriterConfig()
+    writer_config: YamlWriterConfig = YamlWriterConfig(),
 ) -> YAML:
     """
     Configure a yaml parser/formatter the yamkix way
