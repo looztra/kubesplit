@@ -84,6 +84,11 @@ tests: ## run tests quickly with the default Python
 test: tests ## wrapper
 	@echo "+ $@"
 
+.PHONY: integration-tests
+integration-tests: ## Run integration tests
+	@echo "+ $@"
+	bats tests.bats
+
 .PHONY: coverage
 coverage: ## check code coverage quickly with the default Python
 	@echo "+ $@"
