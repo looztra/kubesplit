@@ -114,12 +114,15 @@ You can find some input and output examples in the [examples](https://github.com
 ### Valid resources, no quotes preserved
 
 ```bash
-╰(.venv)─» python -m kubesplit -i examples/all-in-one/source/all-in-one.yml -o examples/all-in-one/generated/ -c -q
-Processing: input=examples/all-in-one/source/all-in-one.yml, output_dir=examples/all-in-one/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
+╰(.venv)─»  kubesplit --input test-assets/source/all-in-one.yml \
+              --output test-assets/expected/all-in-one--no-quotes-preserved \
+              --no-quotes-preserved \
+              --clean-output-dir
+Processing: input=test-assets/source/all-in-one.yml, output_dir=test-assets/expected/all-in-one--no-quotes-preserved, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [16] valid / [0] invalid / [0] empty resources
 
-╰(.venv)─» tree --dirsfirst examples/all-in-one/generated/
-examples/all-in-one/generated/
+╰(.venv)─» tree --dirsfirst test-assets/expected/all-in-one--no-quotes-preserved
+test-assets/expected/all-in-one--no-quotes-preserved
 ├── apps-demo
 │   └── 05--rolebinding--example-ns-demo-developer-binding.yml
 ├── apps-integration
@@ -140,17 +143,22 @@ examples/all-in-one/generated/
 ├── 02--clusterrolebinding--example-node-viewer-developer.yml
 └── 02--clusterrolebinding--example-traefik-ingress-controller.yml
 
+3 directories, 16 files
 ```
 
 ### Valid resources, no prefix, no quotes preserved
 
 ```bash
-╰(.venv)─» python -m kubesplit -i examples/all-in-one-no-prefix/source/all-in-one.yml -o examples/all-in-one-no-prefix/generated/ -c -q -p
-Processing: input=examples/all-in-one-no-prefix/source/all-in-one.yml, output_dir=examples/all-in-one-no-prefix/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=False
+╰(.venv)─» kubesplit --input test-assets/source/all-in-one.yml \
+              --output test-assets/expected/all-in-one--no-quotes-preserved--no-resource-prefix \
+              --no-quotes-preserved \
+              --no-resource-prefix \
+              --clean-output-dir
+Processing: input=test-assets/source/all-in-one.yml, output_dir=test-assets/expected/all-in-one--no-quotes-preserved--no-resource-prefix, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=False
 Found [16] valid / [0] invalid / [0] empty resources
 
-╰(.venv)─» tree --dirsfirst examples/all-in-one-no-prefix/generated/
-examples/all-in-one-no-prefix/generated/
+╰(.venv)─» tree --dirsfirst test-assets/expected/all-in-one--no-quotes-preserved--no-resource-prefix
+test-assets/expected/all-in-one--no-quotes-preserved--no-resource-prefix
 ├── apps-demo
 │   └── rolebinding--example-ns-demo-developer-binding.yml
 ├── apps-integration
@@ -171,22 +179,27 @@ examples/all-in-one-no-prefix/generated/
 ├── namespace--apps-integration.yml
 └── namespace--ingress-controllers.yml
 
-
+3 directories, 16 files
 ```
 
 ### Mixed content : valid, invalid and empty resources, no quotes preserved
 
 ```bash
-╰(.venv)─» python -m kubesplit -i examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml  -o examples/mixed-content/generated/ -c -q
-Processing: input=examples/mixed-content/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=examples/mixed-content/generated/, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
+╰(.venv)─» kubesplit --input test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml \
+                         --output test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved \
+                         --no-quotes-preserved \
+                         --clean-output-dir
+Processing: input=test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [2] valid / [1] invalid / [1] empty resources
 
-╰(.venv)─» tree --dirsfirst examples/mixed-content/generated/
-examples/mixed-content/generated/
+╰(.venv)─» tree --dirsfirst test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved
+test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved
 ├── akira
 │   └── 25--replicaset--bididididi.yml
 └── yolo
     └── 25--replicaset--frontend.yml
+
+2 directories, 2 files
 
 ```
 

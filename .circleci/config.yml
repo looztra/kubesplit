@@ -25,11 +25,11 @@ commands:
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             make test
-#      - run:
-#          name: Run integration tests
-#          command: |
-#            set -x
-#            make integration-tests
+      - run:
+          name: Run integration tests
+          command: |
+            set -x
+            make integration-tests
       - run:
           name: Check that we can build a package
           command: |
