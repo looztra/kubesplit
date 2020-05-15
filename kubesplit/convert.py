@@ -24,9 +24,9 @@ def resource_is_list(resource):
     """Check if the resource is a list."""
     if resource:
         return (
-            "items" in resource
-            and "kind" in resource
+            "kind" in resource
             and "apiVersion" in resource
+            and resource["kind"].endswith("List")
         )
     return False
 
@@ -50,8 +50,9 @@ def deal_with_list(
     if split_lists_to_items:
         print("Not supported yet")
     else:
+        list_name = "list_" + str(list_index)
         k8s_descriptor = K8SDescriptor(
-            name="list_" + str(list_index),
+            name=list_name,
             kind=resource["kind"],
             namespace=None,
             as_yaml=resource,

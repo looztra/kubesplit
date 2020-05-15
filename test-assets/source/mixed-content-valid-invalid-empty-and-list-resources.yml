@@ -44,8 +44,8 @@ metadata:
   namespace: akira
   annotations:
     boubou: frontend
-# I am a list
 ---
+# I am a list
 apiVersion: v1
 items:
   - apiVersion: v1
@@ -63,3 +63,12 @@ items:
       name: grafana-dashboard-statefulset2
       namespace: monitoring
 kind: ConfigMapList
+---
+# I am a list without items
+apiVersion: v1
+kind: RoleList
+---
+# I am a list with an empty items array
+apiVersion: v1
+kind: RoleList
+items: []

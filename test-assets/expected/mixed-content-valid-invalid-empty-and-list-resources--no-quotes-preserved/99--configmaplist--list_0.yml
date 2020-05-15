@@ -1,4 +1,5 @@
 ---
+# I am a list
 apiVersion: v1
 items:
   - apiVersion: v1

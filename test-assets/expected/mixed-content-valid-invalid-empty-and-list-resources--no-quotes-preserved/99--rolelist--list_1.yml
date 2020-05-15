@@ -1,0 +1,4 @@
+---
+# I am a list without items
+apiVersion: v1
+kind: RoleList
