@@ -73,6 +73,20 @@ kind: ConfigMapList
     assert res is True
 
 
+def test_resource_is_list_when_resource_is_a_list_without_items():
+    """Test resource_is_list when resource is a list without items."""
+    string = StringIO()
+    string.write(
+        """---
+apiVersion: v1
+kind: ConfigMapList
+"""
+    )
+    sut = string_to_single_resource(string)
+    res = resource_is_list(sut)
+    assert res is True
+
+
 def test_resource_is_object_when_resource_is_a_list():
     """Test resource_is_object when resource is a list."""
     string = StringIO()

@@ -1,0 +1,5 @@
+---
+# I am a list with an empty items array
+apiVersion: v1
+kind: RoleList
+items: []
