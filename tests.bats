@@ -30,3 +30,11 @@ load test-assets/test_kubesplit
 @test "mixed-content-valid-invalid-and-empty-resources.yml, --no-quotes-preserved, --clean-output-dir" {
   kubesplit_no_quotes_preserved mixed-content-valid-invalid-and-empty-resources
 }
+
+# kubesplit --input test-assets/source/mixed-content-valid-invalid-empty-and-list-resources.yml \
+#   --output test-assets/expected/mixed-content-valid-invalid-empty-and-list-resources--no-quotes-preserved \
+#   --no-quotes-preserved \
+#   --clean-output-dir
+@test "mixed-content-valid-invalid-empty-and-list-resources.yml, --no-quotes-preserved, --clean-output-dir" {
+  kubesplit_no_quotes_preserved mixed-content-valid-invalid-empty-and-list-resources
+}
