@@ -2,6 +2,10 @@
 
 load test-assets/test_kubesplit
 
+@test "--help" {
+  python -m kubesplit --help
+}
+
 # kubesplit --input test-assets/source/all-in-one.yml \
 #   --output test-assets/expected/all-in-one--no-quotes-preserved \
 #   --no-quotes-preserved \

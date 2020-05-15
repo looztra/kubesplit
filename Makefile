@@ -75,6 +75,10 @@ lint: ## check style with flake8
 	@echo "+ $@"
 	tox -e linters
 
+.PHONY: all
+all: clean lint test integration-test ## Reset cache and test everything
+	@echo "+ $@"
+
 .PHONY: tests
 tests: ## run tests quickly with the default Python
 	@echo "+ $@"
@@ -88,6 +92,9 @@ test: tests ## wrapper
 integration-tests: ## Run integration tests
 	@echo "+ $@"
 	bats tests.bats
+
+.PHONY: integration-test
+integration-test: integration-tests ## Run integration tests
 
 .PHONY: coverage
 coverage: ## check code coverage quickly with the default Python

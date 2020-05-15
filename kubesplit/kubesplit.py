@@ -1,161 +1,24 @@
-# -*- coding: utf-8 -*-
 """Main module."""
 
 import sys
 import os
 import logging
 import shutil
-import argparse
 from typing import Dict, Set
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 
-from .yaml_writer_config import (
-    build_yaml_writer_config_from_args,
-    get_opinionated_yaml_writer,
-    YamlWriterConfig,
-    YamlWriterConfigKey,
-)
-from .k8s_descriptor import K8SDescriptor
+from yamkix.config import get_default_yamkix_config, YamkixConfig
+from yamkix.yaml_writer import get_opinionated_yaml_writer
+
+from kubesplit.args import parse_cli
+from kubesplit.config import KubesplitConfig, print_config
+from kubesplit.helpers import print_version
+from kubesplit.k8s_descriptor import K8SDescriptor
 
 default_yaml = YAML(typ="rt")
-default_yaml_writer_config = YamlWriterConfig()
-
-
-def parse_cli():
-    """Parse the cli args."""
-    my_args = dict()
-    parser = argparse.ArgumentParser(
-        description="""Split a set of Kubernetes descriptors to a set of files.
-            The yaml format of the generated files can be tuned using the same\
-                parameters as the one used by Yamkix.
-            By default, explicit_start is `On`, explicit_end is `Off`\
-            and array elements are pushed inwards the start of the \
-            matching sequence. Comments are preserved thanks to default \
-            parsing mode `rt`.
-        """
-    )
-    parser.add_argument(
-        "-i",
-        "--input",
-        required=False,
-        help="the file to parse, or STDIN if not specified or if value is -",
-    )
-    parser.add_argument(
-        "-t",
-        "--typ",
-        required=False,
-        default="rt",
-        help="the yaml parser mode. Can be `safe` or `rt`",
-    )
-    parser.add_argument(
-        "-o",
-        "--output-dir",
-        required=True,
-        help="the name of the output target directory.\
-                The target directory will be created if it does not\
-                exist if it's possible",
-    )
-    parser.add_argument(
-        "-n",
-        "--no-explicit-start",
-        action="store_true",
-        help="by default, explicit start (---) of the yaml doc \
-                is `On`, you can disable it with this option",
-    )
-    parser.add_argument(
-        "-e",
-        "--explicit-end",
-        action="store_true",
-        help="by default, explicit end (...) of the yaml doc \
-                is `Off`, you can enable it with this option",
-    )
-    parser.add_argument(
-        "-q",
-        "--no-quotes-preserved",
-        action="store_true",
-        help="by default, quotes are preserved \
-                you can disable this with this option",
-    )
-    parser.add_argument(
-        "-f",
-        "--default-flow-style",
-        action="store_true",
-        help="enable the default flow style \
-                `Off` by default. In default flow style \
-                (with typ=`rt`), maps and lists are written \
-                like json",
-    )
-    parser.add_argument(
-        "-d",
-        "--no-dash-inwards",
-        action="store_true",
-        help="by default, dash are pushed inwards \
-                use `--no-dash-inwards` to have the dash \
-                start at the sequence level",
-    )
-    parser.add_argument(
-        "-c",
-        "--clean-output-dir",
-        action="store_true",
-        help="clean the output directory (rmtree) if set (default is False)",
-    )
-    parser.add_argument(
-        "-p",
-        "--no-resource-prefix",
-        action="store_true",
-        help="by default, resource files are number prefixed, you can disable \
-            this behaviour with this flag",
-    )
-    args = parser.parse_args()
-
-    input_display_name = "STDIN"
-    if args.input is None or args.input == "-":
-        my_args["input"] = None
-    else:
-        my_args["input"] = args.input
-        input_display_name = my_args["input"]
-
-    if args.typ not in ["safe", "rt"]:
-        raise ValueError(
-            "'%s' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'" % args.type
-        )
-    my_args["output_dir"] = args.output_dir
-    my_args[YamlWriterConfigKey.typ] = args.typ
-    my_args[YamlWriterConfigKey.explicit_start] = not args.no_explicit_start
-    my_args[YamlWriterConfigKey.explicit_end] = args.explicit_end
-    my_args[YamlWriterConfigKey.default_flow_style] = args.default_flow_style
-    my_args[YamlWriterConfigKey.dash_inwards] = not args.no_dash_inwards
-    my_args[
-        YamlWriterConfigKey.quotes_preserved
-    ] = not args.no_quotes_preserved
-    my_args["clean_output_dir"] = args.clean_output_dir
-    my_args["prefix_resource_files"] = not args.no_resource_prefix
-    print(
-        "Processing: input="
-        + input_display_name
-        + ", output_dir="
-        + my_args["output_dir"]
-        + ", clean_output_dir="
-        + str(my_args["clean_output_dir"])
-        + ", typ="
-        + my_args[YamlWriterConfigKey.typ]
-        + ", explicit_start="
-        + str(my_args[YamlWriterConfigKey.explicit_start])
-        + ", explicit_end="
-        + str(my_args[YamlWriterConfigKey.explicit_end])
-        + ", default_flow_style="
-        + str(my_args[YamlWriterConfigKey.default_flow_style])
-        + ", quotes_preserved="
-        + str(my_args[YamlWriterConfigKey.quotes_preserved])
-        + ", dash_inwards="
-        + str(my_args[YamlWriterConfigKey.dash_inwards])
-        + ", prefix_resource_files="
-        + str(my_args["prefix_resource_files"])
-    )
-    return my_args
+default_yamkix_config = get_default_yamkix_config()
 
 
 def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
@@ -264,10 +127,10 @@ def convert_input_to_files_in_directory(
     input_name: str,
     root_directory: str,
     prefix_resource_files: bool = True,
-    writer_config: YamlWriterConfig = default_yaml_writer_config,
+    yamkix_config: YamkixConfig = default_yamkix_config,
 ) -> None:
     """convert_input_to_files_in_directory."""
-    yaml = get_opinionated_yaml_writer(writer_config)
+    yaml = get_opinionated_yaml_writer(yamkix_config)
     if input_name is not None:
         with open(input_name, "rt") as f_input:
             descriptors = convert_input_to_descriptors(
@@ -288,13 +151,7 @@ def convert_input_to_files_in_directory(
         )
 
 
-def split_input_to_files(
-    root_directory: str,
-    input_name: str,
-    clean_output_dir: bool = True,
-    prefix_resource_files: bool = True,
-    writer_config: YamlWriterConfig = default_yaml_writer_config,
-) -> None:
+def split_input_to_files(kubesplit_config: KubesplitConfig) -> None:
     """Split input to files.
 
     Args:
@@ -303,9 +160,15 @@ def split_input_to_files(
         input_name: the name of the input file to read. If None, then STDIN\
             will be used
         clean_output_dir: do we cleanup the target directory before processing?
-        writer_config: YamlWriterConfig object describing how to format the\
+        yamkix_config: YamkixConfig object describing how to format the\
             yaml files that will be written
     """
+    root_directory = kubesplit_config.io_config.output_dir
+    clean_output_dir = kubesplit_config.clean_output_dir
+    prefix_resource_files = kubesplit_config.prefix_resource_files
+    input_name = kubesplit_config.io_config.input
+    yamkix_config = kubesplit_config.yamkix_config
+
     create_root_dir(root_directory)
     if clean_output_dir:
         clean_root_dir(root_directory)
@@ -313,24 +176,18 @@ def split_input_to_files(
         input_name=input_name,
         root_directory=root_directory,
         prefix_resource_files=prefix_resource_files,
-        writer_config=writer_config,
+        yamkix_config=yamkix_config,
     )
 
 
 def main():
     """Parse args and call the split mojo."""
-    parsed_args = parse_cli()
-    root_directory = parsed_args["output_dir"]
-    clean_output_dir = parsed_args["clean_output_dir"]
-    prefix_resource_files = parsed_args["prefix_resource_files"]
-    input_name = parsed_args["input"]
-    split_input_to_files(
-        root_directory=root_directory,
-        input_name=input_name,
-        clean_output_dir=clean_output_dir,
-        prefix_resource_files=prefix_resource_files,
-        writer_config=build_yaml_writer_config_from_args(parsed_args),
-    )
+    kubesplit_config = parse_cli(sys.argv[1:])
+    if kubesplit_config.version:
+        print_version()
+    else:
+        print_config(kubesplit_config)
+        split_input_to_files(kubesplit_config)
 
 
 if __name__ == "__main__":
