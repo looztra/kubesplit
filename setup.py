@@ -11,7 +11,7 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = ["ruamel.yaml>=0.16.10", "yamkix>=0.7.0"]
+requirements = ["ruamel.yaml>=0.16.10", "yamkix>=0.8.0"]
 
 setup_requirements = ["pytest-runner"]
 
