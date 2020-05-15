@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+items:
+  - apiVersion: v1
+    data:
+      envoy.json: some data
+    kind: ConfigMap
+    metadata:
+      name: grafana-dashboard-statefulset
+      namespace: monitoring
+  - apiVersion: v1
+    data:
+      envoy.json: some data
+    kind: ConfigMap
+    metadata:
+      name: grafana-dashboard-statefulset2
+      namespace: monitoring
+kind: ConfigMapList

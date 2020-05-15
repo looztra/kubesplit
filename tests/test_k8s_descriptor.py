@@ -51,24 +51,49 @@ def test_compute_namespace_dirname_when_no_namespace():
 @pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
 def test_get_order_prefix(kind: str):
     """test_get_order_prefix."""
-    d = K8SDescriptor(
+    sut = K8SDescriptor(
         name="for_test",
         kind=kind,
         namespace=None,
         as_yaml=None,
         use_order_prefix=True,
     )
-    assert (d.get_order_prefix() == "") is False
+    assert (sut.get_order_prefix() == "") is False
 
 
 @pytest.mark.parametrize("kind", data_for_test_get_order_prefix)
 def test_get_order_prefix_when_disabled(kind: str):
     """test_get_order_prefix_when_disabled."""
-    d = K8SDescriptor(
+    sut = K8SDescriptor(
         name="for_test",
         kind=kind,
         namespace=None,
         as_yaml=None,
         use_order_prefix=False,
     )
-    assert (d.get_order_prefix() == "") is True
+    assert (sut.get_order_prefix() == "") is True
+
+
+def test_is_list_with_default():
+    """Test is_list with default."""
+    sut = K8SDescriptor(
+        name="for_test",
+        kind="ConfigMap",
+        namespace=None,
+        as_yaml=None,
+        use_order_prefix=False,
+    )
+    assert sut.is_list is False
+
+
+def test_is_list_can_be_set():
+    """Test is_list with default."""
+    sut = K8SDescriptor(
+        name="for_test",
+        kind="ConfigMapList",
+        namespace=None,
+        as_yaml=None,
+        use_order_prefix=False,
+    )
+    sut.is_list = True
+    assert sut.is_list is True

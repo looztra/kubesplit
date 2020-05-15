@@ -2,6 +2,7 @@
 import os
 
 
+# pylint: disable=too-many-instance-attributes
 class K8SDescriptor:
     """Kubernetes descriptor."""
 
@@ -48,6 +49,7 @@ class K8SDescriptor:
         self.as_yaml = as_yaml
         self.use_order_prefix = use_order_prefix
         self.extension = extension
+        self.is_list = False
         if namespace is None:
             ns_or_cluster_wide = K8SDescriptor._cluster_wide_str_rep
         else:
