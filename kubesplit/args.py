@@ -39,7 +39,7 @@ def build_parser():
                 exist if it's possible",
     )
     parser.add_argument(
-        "-x",
+        "-c",
         "--clean-output-dir",
         action="store_true",
         help="clean the output directory (rmtree) if set (default is False)",
@@ -51,7 +51,9 @@ def build_parser():
         help="by default, resource files are number prefixed, you can disable \
             this behavior with this flag",
     )
-    add_yamkix_options_to_parser(parser)
+    add_yamkix_options_to_parser(
+        parser, short_opt_override={"--spaces-before-comment": "-s"}
+    )
     parser.add_argument(
         "-v", "--version", action="store_true", help="show kubesplit version",
     )
