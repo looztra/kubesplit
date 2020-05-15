@@ -20,6 +20,6 @@ insert_final_newline = true
 [Makefile]
 indent_style = tab
 
-[test_kubesplit.py]
+[{test_output.py,test_convert.py}]
 indent_size = none
 indent_style = none
