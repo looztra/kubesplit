@@ -1,2 +1,2 @@
 ruamel.yaml==0.16.10
-yamkix==0.8.0
+yamkix==0.9.0

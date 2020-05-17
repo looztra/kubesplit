@@ -150,7 +150,12 @@ def convert_input_to_files_in_directory(
     if len(descriptors) > 0:
         namespaces = get_all_namespaces(descriptors)
         prepare_namespace_directories(root_directory, namespaces)
-        save_descriptors_to_dir(descriptors, root_directory, yaml)
+        save_descriptors_to_dir(
+            descriptors,
+            root_directory,
+            yaml_instance=yaml,
+            yamkix_config=yamkix_config,
+        )
     else:
         logging.error(
             "Nothing found in provided input, check for previous errors"
