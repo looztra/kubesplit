@@ -1,4 +1,4 @@
-FROM python:3.7.3-alpine3.9
+FROM python:3.8.3-alpine3.11
 
 ARG CI_PLATFORM
 LABEL io.nodevops.ci-platform ${CI_PLATFORM}
