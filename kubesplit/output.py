@@ -5,7 +5,11 @@ import shutil
 
 from ruamel.yaml import YAML
 
+from yamkix.yamkix import yamkix_dump_one
+from yamkix.config import get_default_yamkix_config, YamkixConfig
+
 default_yaml = YAML(typ="rt")
+default_yamkix_config = get_default_yamkix_config()
 
 
 def create_root_dir(root_directory: str) -> None:
@@ -21,13 +25,27 @@ def clean_root_dir(root_directory: str) -> None:
         os.makedirs(root_directory)
 
 
-def save_descriptor_to_stream(descriptor, out, yaml_instance=default_yaml):
+def save_descriptor_to_stream(
+    descriptor,
+    out,
+    yaml_instance: YAML,
+    yamkix_config: YamkixConfig = default_yamkix_config,
+):
     """save_descriptor_to_stream."""
-    yaml_instance.dump(descriptor.as_yaml, out)
+    yamkix_dump_one(
+        descriptor.as_yaml,
+        yaml_instance,
+        yamkix_config.dash_inwards,
+        out,
+        yamkix_config.spaces_before_comment,
+    )
 
 
 def save_descriptors_to_dir(
-    descriptors, root_directory, yaml_instance=default_yaml
+    descriptors,
+    root_directory,
+    yaml_instance: YAML,
+    yamkix_config: YamkixConfig = default_yamkix_config,
 ):
     """Save input descriptors to files in dir."""
     for _desc_id, desc in descriptors.items():
@@ -35,5 +53,8 @@ def save_descriptors_to_dir(
             desc.compute_filename_with_namespace(root_directory), "wt"
         ) as out:
             save_descriptor_to_stream(
-                descriptor=desc, out=out, yaml_instance=yaml_instance
+                descriptor=desc,
+                out=out,
+                yaml_instance=yaml_instance,
+                yamkix_config=yamkix_config,
             )
