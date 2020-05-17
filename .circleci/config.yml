@@ -98,8 +98,7 @@ jobs:
     steps:
       - checkout
       - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run:
           name: Build FTW!
           command: |
