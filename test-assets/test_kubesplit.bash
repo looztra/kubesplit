@@ -27,3 +27,15 @@ function kubesplit_no_quotes_preserved_no_resource_prefix() {
     --clean-output-dir
   diff_result_vs_expected "${f_input}" no-quotes-preserved--no-resource-prefix
 }
+
+function kubesplit_no_quotes_preserved_no_resource_prefix_spaces_before_comment_1() {
+  local f_input=$1
+  python -m kubesplit \
+    --input "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" \
+    --output "$BATS_TMPDIR/result" \
+    --no-quotes-preserved \
+    --no-resource-prefix \
+    --spaces-before-comment 1 \
+    --clean-output-dir
+  diff_result_vs_expected "${f_input}" no-quotes-preserved--no-resource-prefix--spaces-before-comment_1
+}

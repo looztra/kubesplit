@@ -38,3 +38,21 @@ load test-assets/test_kubesplit
 @test "mixed-content-valid-invalid-empty-and-list-resources.yml, --no-quotes-preserved, --clean-output-dir" {
   kubesplit_no_quotes_preserved mixed-content-valid-invalid-empty-and-list-resources
 }
+
+# kubesplit --input test-assets/source/k8s-deployment-with-comments-1.yml \
+#   --output test-assets/expected/k8s-deployment-with-comments-1--no-quotes-preserved \
+#   --no-quotes-preserved \
+#   --clean-output-dir
+@test "k8s-deployment-with-comments-1.yml, --no-quotes-preserved, --clean-output-dir" {
+  kubesplit_no_quotes_preserved k8s-deployment-with-comments-1
+}
+
+# kubesplit --input test-assets/source/k8s-deployment-with-comments-1.yml \
+#   --output test-assets/expected/k8s-deployment-with-comments-1--no-quotes-preserved--no-resource-prefix--spaces-before-comment_1 \
+#   --no-quotes-preserved \
+#   --no-resource-prefix \
+#   --spaces-before-comment 1 \
+#   --clean-output-dir
+@test "k8s-deployment-with-comments-1.yml, --no-quotes-preserved, --no-resource-prefix, --spaces-before-comment 1, --clean-output-dir" {
+  kubesplit_no_quotes_preserved_no_resource_prefix_spaces_before_comment_1 k8s-deployment-with-comments-1
+}
