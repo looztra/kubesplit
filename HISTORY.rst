@@ -18,7 +18,7 @@ History
 ------------------
 
 * refactor : use the newly available yamkix module and rely on its configuration and writer helpers that make all the yaml writing options work as expected (some of them were not working)
-  * now kubesplit can also deal with comments!
+    * now kubesplit can also deal with comments!
 * fix #5 (deal with Lists)
 * chore(CI): introduce some integration tests
 
