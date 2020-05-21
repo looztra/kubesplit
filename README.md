@@ -1,5 +1,8 @@
 # kubesplit
 
+[![Updates](https://pyup.io/repos/github/looztra/kubesplit/shield.svg)](https://pyup.io/repos/github/looztra/kubesplit/)
+[![Python 3](https://pyup.io/repos/github/looztra/kubesplit/python-3-shield.svg)](https://pyup.io/repos/github/looztra/kubesplit/)
+
 ## What?
 
 [<img src="https://img.shields.io/pypi/v/kubesplit.svg">](https://pypi.python.org/pypi/kubesplit)
@@ -348,3 +351,4 @@ make test
 
 - This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
 - Kubesplit uses the awesome [ruamel.yaml](https://yaml.readthedocs.io/en/latest/pyyaml.html) python lib.
+- Dependencies scanned by [PyUp.io](https://pyup.io/)
