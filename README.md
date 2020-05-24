@@ -112,7 +112,7 @@ optional arguments:
 
 ## Examples
 
-You can find some input and output examples in the [examples](https://github.com/looztra/kubesplit/tree/master/examples) directory
+You can find some input and output examples in the [test-assets](https://github.com/looztra/kubesplit/tree/master/test-assets) directory
 
 ### Valid resources, no quotes preserved
 
