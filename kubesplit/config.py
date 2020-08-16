@@ -32,7 +32,7 @@ def get_io_config_from_args(
 ) -> KubesplitIOConfig:
     """Build a KubesplitIOConfig from parsed args."""
     input_display_name = "STDIN"
-    if args.input is None:
+    if args.input is None or args.input == "-":
         f_input = None
     else:
         f_input = args.input

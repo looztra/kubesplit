@@ -56,3 +56,20 @@ load test-assets/test_kubesplit
 @test "k8s-deployment-with-comments-1.yml, --no-quotes-preserved, --no-resource-prefix, --spaces-before-comment 1, --clean-output-dir" {
   kubesplit_no_quotes_preserved_no_resource_prefix_spaces_before_comment_1 k8s-deployment-with-comments-1
 }
+
+#  kubesplit \
+#   --output test-assets/expected/all-in-one--no-quotes-preserved \
+#   --no-quotes-preserved \
+#   --clean-output-dir < test-assets/source/all-in-one.yml
+@test "all-in-one.yml, --no-quotes-preserved, --clean-output-dir, input not specified" {
+  kubesplit_no_quotes_preserved_stdin_not_specified all-in-one
+}
+
+#  kubesplit \
+#   --input - \
+#   --output test-assets/expected/all-in-one--no-quotes-preserved \
+#   --no-quotes-preserved \
+#   --clean-output-dir < test-assets/source/all-in-one.yml
+@test "all-in-one.yml, --no-quotes-preserved, --clean-output-dir, input is -" {
+  kubesplit_no_quotes_preserved_stdin_is_dash all-in-one
+}
