@@ -46,7 +46,7 @@ def deal_with_list(
     resource, list_index, use_order_prefix, split_lists_to_items: bool = False
 ):
     """Deal with lists."""
-    descriptors = dict()
+    descriptors = {}
     if split_lists_to_items:
         print("Not supported yet")
     else:
@@ -71,7 +71,7 @@ def convert_input_to_descriptors(
 ):
     """Convert input_ref to a dict of descriptors."""
     parsed = yaml_reader.load_all(input_ref.read())
-    descriptors = dict()
+    descriptors = {}
     try:
         nb_empty_resources = 0
         nb_invalid_resources = 0
@@ -112,20 +112,15 @@ def convert_input_to_descriptors(
             else:
                 nb_empty_resources = nb_empty_resources + 1
         print(
-            "Found [{0}] valid /"
-            " [{1}] lists /"
-            " [{2}] invalid /"
-            " [{3}] empty resources".format(
-                nb_valid_resources,
-                nb_lists,
-                nb_invalid_resources,
-                nb_empty_resources,
-            )
+            f"Found [{nb_valid_resources}] valid /"
+            f" [{nb_lists}] lists /"
+            f" [{nb_invalid_resources}] invalid /"
+            f" [{nb_empty_resources}] empty resources"
         )
     except ScannerError as scanner_error:
         print("Something is wrong in the input, got error from Scanner")
         print(scanner_error)
-        return dict()
+        return {}
     return descriptors
 
 
@@ -138,7 +133,7 @@ def convert_input_to_files_in_directory(
     """convert_input_to_files_in_directory."""
     yaml = get_opinionated_yaml_writer(yamkix_config)
     if input_name is not None:
-        with open(input_name, "rt") as f_input:
+        with open(input_name, mode="rt", encoding="UTF-8") as f_input:
             descriptors = convert_input_to_descriptors(
                 f_input, yaml, prefix_resource_files=prefix_resource_files
             )
