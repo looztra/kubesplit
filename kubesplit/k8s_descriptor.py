@@ -55,9 +55,7 @@ class K8SDescriptor:
         else:
             ns_or_cluster_wide = namespace
         # pylint: disable=invalid-name
-        self.id = "ns:{0}/kind:{1}/name:{2}".format(
-            ns_or_cluster_wide, kind, name
-        )
+        self.id = f"ns:{ns_or_cluster_wide}/kind:{kind}/name:{name}"
 
     def has_namespace(self) -> bool:
         """has_namespace."""
@@ -71,11 +69,9 @@ class K8SDescriptor:
 
     def compute_filename(self) -> str:
         """compute_filename."""
-        return "{0}{1}--{2}.{3}".format(
-            self.get_order_prefix(),
-            self.kind.lower(),
-            self.name.lower().replace(":", "-"),
-            self.extension,
+        return (
+            f"{self.get_order_prefix()}{self.kind.lower()}--"
+            f"{self.name.lower().replace(':', '-')}.{self.extension}"
         )
 
     def get_order_prefix(self) -> str:
@@ -85,7 +81,7 @@ class K8SDescriptor:
                 k = self.kind.lower()
             else:
                 k = "__unknown__"
-            return "{0}--".format(K8SDescriptor._order_prefixes[k])
+            return f"{K8SDescriptor._order_prefixes[k]}--"
         return ""
 
     def compute_filename_with_namespace(self, root_directory) -> str:

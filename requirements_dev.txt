@@ -1,16 +1,15 @@
-pip==21.1.2
-bump2version==1.0.0
-wheel==0.35.1
-watchdog==0.10.3
-flake8==3.8.3
-tox==3.19.0
-coverage==5.2.1
-rope==0.17.0
-Sphinx==3.2.1
-twine==3.2.0
-black==19.10b0
-pylint==2.8.2
-pytest==6.0.1
-pytest-runner==5.2
+bump2version==1.0.1
+wheel==0.37.0
+flake8==4.0.1
+tox==3.24.4
+coverage==6.2
+rope==0.22.0
+Sphinx==4.3.2
+twine==3.7.1
+black==21.12b0
+rstcheck==3.3.1
+pylint==2.12.2
+pytest==6.2.5
+
 
 -e .

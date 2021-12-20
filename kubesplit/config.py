@@ -18,7 +18,8 @@ KubesplitConfig = collections.namedtuple(
 )
 
 KubesplitIOConfig = collections.namedtuple(
-    "KubesplitIOConfig", "input input_display_name output_dir",
+    "KubesplitIOConfig",
+    "input input_display_name output_dir",
 )
 
 

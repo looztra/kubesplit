@@ -12,7 +12,7 @@ from kubesplit.config import get_config_from_args, KubesplitConfig
 def build_parser():
     """Build the cli args parser."""
     parser = argparse.ArgumentParser(
-        description="""Kubesplit v{}
+        description=f"""Kubesplit v{__version__}
             Split a set of Kubernetes descriptors to a set of files.
             The yaml format of the generated files can be tuned using the same\
                 parameters as the one used by Yamkix.
@@ -20,9 +20,7 @@ def build_parser():
             and array elements are pushed inwards the start of the \
             matching sequence. Comments are preserved thanks to default \
             parsing mode `rt`.
-        """.format(
-            __version__
-        )
+        """
     )
     parser.add_argument(
         "-i",
@@ -55,7 +53,10 @@ def build_parser():
         parser, short_opt_override={"--spaces-before-comment": "-s"}
     )
     parser.add_argument(
-        "-v", "--version", action="store_true", help="show kubesplit version",
+        "-v",
+        "--version",
+        action="store_true",
+        help="show kubesplit version",
     )
     return parser
 

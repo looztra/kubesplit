@@ -5,10 +5,10 @@
 
 from setuptools import find_packages, setup
 
-with open("README.rst") as readme_file:
+with open("README.rst", encoding="UTF-8") as readme_file:
     readme = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
+with open("HISTORY.rst", encoding="UTF-8") as history_file:
     history = history_file.read()
 
 requirements = ["ruamel.yaml>=0.16.10", "yamkix>=0.9.0"]
@@ -32,9 +32,10 @@ setup(
         "Operating System :: POSIX",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     description="Split multidoc yaml formatted kubernetes descriptors to a set \
         of single resource files",
