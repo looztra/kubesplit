@@ -1,0 +1,174 @@
+---
+name: "Build"
+on:
+  push:
+    branches:
+      - main
+      - maintenance/*
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches:
+      - main
+      - maintenance/*
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - "**.png"
+      - "**.gif"
+      - "**.svg"
+      - "**.jpeg"
+
+env:
+      PIP_CONFIG_FILE: /dev/null
+
+jobs:
+  root_checks:
+    name: Root checks
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v2.3.4
+
+      - name: Check Eclint status
+        uses: snow-actions/eclint@v1.0.1
+        with:
+          args: "check"
+
+  build-python:
+    name: Build python artifacts
+    runs-on: ubuntu-latest
+    needs: root_checks
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        python_version:
+          - 3.7
+          - 3.8
+          - 3.9
+          - "3.10"
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@master
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Prepare venv
+        run: |
+          echo "Cleaning previous venv if any"
+          rm -rf .venv || true
+          echo "Create a new venv"
+          python3 -m venv .venv
+          echo "Activate venv"
+          source .venv/bin/activate
+          which python
+          echo "Upgrade pip"
+          pip install --upgrade pip
+          echo "Install ci requirements"
+          pip install -r requirements_ci.txt
+
+      - name: Run linters
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run linters"
+          make lint
+
+      - name: Run unit tests
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run unit tests"
+          make unit-tests
+
+      - name: Setup BATS
+        uses: mig4/setup-bats@v1.2.0
+        with:
+          bats-version: 1.5.0
+
+      - name: Run integration tests
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run integration tests"
+          make integration-tests
+
+      - name: Check that we can build a package
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Check that we can build a package"
+          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
+          make clean dist dist-check
+          rm ~/.pypirc
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: build-python
+    timeout-minutes: 20
+    steps:
+
+      - name: Checkout current branch
+        uses: actions/checkout@v2.3.4
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Do we need to release?
+        run: |
+          NEED_RELEASE=
+          if [[ "$GITHUB_REF_SLUG" == v* ]]; then
+            NEED_RELEASE=yes
+          fi
+          echo "NEED_RELEASE=${NEED_RELEASE}" >> $GITHUB_ENV
+
+      - name: Setup Python
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Publish python artifact
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          echo "Cleaning previous venv if any"
+          rm -rf .venv || true
+          echo "Create a new venv"
+          python3 -m venv .venv
+          echo "Activate venv"
+          source .venv/bin/activate
+          which python
+          echo "Upgrade pip"
+          pip install --upgrade pip
+          echo "Install ci requirements"
+          pip install -r requirements_ci.txt
+          echo "Publish artifacts"
+          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
+          make clean dist dist-check dist-upload
+          rm ~/.pypirc
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make docker-build
+          echo "Checking built image"
+          docker image ls
+
+      - name: Push docker images
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make docker-push docker-push-latest
