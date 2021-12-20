@@ -2,7 +2,7 @@
 
 PROG_NAME ?= kubesplit
 NAME := looztra/$(PROG_NAME)
-CI_PLATFORM := circleci
+CI_PLATFORM := github_actions
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_DIRTY := $(shell git diff --quiet || echo '-dirty')
@@ -13,28 +13,12 @@ TAG_LATEST := "latest"
 IMG := ${NAME}:${TAG}
 IMG_LATEST := ${NAME}:${TAG_LATEST}
 
-ifdef CIRCLE_BUILD_NUM
-	CI_BUILD_NUMBER := "${CIRCLE_BUILD_NUM}"
+ifdef GITHUB_RUN_NUMBER
+	CI_BUILD_NUMBER := "${GITHUB_RUN_NUMBER}"
 else
 	CI_BUILD_NUMBER := "N/A"
 endif
 
-
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-
-try:
-	from urllib import pathname2url
-except:
-	from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
-
-export PRINT_HELP_PYSCRIPT
-
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 .PHONY: clean
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
@@ -88,6 +72,10 @@ tests: ## run tests quickly with the default Python
 test: tests ## wrapper
 	@echo "+ $@"
 
+.PHONY: unit-tests
+unit-tests: tests ## wrapper
+	@echo "+ $@"
+
 .PHONY: integration-tests
 integration-tests: ## Run integration tests
 	@echo "+ $@"
@@ -96,15 +84,7 @@ integration-tests: ## Run integration tests
 .PHONY: integration-test
 integration-test: integration-tests ## Run integration tests
 
-.PHONY: coverage
-coverage: ## check code coverage quickly with the default Python
-	@echo "+ $@"
-	coverage run --source $(PROG_NAME) -m pytest
-	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
-
-.PHONY: release
+.PHONY: dist-upload
 release: dist ## package and upload a release
 	@echo "+ $@"
 	twine upload dist/*
@@ -126,8 +106,8 @@ install: clean ## install the package to the active Python's site-packages
 	@echo "+ $@"
 	python setup.py install
 
-.PHONY: docker-build-pip
-docker-build-pip: ## build docker image from pip package
+.PHONY: docker-build
+docker-build: ## build docker image from pip package
 	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
@@ -140,8 +120,8 @@ ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
-.PHONY: docker-push-pip
-docker-push-pip: ## build docker image from pip package
+.PHONY: docker-push
+docker-push: ## build docker image from pip package
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
