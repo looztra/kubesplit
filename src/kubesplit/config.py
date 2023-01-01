@@ -1,7 +1,6 @@
 """Kubesplit configuration helpers."""
 import collections
 import sys
-
 from argparse import Namespace
 
 import yamkix.config
@@ -28,9 +27,7 @@ def should_we_show_version(args: Namespace) -> bool:
     return args.version if args.version is not None else False
 
 
-def get_io_config_from_args(
-    args: Namespace, show_version: bool
-) -> KubesplitIOConfig:
+def get_io_config_from_args(args: Namespace, show_version: bool) -> KubesplitIOConfig:
     """Build a KubesplitIOConfig from parsed args."""
     input_display_name = "STDIN"
     if args.input is None or args.input == "-":
@@ -42,9 +39,7 @@ def get_io_config_from_args(
         output_dir = None
     else:
         if args.output_dir is None:
-            raise ValueError(
-                "the following arguments are required: -o/--output-dir"
-            )
+            raise ValueError("the following arguments are required: -o/--output-dir")
         output_dir = args.output_dir
     return KubesplitIOConfig(
         input=f_input,
@@ -53,14 +48,10 @@ def get_io_config_from_args(
     )
 
 
-def get_config_from_args(
-    args: Namespace, inc_io_config: bool = True
-) -> KubesplitConfig:
+def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> KubesplitConfig:
     """Build a KubesplitConfig from parsed args."""
     show_version: bool = should_we_show_version(args)
-    yamkix_config = yamkix.config.get_config_from_args(
-        args, inc_io_config=False
-    )
+    yamkix_config = yamkix.config.get_config_from_args(args, inc_io_config=False)
     if inc_io_config:
         io_config = get_io_config_from_args(args, show_version)
     else:

@@ -1,29 +1,85 @@
-# http://editorconfig.org
+# EditorConfig is awesome: https://EditorConfig.org
 
+# top-most EditorConfig file
 root = true
 
-[{*.py,*.rst}]
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
-insert_final_newline = true
+# Unix-style newlines with a newline ending every file
+[*]
 charset = utf-8
 end_of_line = lf
-
-[*.bat]
-indent_style = tab
-end_of_line = crlf
-
-[LICENSE]
+indent_size = 2
+indent_style = space
 insert_final_newline = true
+max_line_length = 120
+trim_trailing_whitespace = true
 
+# Matches multiple files with brace expansion notation
+# Set default charset
+[*.{js,py}]
+charset = utf-8
+
+# 4 space indentation
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 119
+
+# Tab indentation (no size specified)
 [Makefile]
 indent_style = tab
+max_line_length = unset
+
+[*.mk]
+indent_style = tab
+max_line_length = unset
 
 [setup.cfg]
 indent_style = tab
 trim_trailing_whitespace = false
 
-[{test_output.py,test_convert.py}]
+[*.{tf,tfvars}]
+indent_size = 2
+indent_style = space
+
+[*.{yml,yaml}]
+indent_size = 2
+indent_style = space
+
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+[*.rst]
 indent_size = none
-indent_style = none
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Matches the exact files either package.json or .travis.yml
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+[{Dockerfile,.Dockerfile}]
+indent_size = none
+
+[LICENSE]
+indent_size = none
+
+[test-*.py]
+indent_size = none
+
+[tox.ini]
+max_line_length = off
+
+[*.skip-ec]
+indent_style = unset
+max_line_length = unset
+
+[poetry.lock]
+max_line_length = unset
+
+[requirements.txt]
+max_line_length = unset
+
+[.pylintrc]
+max_line_length = unset

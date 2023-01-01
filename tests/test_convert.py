@@ -3,11 +3,7 @@ from io import StringIO
 
 from ruamel.yaml import YAML
 
-from kubesplit.convert import (
-    convert_input_to_descriptors,
-    resource_is_list,
-    resource_is_object,
-)
+from kubesplit.convert import convert_input_to_descriptors, resource_is_list, resource_is_object
 
 default_yaml = YAML(typ="rt")
 

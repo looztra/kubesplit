@@ -1,0 +1,45 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace # Trims trailing whitespace
+      - id: check-yaml # Validates YAML files
+        exclude: |
+          (?x)^(
+              test-assets/source/multi-doc.*\.yml |
+              test-assets/expected/multi-doc.*\.yml
+          )$
+      - id: check-json # Validates JSON files
+      - id: check-added-large-files # Checks for files that are added to the repository that are larger than a threshold
+      - id: check-case-conflict # Checks for files that would conflict in case-insensitive filesystems
+      - id: check-merge-conflict # Checks for files that contain merge conflict strings
+      - id: detect-private-key # Check for the existence of private keys
+      - id: check-shebang-scripts-are-executable # Checks that scripts with a shebang are executable
+      - id: check-executables-have-shebangs # Checks that executables have shebangs
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      - id: shellcheck # Shell scripts conform to shellcheck
+      - id: shfmt # Check shell style with shfmt
+        exclude: |
+          (?x)^(
+              .*\.bats
+          )$
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.2
+    hooks:
+      - id: isort
+        name: isort
+        args:
+          - --dont-order-by-type
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 2.6.1
+    hooks:
+      - id: editorconfig-checker-system # Check editorconfig compliance
+        alias: ec

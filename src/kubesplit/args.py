@@ -2,7 +2,6 @@
 
 import argparse
 
-
 from yamkix.args import add_yamkix_options_to_parser
 
 from kubesplit import __version__
@@ -49,9 +48,7 @@ def build_parser():
         help="by default, resource files are number prefixed, you can disable \
             this behavior with this flag",
     )
-    add_yamkix_options_to_parser(
-        parser, short_opt_override={"--spaces-before-comment": "-s"}
-    )
+    add_yamkix_options_to_parser(parser, short_opt_override={"--spaces-before-comment": "-s"})
     parser.add_argument(
         "-v",
         "--version",

@@ -48,9 +48,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"kubesplit"
-copyright = u"2019, Christophe Furmaniak"
-author = u"Christophe Furmaniak"
+project = "kubesplit"
+copyright = "2019, Christophe Furmaniak"
+author = "Christophe Furmaniak"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -129,8 +129,8 @@ latex_documents = [
     (
         master_doc,
         "kubesplit.tex",
-        u"kubesplit Documentation",
-        u"Christophe Furmaniak",
+        "kubesplit Documentation",
+        "Christophe Furmaniak",
         "manual",
     )
 ]
@@ -140,9 +140,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "kubesplit", u"kubesplit Documentation", [author], 1)
-]
+man_pages = [(master_doc, "kubesplit", "kubesplit Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------
@@ -154,7 +152,7 @@ texinfo_documents = [
     (
         master_doc,
         "kubesplit",
-        u"kubesplit Documentation",
+        "kubesplit Documentation",
         author,
         "kubesplit",
         "One line description of project.",

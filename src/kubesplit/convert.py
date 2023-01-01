@@ -5,15 +5,11 @@ import sys
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
-
 from yamkix.config import get_default_yamkix_config, YamkixConfig
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 from kubesplit.k8s_descriptor import K8SDescriptor
-from kubesplit.namespaces import (
-    get_all_namespaces,
-    prepare_namespace_directories,
-)
+from kubesplit.namespaces import get_all_namespaces, prepare_namespace_directories
 from kubesplit.output import save_descriptors_to_dir
 
 default_yamkix_config = get_default_yamkix_config()
@@ -23,28 +19,18 @@ default_yaml = YAML(typ="rt")
 def resource_is_list(resource):
     """Check if the resource is a list."""
     if resource:
-        return (
-            "kind" in resource
-            and "apiVersion" in resource
-            and resource["kind"].endswith("List")
-        )
+        return "kind" in resource and "apiVersion" in resource and resource["kind"].endswith("List")
     return False
 
 
 def resource_is_object(resource):
     """Check if the resource is a simple object."""
     if resource:
-        return (
-            "metadata" in resource
-            and "kind" in resource
-            and "name" in resource["metadata"]
-        )
+        return "metadata" in resource and "kind" in resource and "name" in resource["metadata"]
     return False
 
 
-def deal_with_list(
-    resource, list_index, use_order_prefix, split_lists_to_items: bool = False
-):
+def deal_with_list(resource, list_index, use_order_prefix, split_lists_to_items: bool = False):
     """Deal with lists."""
     descriptors = {}
     if split_lists_to_items:
@@ -84,9 +70,7 @@ def convert_input_to_descriptors(
                     resource_name = full_resource["metadata"]["name"]
                     resource_kind = full_resource["kind"]
                     if "namespace" in full_resource["metadata"]:
-                        resource_namespace = full_resource["metadata"][
-                            "namespace"
-                        ]
+                        resource_namespace = full_resource["metadata"]["namespace"]
                     else:
                         resource_namespace = None
                     k8s_descriptor = K8SDescriptor(
@@ -134,13 +118,9 @@ def convert_input_to_files_in_directory(
     yaml = get_opinionated_yaml_writer(yamkix_config)
     if input_name is not None:
         with open(input_name, mode="rt", encoding="UTF-8") as f_input:
-            descriptors = convert_input_to_descriptors(
-                f_input, yaml, prefix_resource_files=prefix_resource_files
-            )
+            descriptors = convert_input_to_descriptors(f_input, yaml, prefix_resource_files=prefix_resource_files)
     else:
-        descriptors = convert_input_to_descriptors(
-            sys.stdin, yaml, prefix_resource_files=prefix_resource_files
-        )
+        descriptors = convert_input_to_descriptors(sys.stdin, yaml, prefix_resource_files=prefix_resource_files)
 
     if len(descriptors) > 0:
         namespaces = get_all_namespaces(descriptors)
@@ -152,6 +132,4 @@ def convert_input_to_files_in_directory(
             yamkix_config=yamkix_config,
         )
     else:
-        logging.error(
-            "Nothing found in provided input, check for previous errors"
-        )
+        logging.error("Nothing found in provided input, check for previous errors")
