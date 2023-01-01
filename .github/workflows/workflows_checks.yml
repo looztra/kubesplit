@@ -1,0 +1,24 @@
+---
+name: Workflows sanity checks
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+jobs:
+  repo-checks:
+    name: Check the repository github actions workflows
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Run actionlint
+        uses: reviewdog/action-actionlint@v1
