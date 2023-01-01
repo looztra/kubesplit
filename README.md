@@ -55,7 +55,7 @@ All tags available at <https://cloud.docker.com/repository/docker/looztra/kubesp
 ```bash
 ╰(.venv)─» kubesplit -h
 usage: kubesplit [-h] [-i INPUT] [-t TYP] -o OUTPUT_DIR [-n] [-e] [-q] [-f]
-                   [-d] [-c] [-p]
+        [-d] [-c] [-p]
 
 Split a set of Kubernetes descriptors to a set of files. The yaml format of
 the generated files can be tuned using the same parameters as the one used by
@@ -189,9 +189,9 @@ test-assets/expected/all-in-one--no-quotes-preserved--no-resource-prefix
 
 ```bash
 ╰(.venv)─» kubesplit --input test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml \
-                         --output test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved \
-                         --no-quotes-preserved \
-                         --clean-output-dir
+                        --output test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved \
+                        --no-quotes-preserved \
+                        --clean-output-dir
 Processing: input=test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml, output_dir=test-assets/expected/mixed-content-valid-invalid-and-empty-resources--no-quotes-preserved, clean_output_dir=True, typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, quotes_preserved=False, dash_inwards=True, prefix_resource_files=True
 Found [2] valid / [1] invalid / [1] empty resources
 

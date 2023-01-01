@@ -8,8 +8,9 @@ repos:
       - id: check-yaml # Validates YAML files
         exclude: |
           (?x)^(
-              test-assets/source/multi-doc.*\.yml |
-              test-assets/expected/multi-doc.*\.yml
+              test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml |
+              test-assets/source/mixed-content-valid-invalid-empty-and-list-resources.yml |
+              test-assets/source/all-in-one.yml
           )$
       - id: check-json # Validates JSON files
       - id: check-added-large-files # Checks for files that are added to the repository that are larger than a threshold
