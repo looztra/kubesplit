@@ -1,0 +1,58 @@
+[tool.poetry]
+name = "kubesplit"
+version = "0.0.0-dev"
+description = "A CLI to split multidoc yaml formatted kubernetes descriptors to a set of single resource files"
+authors = ["Christophe Furmaniak <christophe.furmaniak@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/looztra/kubesplit"
+classifiers = ["Topic :: Utilities"]
+packages = [{ include = "kubesplit", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">3.8.1"
+ruamel-yaml = ">0.16"
+yamkix = ">=0.9.0"
+
+[tool.poetry.group.dev.dependencies]
+tox = "^3.27"
+pylint = "^2.15"
+black = "^22.10"
+isort = "^5.10"
+coverage = "^6.5"
+pytest = "^7.2"
+pytest-mock = "^3.10"
+freezegun = "^1.2"
+flake8 = "^6.0.0"
+flake8-bugbear = "^22.12"
+flake8-colors = "^0.1"
+flake8-docstrings = "^1.6"
+flake8-typing-imports = "^1.14"
+pep8-naming = "^0.13"
+
+[tool.poetry.scripts]
+kubesplit = "kubesplit.__main__:main"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+metadata = true
+dirty = true
+bump = true
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["src/kubesplit/__init__.py"]
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
+line_length = 119
+
+[tool.black]
+extend-exclude = ".venv"
+line_length = 119
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"

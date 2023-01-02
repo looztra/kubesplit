@@ -1,5 +1,6 @@
 """Test the K8SDescriptor wrapper."""
 import pytest
+
 from kubesplit.k8s_descriptor import K8SDescriptor
 
 data_for_test_get_order_prefix = [
@@ -18,33 +19,25 @@ data_for_test_get_order_prefix = [
 
 def test_has_namespace_when_true():
     """test_has_namespace_when_true."""
-    k8s_default_svc_dummy = K8SDescriptor(
-        name="dummy", kind="Service", namespace="default", as_yaml=""
-    )
+    k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace="default", as_yaml="")
     assert k8s_default_svc_dummy.has_namespace()
 
 
 def test_has_namespace_when_false():
     """test_has_namespace_when_false."""
-    k8s_default_svc_dummy = K8SDescriptor(
-        name="dummy", kind="Service", namespace=None, as_yaml=""
-    )
+    k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace=None, as_yaml="")
     assert not k8s_default_svc_dummy.has_namespace()
 
 
 def test_compute_namespace_dirname_when_has_namespace():
     """test_compute_namespace_dirname_when_has_namespace."""
-    k8s_default_svc_dummy = K8SDescriptor(
-        name="dummy", kind="Service", namespace="default", as_yaml=""
-    )
+    k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace="default", as_yaml="")
     assert k8s_default_svc_dummy.compute_namespace_dirname() == "default"
 
 
 def test_compute_namespace_dirname_when_no_namespace():
     """test_compute_namespace_dirname_when_no_namespace."""
-    k8s_default_svc_dummy = K8SDescriptor(
-        name="dummy", kind="Service", namespace=None, as_yaml=""
-    )
+    k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace=None, as_yaml="")
     assert k8s_default_svc_dummy.compute_namespace_dirname() is None
 
 

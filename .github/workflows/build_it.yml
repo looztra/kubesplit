@@ -17,9 +17,14 @@ on:
       - "**.gif"
       - "**.svg"
       - "**.jpeg"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}-checks
+  cancel-in-progress: true
 
 env:
-      PIP_CONFIG_FILE: /dev/null
+  PIP_CONFIG_FILE: /dev/null
 
 jobs:
   root_checks:
@@ -28,12 +33,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
 
-      - name: Check Eclint status
-        uses: snow-actions/eclint@v1.0.1
+      - name: Ensure remote mk targets are present
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Tools with asdf
+        uses: asdf-vm/actions/install@v1.1.0
+
+      - name: Run pre-commit checks
+        uses: pre-commit/action@v3.0.0
+
+      # We only check docs for now
+      - uses: dorny/paths-filter@v2
+        id: filter
         with:
-          args: "check"
+          filters: |
+            can_apply:
+              - '**/*.md'
+
+      - name: Lint Docs
+        if: steps.filter.outputs.can_apply == 'true'
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_MARKDOWN: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
+          LINTER_RULES_PATH: "."
+
+      - name: Check requirements.txt is up to date with poetry.lock
+        run: |
+          make generate-requirements-file
+          changes_count=$(git status --porcelain --untracked-files requirements.txt | wc -l)
+          if [[ "$changes_count" -ne 0 ]] ; then
+            echo "You failed to keep requirements.txt synchronized with poetry.lock"
+            git status --porcelain --untracked-files requirements.txt
+            git diff requirements.txt
+            exit 1
+          else
+            echo "Nothing to say, requirements.txt seems OK"
+          fi
 
   build-python:
     name: Build python artifacts
@@ -43,47 +87,53 @@ jobs:
     strategy:
       matrix:
         python_version:
-          - 3.7
           - 3.8
           - 3.9
           - "3.10"
+          - 3.11
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4.x
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: Ensure remote mk targets are present
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get poetry version from .tool-versions
+        id: get-poetry-version
+        run: |
+          echo "POETRY_VERSION=$(grep poetry .tool-versions | cut -d " " -f2)" >> "${GITHUB_OUTPUT}"
+
+      - name: Install poetry ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
+
       - name: Prepare venv
         run: |
-          echo "Cleaning previous venv if any"
-          rm -rf .venv || true
-          echo "Create a new venv"
-          python3 -m venv .venv
-          echo "Activate venv"
-          source .venv/bin/activate
-          which python
-          echo "Upgrade pip"
-          pip install --upgrade pip
-          echo "Install ci requirements"
-          pip install -r requirements_ci.txt
+          poetry install
 
       - name: Run linters
         run: |
           echo "Activate venv"
-          source .venv/bin/activate
+          eval "$(make echo-venv-activate-cmd)"
           echo "Run linters"
           make lint
 
       - name: Run unit tests
         run: |
           echo "Activate venv"
-          source .venv/bin/activate
+          eval "$(make echo-venv-activate-cmd)"
           echo "Run unit tests"
           make unit-tests
 
@@ -101,12 +151,8 @@ jobs:
 
       - name: Check that we can build a package
         run: |
-          echo "Activate venv"
-          source .venv/bin/activate
-          echo "Check that we can build a package"
-          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
-          make clean dist dist-check
-          rm ~/.pypirc
+          poetry build
+          ls dist
 
   release:
     name: Release
@@ -114,12 +160,11 @@ jobs:
     needs: build-python
     timeout-minutes: 20
     steps:
-
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4.x
 
       - name: Do we need to release?
         run: |
@@ -127,32 +172,46 @@ jobs:
           if [[ "$GITHUB_REF_SLUG" == v* ]]; then
             NEED_RELEASE=yes
           fi
-          echo "NEED_RELEASE=${NEED_RELEASE}" >> $GITHUB_ENV
+          echo "NEED_RELEASE=${NEED_RELEASE}" >> "${GITHUB_ENV}"
 
       - name: Setup Python
         if: "${{ env.NEED_RELEASE == 'yes' }}"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
+      - name: Ensure remote mk targets are present
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get poetry version from .tool-versions
+        id: get-poetry-version
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          echo "POETRY_VERSION=$(grep poetry .tool-versions | cut -d " " -f2)" >> "${GITHUB_OUTPUT}"
+
+      - name: Install poetry ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
+
+      - name: Prepare venv
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          poetry install
 
       - name: Publish python artifact
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          echo "Cleaning previous venv if any"
-          rm -rf .venv || true
-          echo "Create a new venv"
-          python3 -m venv .venv
-          echo "Activate venv"
-          source .venv/bin/activate
-          which python
-          echo "Upgrade pip"
-          pip install --upgrade pip
-          echo "Install ci requirements"
-          pip install -r requirements_ci.txt
           echo "Publish artifacts"
-          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
-          make clean dist dist-check dist-upload
-          rm ~/.pypirc
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry self add "poetry-dynamic-versioning[plugin]"
+          poetry build
+          poetry publish
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -164,11 +223,11 @@ jobs:
       - name: Docker build
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          make docker-build
+          make docker-build "APP_VERSION=${GITHUB_REF_SLUG:1}"
           echo "Checking built image"
           docker image ls
 
       - name: Push docker images
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          make docker-push
+          make docker-push docker-push-latest

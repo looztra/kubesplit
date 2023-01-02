@@ -70,8 +70,7 @@ class K8SDescriptor:
     def compute_filename(self) -> str:
         """compute_filename."""
         return (
-            f"{self.get_order_prefix()}{self.kind.lower()}--"
-            f"{self.name.lower().replace(':', '-')}.{self.extension}"
+            f"{self.get_order_prefix()}{self.kind.lower()}--" f"{self.name.lower().replace(':', '-')}.{self.extension}"
         )
 
     def get_order_prefix(self) -> str:

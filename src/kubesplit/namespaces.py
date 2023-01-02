@@ -16,9 +16,7 @@ def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
     return all_namespaces
 
 
-def prepare_namespace_directories(
-    root_directory: str, namespaces: str
-) -> None:
+def prepare_namespace_directories(root_directory: str, namespaces: str) -> None:
     """prepare_namespace_directories."""
     for namespace in namespaces:
         ns_dir = os.path.join(root_directory, namespace)

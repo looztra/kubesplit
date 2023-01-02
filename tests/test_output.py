@@ -32,9 +32,7 @@ metadata:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(
         descriptor,
@@ -89,13 +87,9 @@ metadata:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
-    save_descriptor_to_stream(
-        descriptor, output, yaml_instance, yamkix_config=yamkix_config
-    )
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     print("input    => [{0}]".format(s_input))
     print("expected => [{0}]".format(s_expected))
@@ -142,13 +136,9 @@ spec:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
-    save_descriptor_to_stream(
-        descriptor, output, yaml_instance, yamkix_config=yamkix_config
-    )
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     print("input    => [{0}]".format(s_input))
     print("expected => [{0}]".format(s_expected))
@@ -195,13 +185,9 @@ spec:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
-    save_descriptor_to_stream(
-        descriptor, output, yaml_instance, yamkix_config=yamkix_config
-    )
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     print("input    => [{0}]".format(s_input))
     print("expected => [{0}]".format(s_expected))
@@ -251,13 +237,9 @@ spec:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
-    save_descriptor_to_stream(
-        descriptor, output, yaml_instance, yamkix_config=yamkix_config
-    )
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     print("input    => [{0}]".format(s_input))
     print("expected => [{0}]".format(s_expected))
@@ -304,13 +286,9 @@ spec:
     parsed = yaml_instance.load_all(s_input)
     for yaml_resource in parsed:
         as_yaml = yaml_resource
-    descriptor = K8SDescriptor(
-        name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml
-    )
+    descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
-    save_descriptor_to_stream(
-        descriptor, output, yaml_instance, yamkix_config=yamkix_config
-    )
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     print("input    => [{0}]".format(s_input))
     print("expected => [{0}]".format(s_expected))
