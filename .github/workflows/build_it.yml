@@ -68,7 +68,7 @@ jobs:
 
       - name: Check requirements.txt is up to date with poetry.lock
         run: |
-          make update-requirements-file
+          make generate-requirements-file
           changes_count=$(git status --porcelain --untracked-files requirements.txt | wc -l)
           if [[ "$changes_count" -ne 0 ]] ; then
             echo "You failed to keep requirements.txt synchronized with poetry.lock"
