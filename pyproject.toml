@@ -42,7 +42,7 @@ dirty = true
 bump = true
 
 [tool.poetry-dynamic-versioning.substitution]
-files = ["src/yamkix/__init__.py"]
+files = ["src/kubesplit/__init__.py"]
 
 [tool.isort]
 profile = "black"

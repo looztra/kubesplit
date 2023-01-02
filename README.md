@@ -1,7 +1,6 @@
 # kubesplit
 
-[![Updates](https://pyup.io/repos/github/looztra/kubesplit/shield.svg)](https://pyup.io/repos/github/looztra/kubesplit/)
-[![Python 3](https://pyup.io/repos/github/looztra/kubesplit/python-3-shield.svg)](https://pyup.io/repos/github/looztra/kubesplit/)
+[![Pypi](https://img.shields.io/pypi/v/kubesplit.svg)](https://pypi.python.org/pypi/kubesplit)
 
 ## What?
 
