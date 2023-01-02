@@ -7,7 +7,7 @@ MK_PRE_COMMIT_SHA256          := 0c73900d816a266dfaa230b3223f25f53caff97d102e8fc
 MK_PYTHON_POETRY_APP_SHA256   := 65204fedf5a5bfe1915f55b2af9414f9aa65e26d0c0da84a695964ded8129b48
 MK_PYTHON_POETRY_VENV_SHA256  := 9cf4d57d6acea5bf2dcd2e0bf4b771528ae2a4c4dfc492188d09c7eaee2c8014
 
-MK_GIT_REF ?= chore/mk/new-targets
+MK_GIT_REF ?= mk-1.1.0
 
 include toolbox/mk/remote-mk.mk
 
