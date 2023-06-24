@@ -26,3 +26,8 @@ History
 ------------------
 
 * dummy release so that the history is updated on PyPi
+
+0.3.3 (2023-06-24)
+------------------
+
+* update requirements to deal with ruamel.yaml >= 0.17.27
