@@ -11,8 +11,7 @@ packages = [{ include = "kubesplit", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">3.8.1"
-ruamel-yaml = ">0.16"
-yamkix = ">=0.9.0"
+yamkix = ">=0.10.0"
 
 [tool.poetry.group.dev.dependencies]
 tox = "^3.27"
@@ -29,6 +28,7 @@ flake8-colors = "^0.1"
 flake8-docstrings = "^1.6"
 flake8-typing-imports = "^1.14"
 pep8-naming = "^0.13"
+pre-commit = "^3.3.3"
 
 [tool.poetry.scripts]
 kubesplit = "kubesplit.__main__:main"
@@ -37,7 +37,7 @@ kubesplit = "kubesplit.__main__:main"
 enable = true
 vcs = "git"
 style = "pep440"
-metadata = true
+metadata = false
 dirty = true
 bump = true
 

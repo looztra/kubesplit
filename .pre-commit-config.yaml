@@ -6,13 +6,9 @@ repos:
     hooks:
       - id: trailing-whitespace # Trims trailing whitespace
       - id: check-yaml # Validates YAML files
-        exclude: |
-          (?x)^(
-              test-assets/source/mixed-content-valid-invalid-and-empty-resources.yml |
-              test-assets/source/mixed-content-valid-invalid-empty-and-list-resources.yml |
-              test-assets/source/all-in-one.yml
-          )$
+        args: [--allow-multiple-documents]
       - id: check-json # Validates JSON files
+      - id: check-toml # Validates TOML files
       - id: check-added-large-files # Checks for files that are added to the repository that are larger than a threshold
       - id: check-case-conflict # Checks for files that would conflict in case-insensitive filesystems
       - id: check-merge-conflict # Checks for files that contain merge conflict strings
@@ -28,19 +24,22 @@ repos:
           (?x)^(
               .*\.bats
           )$
-  - repo: https://github.com/psf/black
-    rev: stable
-    hooks:
-      - id: black
-  - repo: https://github.com/pycqa/isort
-    rev: 5.11.2
-    hooks:
-      - id: isort
-        name: isort
-        args:
-          - --dont-order-by-type
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
     rev: 2.6.1
     hooks:
       - id: editorconfig-checker-system # Check editorconfig compliance
         alias: ec
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        language: system
+        types: [python]
+        require_serial: true
+        entry: poetry run black
+      - id: isort
+        name: isort
+        language: system
+        types: [python]
+        require_serial: true
+        entry: poetry run isort --dont-order-by-type
