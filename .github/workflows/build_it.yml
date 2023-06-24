@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - main
-      - maintenance/*
     tags:
       - "v*.*.*"
   pull_request:
     branches:
       - main
-      - maintenance/*
     types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
       - "**.png"
@@ -42,10 +40,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Tools with asdf
-        uses: asdf-vm/actions/install@v1.1.0
+        uses: asdf-vm/actions/install@v2.2.0
 
       - name: Run pre-commit checks
-        uses: pre-commit/action@v3.0.0
+        run: |
+          poetry install --only=dev
+          source .venv/bin/activate
+          pre-commit run -a
+
 
       # We only check docs for now
       - uses: dorny/paths-filter@v2
@@ -57,27 +59,30 @@ jobs:
 
       - name: Lint Docs
         if: steps.filter.outputs.can_apply == 'true'
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_MARKDOWN: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
-          LINTER_RULES_PATH: "."
+        uses: DavidAnson/markdownlint-cli2-action@v9
+        with:
+          globs: |
+            **/*.md
 
-      - name: Check requirements.txt is up to date with poetry.lock
+      - name: Check if requirements*.txt are up to date with poetry.lock
         run: |
-          make generate-requirements-file
-          changes_count=$(git status --porcelain --untracked-files requirements.txt | wc -l)
+          if ! test -f "requirements.txt" || ! test -f "requirements_dev.txt"; then
+            echo "[ERROR] Either requirements.txt or requirements_dev.txt (or both) does not exist"
+            echo "[ERROR] Make sure to run 'make generate-requirements-files' with remote make targets >= mk-0.7.0"
+            exit 1
+          fi
+          make generate-requirements-files
+          changes_count=$(git status --porcelain --untracked-files requirements.txt requirements_dev.txt | wc -l)
           if [[ "$changes_count" -ne 0 ]] ; then
-            echo "You failed to keep requirements.txt synchronized with poetry.lock"
+            echo "You failed to keep requirements files synchronized with poetry.lock"
             git status --porcelain --untracked-files requirements.txt
-            git diff requirements.txt
+            git diff requirements.txt requirements_dev.txt
+            echo
             exit 1
           else
-            echo "Nothing to say, requirements.txt seems OK"
+            echo "Nothing to say, requirements*.txt files seem OK"
           fi
+
 
   build-python:
     name: Build python artifacts
@@ -223,7 +228,7 @@ jobs:
       - name: Docker build
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          make docker-build "APP_VERSION=${GITHUB_REF_SLUG:1}"
+          make docker-build APP_VERSION="${GITHUB_REF_SLUG:1}"
           echo "Checking built image"
           docker image ls
 

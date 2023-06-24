@@ -18,15 +18,11 @@ trim_trailing_whitespace = true
 [*.{js,py}]
 charset = utf-8
 
-
-# 4 space indentation (let black do the job)
+# 4 space indentation
 [*.py]
 indent_style = space
 indent_size = 4
 max_line_length = unset
-
-[tests/test_{convert,output}.py]
-indent_size = unset
 
 # Tab indentation (no size specified)
 [Makefile]
@@ -54,7 +50,7 @@ trim_trailing_whitespace = false
 max_line_length = off
 
 [*.rst]
-indent_size = none
+indent_size = unset
 trim_trailing_whitespace = false
 max_line_length = off
 
@@ -82,7 +78,7 @@ max_line_length = unset
 [poetry.lock]
 max_line_length = unset
 
-[requirements.txt]
+[requirements*.txt]
 max_line_length = unset
 
 [.pylintrc]
@@ -90,3 +86,6 @@ max_line_length = unset
 
 [*.bats]
 max_line_length = unset
+
+[tests/test_{convert,output}.py]
+indent_size = unset
