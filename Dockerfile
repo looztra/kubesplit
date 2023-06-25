@@ -7,7 +7,8 @@ LABEL org.label-schema.schema-version "1.0" \
   org.label-schema.vendor "looztra" \
   org.label-schema.docker.cmd.help "docker run --rm -v $(pwd):/app/code looztra/kubesplit:TAG help" \
   org.label-schema.docker.cmd "docker run --rm -v $(pwd):/app/code looztra/kubesplit:TAG -i input"
-ENV PIP_ROOT_USER_ACTION=ignore
+ENV PIP_ROOT_USER_ACTION=ignore\
+  PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app/code
 COPY wait-for-pypi.sh /app/code
