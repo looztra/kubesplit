@@ -23,6 +23,7 @@ concurrency:
 
 env:
   PIP_CONFIG_FILE: /dev/null
+  ARTIFACT_NAME: kubesplit
 
 jobs:
   root_checks:
@@ -82,7 +83,6 @@ jobs:
           else
             echo "Nothing to say, requirements*.txt files seem OK"
           fi
-
 
   build-python:
     name: Build python artifacts
@@ -159,10 +159,32 @@ jobs:
           poetry build
           ls dist
 
+  check-docker:
+    name: Check docker build
+    runs-on: ubuntu-latest
+    needs: root_checks
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v3
+
+      - name: Ensure remote mk targets are present
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker build with latest artifact version published on PyPI
+        run: |
+          LATEST_PUBLISHED_VERSION=$(pip index versions "${ARTIFACT_NAME}" | grep "${ARTIFACT_NAME}" | awk -F '[()]' '{print $2}')
+          make docker-build APP_VERSION="${LATEST_PUBLISHED_VERSION}"
+
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build-python
+    needs:
+      - build-python
+      - check-docker
     timeout-minutes: 20
     steps:
       - name: Checkout current branch
