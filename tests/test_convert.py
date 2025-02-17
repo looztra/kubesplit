@@ -1,6 +1,7 @@
-"""Test the convert package."""
+"""Test the convert package (editorconfig-checker-disable-file)."""
 
 from io import StringIO
+from textwrap import dedent
 
 from ruamel.yaml import YAML
 
@@ -45,25 +46,25 @@ def test_resource_is_list_when_resource_is_a_list():
     """Test resource_is_list when resource is a list."""
     string = StringIO()
     string.write(
-        """---
-apiVersion: v1
-items:
-  - apiVersion: v1
-    data:
-      envoy.json: "some data"
-    kind: ConfigMap
-    metadata:
-      name: grafana-dashboard-statefulset
-      namespace: monitoring
-  - apiVersion: v1
-    data:
-      envoy.json: "some data"
-    kind: ConfigMap
-    metadata:
-      name: grafana-dashboard-statefulset2
-      namespace: monitoring
-kind: ConfigMapList
-"""
+        dedent("""---
+            apiVersion: v1
+            items:
+              - apiVersion: v1
+                data:
+                  envoy.json: "some data"
+                kind: ConfigMap
+                metadata:
+                  name: grafana-dashboard-statefulset
+                  namespace: monitoring
+              - apiVersion: v1
+                data:
+                  envoy.json: "some data"
+                kind: ConfigMap
+                metadata:
+                  name: grafana-dashboard-statefulset2
+                  namespace: monitoring
+            kind: ConfigMapList
+            """)
     )
     sut = string_to_single_resource(string)
     res = resource_is_list(sut)

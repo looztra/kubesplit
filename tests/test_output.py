@@ -1,4 +1,4 @@
-"""Test the output package."""
+"""Test the output package (editorconfig-checker-disable-file)."""
 
 from io import StringIO
 

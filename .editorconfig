@@ -13,18 +13,13 @@ insert_final_newline = true
 max_line_length = 120
 trim_trailing_whitespace = true
 
-# Matches multiple files with brace expansion notation
-# Set default charset
-[*.{js,py}]
-charset = utf-8
-
 # 4 space indentation
+# don't check for max_line_length, rely on pylint
 [*.py]
 indent_style = space
 indent_size = 4
 max_line_length = unset
 
-# Tab indentation (no size specified)
 [Makefile]
 indent_style = tab
 max_line_length = unset
@@ -35,60 +30,46 @@ max_line_length = unset
 
 [setup.cfg]
 indent_style = tab
-trim_trailing_whitespace = false
 
 [*.{tf,tfvars}]
 indent_size = 2
 indent_style = space
+max_line_length = unset
 
 [*.{yml,yaml}]
 indent_size = 2
 indent_style = space
+max_line_length = unset
 
-[*.md]
+# Fix for json files
+[*.json]
+max_line_length = unset
+
+[*.{md,rst}]
 trim_trailing_whitespace = false
-max_line_length = off
-
-[*.rst]
+max_line_length = unset
 indent_size = unset
-trim_trailing_whitespace = false
-max_line_length = off
 
-# Matches the exact files either package.json or .travis.yml
-[{package.json,.travis.yml}]
-indent_style = space
-indent_size = 2
-
-[{Dockerfile,.Dockerfile}]
-indent_size = unset
+[*.{sh,bats}]
+max_line_length = unset
 
 [LICENSE]
-indent_size = unset
-
-[test-*.py]
-indent_size = unset
-
-[tox.ini]
-max_line_length = off
-
-[*.skip-ec]
+max_line_length = unset
 indent_style = unset
+indent_size = unset
+
+# Fix for tox.ini
+[**/tox.ini]
 max_line_length = unset
 
-[poetry.lock]
-max_line_length = unset
-
-[requirements*.txt]
+[*.txt]
 max_line_length = unset
 
 [.pylintrc]
 max_line_length = unset
 
-[*.bats]
+[poetry.lock]
 max_line_length = unset
 
-[.github/workflows/*.yml]
+[uv.lock]
 max_line_length = unset
-
-[tests/test_{convert,output}.py]
-indent_size = unset
