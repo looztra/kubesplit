@@ -1,7 +1,7 @@
 # This file is the default configuration coming from the template, do not change it.
 # If you need to tune the configuration, use the `ruff.toml` file (but keep the "extend" directive inside it).
 line-length = 119
-target-version = "py312"
+target-version = "py310"
 
 [lint]
 
