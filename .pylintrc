@@ -14,7 +14,7 @@ ignore-patterns=
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-init-hook='from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.join(os.path.dirname(find_pylintrc()),"src"))'
+#init-hook=
 
 
 
@@ -234,7 +234,7 @@ ignored-modules=
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "BaseException, Exception".
-overgeneral-exceptions=BaseException,Exception
+overgeneral-exceptions=builtins.BaseException,builtins.Exception
 
 
 [SIMILARITIES]

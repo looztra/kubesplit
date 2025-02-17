@@ -4,8 +4,6 @@
 
 ## What?
 
-[<img src="https://img.shields.io/pypi/v/kubesplit.svg">](https://pypi.python.org/pypi/kubesplit)
-
 Split multidoc yaml formatted [kubernetes](https://kubernetes.io/) descriptors to a set of single resource files.
 
 If you just want an opinionated yaml formatter, you can have a look at [yamkix](https://github.com/looztra/yamkix).

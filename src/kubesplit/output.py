@@ -4,7 +4,7 @@ import os
 import shutil
 
 from ruamel.yaml import YAML
-from yamkix.config import get_default_yamkix_config, YamkixConfig
+from yamkix.config import YamkixConfig, get_default_yamkix_config
 from yamkix.yamkix import yamkix_dump_one
 
 default_yaml = YAML(typ="rt")

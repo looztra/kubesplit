@@ -5,7 +5,7 @@ import argparse
 from yamkix.args import add_yamkix_options_to_parser
 
 from kubesplit import __version__
-from kubesplit.config import get_config_from_args, KubesplitConfig
+from kubesplit.config import KubesplitConfig, get_config_from_args
 
 
 def build_parser():
