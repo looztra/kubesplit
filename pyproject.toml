@@ -1,58 +1,84 @@
-[tool.poetry]
-name = "kubesplit"
-version = "0.0.0-dev"
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    "hatchling",
+    "versioningit>=3.1.2",
+]
+
+[project]
+authors = [
+    { name = "Christophe Furmaniak", email = "christophe.furmaniak@gmail.com" },
+]
+classifiers = [
+    "Topic :: Utilities",
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "yamkix>=0.10.0",
+]
 description = "A CLI to split multidoc yaml formatted kubernetes descriptors to a set of single resource files"
-authors = ["Christophe Furmaniak <christophe.furmaniak@gmail.com>"]
+dynamic = [
+    "version",
+]
 license = "Apache-2.0"
+name = "kubesplit"
 readme = "README.md"
-repository = "https://github.com/looztra/kubesplit"
-classifiers = ["Topic :: Utilities"]
-packages = [{ include = "kubesplit", from = "src" }]
+requires-python = ">=3.10"
 
-[tool.poetry.dependencies]
-python = ">3.8.1"
-yamkix = ">=0.10.0"
+[project.urls]
+Repository = "https://github.com/looztra/kubesplit"
 
-[tool.poetry.group.dev.dependencies]
-tox = "^3.27"
-pylint = "^2.15"
-black = "^22.10"
-isort = "^5.10"
-coverage = "^6.5"
-pytest = "^7.2"
-pytest-mock = "^3.10"
-freezegun = "^1.2"
-flake8 = "^6.0.0"
-flake8-bugbear = "^22.12"
-flake8-colors = "^0.1"
-flake8-docstrings = "^1.6"
-flake8-typing-imports = "^1.14"
-pep8-naming = "^0.13"
-pre-commit = "^3.3.3"
-
-[tool.poetry.scripts]
+[project.scripts]
 kubesplit = "kubesplit.__main__:main"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
-metadata = false
-dirty = true
-bump = true
+[dependency-groups]
+dev = [
+    "tox>=4.2",
+    "faker>=36.0",
+    "poethepoet>=0.29.0",
+    "pylint>=3.3.0",
+    "pyright>=1.1.384",
+    "pytest-cov>=6.0",
+    "pytest-mock>=3.14.0",
+    "pytest-unordered>=0.6.1",
+    "pytest>=8.3.3",
+    "ruff>=0.9.6",
+    "tox-uv>=1.23.2",
+]
 
-[tool.poetry-dynamic-versioning.substitution]
-files = ["src/kubesplit/__init__.py"]
+[tool.hatch.build.hooks.versioningit-onbuild]
+build-file = "kubesplit/__init__.py"
+source-file = "src/kubesplit/__init__.py"
 
-[tool.isort]
-profile = "black"
-src_paths = ["src", "tests"]
-line_length = 119
+[tool.hatch.version]
+source = "versioningit"
 
-[tool.black]
-extend-exclude = ".venv"
-line_length = 119
+[tool.hatch.build.targets.wheel]
+include = [
+    "src/kubesplit",
+]
 
-[build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry_dynamic_versioning.backend"
+[tool.hatch.build.targets.wheel.sources]
+"src/kubesplit" = "kubesplit"
+
+[tool.versioningit]
+default-version = "0.0.0.dev0+0"
+
+[tool.versioningit.vcs]
+default-tag = "v0.0.0"
+
+[tool.versioningit.format]
+# Format used when there have been commits since the most recent tag:
+distance = "{next_version}.dev{distance}"
+# Example formatted version: 1.2.3.post42+ge174a1f
+
+# Format used when there are uncommitted changes:
+dirty = "{base_version}+dirty{build_date:%Y%m%d}"
+# Example formatted version: 1.2.3+d20230922
+
+# Format used when there are both commits and uncommitted changes:
+distance-dirty = "{next_version}.dev{distance}+{vcs}{rev}.d{build_date:%Y%m%d}"

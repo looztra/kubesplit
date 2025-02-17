@@ -1,4 +1,5 @@
 """Test the K8SDescriptor wrapper."""
+
 import pytest
 
 from kubesplit.k8s_descriptor import K8SDescriptor

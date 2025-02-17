@@ -1,0 +1,29 @@
+# This file is the default configuration coming from the template, do not change it.
+# If you need to tune the configuration, use the `ruff.toml` file (but keep the "extend" directive inside it).
+line-length = 119
+target-version = "py312"
+
+[lint]
+
+select = [
+    "ALL",
+]
+
+ignore = [
+    "B008",   # B008: Do not perform function call {name} in argument defaults
+    "COM812", # COM812: Trailing comma missing
+    "FBT",    # All flake8-boolean-trap rules,
+    "ISC001", # The following rule may cause conflicts when used with the formatter
+]
+
+per-file-ignores."**/tests/*" = [
+    "INP001", # INP001: File {filename} is part of an implicit namespace package. Add an __init__.py.
+    "S101",   # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+]
+
+# Use Google-style docstrings.
+[lint.pydocstyle]
+convention = "google"
+
+[lint.flake8-pytest-style]
+fixture-parentheses = false

@@ -1,4 +1,5 @@
 """Provides a wrapper for a Kubernetes descriptor."""
+
 import os
 
 
@@ -31,9 +32,8 @@ class K8SDescriptor:
         "priorityclass": "42",
         "__unknown__": "99",
     }
-    # pylint: disable=too-many-arguments
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments,too-many-arguments
         self,
         name: str,
         kind: str,
@@ -69,9 +69,7 @@ class K8SDescriptor:
 
     def compute_filename(self) -> str:
         """compute_filename."""
-        return (
-            f"{self.get_order_prefix()}{self.kind.lower()}--" f"{self.name.lower().replace(':', '-')}.{self.extension}"
-        )
+        return f"{self.get_order_prefix()}{self.kind.lower()}--{self.name.lower().replace(':', '-')}.{self.extension}"
 
     def get_order_prefix(self) -> str:
         """get_order_prefix."""

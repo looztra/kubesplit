@@ -5,7 +5,7 @@ import sys
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
-from yamkix.config import get_default_yamkix_config, YamkixConfig
+from yamkix.config import YamkixConfig, get_default_yamkix_config
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 from kubesplit.k8s_descriptor import K8SDescriptor

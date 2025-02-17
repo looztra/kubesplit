@@ -1,4 +1,5 @@
 """Test the output package."""
+
 from io import StringIO
 
 from yamkix.config import get_yamkix_config_from_default
