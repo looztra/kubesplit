@@ -3,7 +3,7 @@
 load test-assets/test_kubesplit
 
 @test "--help" {
-  python -m kubesplit --help
+  uv run kubesplit --help
 }
 
 # kubesplit --input test-assets/source/all-in-one.yml \
