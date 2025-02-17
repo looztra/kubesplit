@@ -169,7 +169,7 @@ jobs:
     if: ${{ github.event_name == 'push' || inputs.force_release }}
     environment:
       name: ${{ needs.python-checks.outputs.deploy_env }}
-      url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/yamkix/' || 'https://test.pypi.org/project/yamkix/' }}
+      url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/kubesplit/' || 'https://test.pypi.org/project/kubesplit/' }}
     permissions:
       id-token: write
     needs:
