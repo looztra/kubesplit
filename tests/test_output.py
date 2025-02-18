@@ -42,8 +42,8 @@ metadata:
         yamkix_config=yamkix_config,
     )
     s_output = output.getvalue()
-    print("input  => [{0}]".format(s_input))
-    print("output => [{0}]".format(s_output))
+    print(f"input  => [{s_input}]")
+    print(f"output => [{s_output}]")
     assert s_output == s_input
 
 
@@ -92,9 +92,9 @@ metadata:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
+    print(f"input    => [{s_input}]")
+    print(f"expected => [{s_expected}]")
+    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
@@ -141,9 +141,9 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
+    print(f"input    => [{s_input}]")
+    print(f"expected => [{s_expected}]")
+    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
@@ -190,9 +190,9 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
+    print(f"input    => [{s_input}]")
+    print(f"expected => [{s_expected}]")
+    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
@@ -242,9 +242,9 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
+    print(f"input    => [{s_input}]")
+    print(f"expected => [{s_expected}]")
+    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
@@ -291,7 +291,7 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
+    print(f"input    => [{s_input}]")
+    print(f"expected => [{s_expected}]")
+    print(f"output   => [{s_output}]")
     assert s_output == s_expected

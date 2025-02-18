@@ -50,7 +50,7 @@ def save_descriptors_to_dir(
     for _desc_id, desc in descriptors.items():
         with open(
             desc.compute_filename_with_namespace(root_directory),
-            mode="wt",
+            mode="w",
             encoding="UTF-8",
         ) as out:
             save_descriptor_to_stream(
