@@ -10,17 +10,7 @@ from kubesplit.output import clean_root_dir, create_root_dir
 
 
 def split_input_to_files(kubesplit_config: KubesplitConfig) -> None:
-    """Split input to files.
-
-    Args:
-        root_directory: the directory where files and namespace directories\
-            will be created
-        input_name: the name of the input file to read. If None, then STDIN\
-            will be used
-        clean_output_dir: do we cleanup the target directory before processing?
-        yamkix_config: YamkixConfig object describing how to format the\
-            yaml files that will be written
-    """
+    """Split input to files."""
     root_directory = kubesplit_config.io_config.output_dir
     clean_output_dir = kubesplit_config.clean_output_dir
     prefix_resource_files = kubesplit_config.prefix_resource_files

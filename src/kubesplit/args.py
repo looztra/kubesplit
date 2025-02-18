@@ -62,5 +62,4 @@ def parse_cli(args) -> KubesplitConfig:
     """Parse the cli args."""
     parser = build_parser()
     args = parser.parse_args(args)
-    kubesplit_config = get_config_from_args(args, inc_io_config=True)
-    return kubesplit_config
+    return get_config_from_args(args, inc_io_config=True)
