@@ -4,7 +4,7 @@ import collections
 import sys
 from argparse import Namespace
 
-import yamkix.config
+from yamkix.config import get_config_from_args as yamkix_get_config_from_args
 
 from kubesplit import __version__
 
@@ -52,7 +52,7 @@ def get_io_config_from_args(args: Namespace, show_version: bool) -> KubesplitIOC
 def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> KubesplitConfig:
     """Build a KubesplitConfig from parsed args."""
     show_version: bool = should_we_show_version(args)
-    yamkix_config = yamkix.config.get_config_from_args(args, inc_io_config=False)
+    yamkix_config = yamkix_get_config_from_args(args, inc_io_config=False)
     if inc_io_config:
         io_config = get_io_config_from_args(args, show_version)
     else:
