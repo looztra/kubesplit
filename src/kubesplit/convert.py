@@ -2,6 +2,8 @@
 
 import logging
 import sys
+from pathlib import Path
+from typing import Any
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
@@ -14,27 +16,30 @@ from kubesplit.output import save_descriptors_to_dir
 
 default_yamkix_config = get_default_yamkix_config()
 default_yaml = YAML(typ="rt")
+StreamTextType = Any
 
 
-def resource_is_list(resource):
+def resource_is_list(resource: dict[str, Any]) -> bool:
     """Check if the resource is a list."""
     if resource:
         return "kind" in resource and "apiVersion" in resource and resource["kind"].endswith("List")
     return False
 
 
-def resource_is_object(resource):
+def resource_is_object(resource: dict[str, Any]) -> bool:
     """Check if the resource is a simple object."""
     if resource:
         return "metadata" in resource and "kind" in resource and "name" in resource["metadata"]
     return False
 
 
-def deal_with_list(resource, list_index, use_order_prefix, split_lists_to_items: bool = False):
+def deal_with_list(
+    resource: dict[str, Any], list_index: int, use_order_prefix: bool, split_lists_to_items: bool = False
+) -> dict[str, Any]:
     """Deal with lists."""
     descriptors = {}
     if split_lists_to_items:
-        print("Not supported yet")
+        print("Not supported yet")  # noqa: T201
     else:
         list_name = "list_" + str(list_index)
         k8s_descriptor = K8SDescriptor(
@@ -50,11 +55,11 @@ def deal_with_list(resource, list_index, use_order_prefix, split_lists_to_items:
 
 # pylint: disable=too-many-locals
 def convert_input_to_descriptors(
-    input_ref,
-    yaml_reader=default_yaml,
+    input_ref: StreamTextType,
+    yaml_reader: YAML = default_yaml,
     prefix_resource_files: bool = True,
     split_lists_to_items: bool = False,
-):
+) -> dict[str, Any]:
     """Convert input_ref to a dict of descriptors."""
     parsed = yaml_reader.load_all(input_ref.read())
     descriptors = {}
@@ -95,29 +100,29 @@ def convert_input_to_descriptors(
                     nb_invalid_resources = nb_invalid_resources + 1
             else:
                 nb_empty_resources = nb_empty_resources + 1
-        print(
+        print(  # noqa: T201
             f"Found [{nb_valid_resources}] valid /"
             f" [{nb_lists}] lists /"
             f" [{nb_invalid_resources}] invalid /"
             f" [{nb_empty_resources}] empty resources"
         )
     except ScannerError as scanner_error:
-        print("Something is wrong in the input, got error from Scanner")
-        print(scanner_error)
+        print("Something is wrong in the input, got error from Scanner")  # noqa: T201
+        print(scanner_error)  # noqa: T201
         return {}
     return descriptors
 
 
 def convert_input_to_files_in_directory(
-    input_name: str,
-    root_directory: str,
+    input_name: Path | None,
+    root_directory: Path,
     prefix_resource_files: bool = True,
     yamkix_config: YamkixConfig = default_yamkix_config,
 ) -> None:
     """convert_input_to_files_in_directory."""
     yaml = get_opinionated_yaml_writer(yamkix_config)
     if input_name is not None:
-        with open(input_name, mode="rt", encoding="UTF-8") as f_input:
+        with input_name.open(encoding="UTF-8") as f_input:
             descriptors = convert_input_to_descriptors(f_input, yaml, prefix_resource_files=prefix_resource_files)
     else:
         descriptors = convert_input_to_descriptors(sys.stdin, yaml, prefix_resource_files=prefix_resource_files)

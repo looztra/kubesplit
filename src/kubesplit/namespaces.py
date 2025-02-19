@@ -1,25 +1,24 @@
 """Deal with namespaces."""
 
 import logging
-import os
-from typing import Dict, Set
+from pathlib import Path
 
 from kubesplit.k8s_descriptor import K8SDescriptor
 
 
-def get_all_namespaces(descriptors: Dict[str, K8SDescriptor]) -> Set[str]:
+def get_all_namespaces(descriptors: dict[str, K8SDescriptor]) -> set[str]:
     """get_all_namespaces."""
     all_namespaces = set()
-    for _desc_id, descriptor in descriptors.items():
+    for descriptor in descriptors.values():
         if descriptor.has_namespace():
             all_namespaces.add(descriptor.compute_namespace_dirname())
     return all_namespaces
 
 
-def prepare_namespace_directories(root_directory: str, namespaces: str) -> None:
+def prepare_namespace_directories(root_directory: Path, namespaces: set[str]) -> None:
     """prepare_namespace_directories."""
     for namespace in namespaces:
-        ns_dir = os.path.join(root_directory, namespace)
-        if not os.path.exists(ns_dir):
+        ns_dir = root_directory / namespace
+        if not ns_dir.exists():
             logging.info("Creating directory [%s]", ns_dir)
-            os.makedirs(ns_dir)
+            ns_dir.mkdir(parents=True)

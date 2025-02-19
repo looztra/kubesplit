@@ -9,7 +9,7 @@ from kubesplit.k8s_descriptor import K8SDescriptor
 from kubesplit.output import save_descriptor_to_stream
 
 
-def test_roundtrip_when_preserve_quotes_true():
+def test_roundtrip_when_preserve_quotes_true() -> None:
     """test_roundtrip_when_preserve_quotes_true."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
@@ -31,8 +31,10 @@ metadata:
     yamkix_config = get_yamkix_config_from_default(quotes_preserved=True)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml is not None
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(
@@ -42,12 +44,10 @@ metadata:
         yamkix_config=yamkix_config,
     )
     s_output = output.getvalue()
-    print("input  => [{0}]".format(s_input))
-    print("output => [{0}]".format(s_output))
     assert s_output == s_input
 
 
-def test_roundtrip_when_preserve_quotes_false():
+def test_roundtrip_when_preserve_quotes_false() -> None:
     """test_roundtrip_when_preserve_quotes_false."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
@@ -86,19 +86,18 @@ metadata:
     yamkix_config = get_yamkix_config_from_default(quotes_preserved=False)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml is not None
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected
 
 
-def test_roundtrip_when_dash_inwards_false():
+def test_roundtrip_when_dash_inwards_false() -> None:
     """test_roundtrip_when_dash_inwards_false."""
     s_input = """---
 apiVersion: v1 # with comment
@@ -135,19 +134,18 @@ spec:
     yamkix_config = get_yamkix_config_from_default(dash_inwards=False)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected
 
 
-def test_roundtrip_when_dash_inwards_true():
+def test_roundtrip_when_dash_inwards_true() -> None:
     """test_roundtrip_when_dash_inwards_true."""
     s_input = """---
 apiVersion: v1 # with comment
@@ -184,19 +182,18 @@ spec:
     yamkix_config = get_yamkix_config_from_default(dash_inwards=True)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected
 
 
-def test_roundtrip_with_unconsistent_comments():
+def test_roundtrip_with_unconsistent_comments() -> None:
     """test_roundtrip_with_unconsistent_comments.
 
     Comments badly placed should be pushed to 1 char after content
@@ -236,19 +233,18 @@ spec:
     yamkix_config = get_yamkix_config_from_default(spaces_before_comment=1)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected
 
 
-def test_roundtrip_with_weird_comments_config():
+def test_roundtrip_with_weird_comments_config() -> None:
     """test_roundtrip_with_weird_comments_config."""
     s_input = """---
 apiVersion: v1    # with comment
@@ -285,13 +281,12 @@ spec:
     yamkix_config = get_yamkix_config_from_default(spaces_before_comment=7)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print("input    => [{0}]".format(s_input))
-    print("expected => [{0}]".format(s_expected))
-    print("output   => [{0}]".format(s_output))
     assert s_output == s_expected

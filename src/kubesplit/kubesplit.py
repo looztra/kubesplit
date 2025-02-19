@@ -1,6 +1,7 @@
 """Main module."""
 
 import sys
+from pathlib import Path
 
 from kubesplit.args import parse_cli
 from kubesplit.config import KubesplitConfig, print_config
@@ -10,18 +11,8 @@ from kubesplit.output import clean_root_dir, create_root_dir
 
 
 def split_input_to_files(kubesplit_config: KubesplitConfig) -> None:
-    """Split input to files.
-
-    Args:
-        root_directory: the directory where files and namespace directories\
-            will be created
-        input_name: the name of the input file to read. If None, then STDIN\
-            will be used
-        clean_output_dir: do we cleanup the target directory before processing?
-        yamkix_config: YamkixConfig object describing how to format the\
-            yaml files that will be written
-    """
-    root_directory = kubesplit_config.io_config.output_dir
+    """Split input to files."""
+    root_directory = Path(kubesplit_config.io_config.output_dir)
     clean_output_dir = kubesplit_config.clean_output_dir
     prefix_resource_files = kubesplit_config.prefix_resource_files
     input_name = kubesplit_config.io_config.input
@@ -31,14 +22,14 @@ def split_input_to_files(kubesplit_config: KubesplitConfig) -> None:
     if clean_output_dir:
         clean_root_dir(root_directory)
     convert_input_to_files_in_directory(
-        input_name=input_name,
+        input_name=Path(input_name) if input_name is not None else None,
         root_directory=root_directory,
         prefix_resource_files=prefix_resource_files,
         yamkix_config=yamkix_config,
     )
 
 
-def main():
+def main() -> None:
     """Parse args and call the split mojo."""
     kubesplit_config = parse_cli(sys.argv[1:])
     if kubesplit_config.version:

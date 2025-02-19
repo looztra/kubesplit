@@ -1,35 +1,38 @@
 """Some stuff need to get out."""
 
-import os
 import shutil
+from pathlib import Path
+from typing import Any, TextIO
 
 from ruamel.yaml import YAML
 from yamkix.config import YamkixConfig, get_default_yamkix_config
 from yamkix.yamkix import yamkix_dump_one
 
+from kubesplit.k8s_descriptor import K8SDescriptor
+
 default_yaml = YAML(typ="rt")
 default_yamkix_config = get_default_yamkix_config()
 
 
-def create_root_dir(root_directory: str) -> None:
+def create_root_dir(root_directory: Path) -> None:
     """create_root_dir."""
-    if not os.path.exists(root_directory):
-        os.makedirs(root_directory)
+    if not root_directory.exists():
+        root_directory.mkdir(parents=True)
 
 
-def clean_root_dir(root_directory: str) -> None:
+def clean_root_dir(root_directory: Path) -> None:
     """clean_root_dir."""
-    if os.path.isdir(root_directory):
+    if root_directory.is_dir():
         shutil.rmtree(root_directory)
-        os.makedirs(root_directory)
+        root_directory.mkdir(parents=True)
 
 
 def save_descriptor_to_stream(
-    descriptor,
-    out,
+    descriptor: K8SDescriptor,
+    out: TextIO,
     yaml_instance: YAML,
     yamkix_config: YamkixConfig = default_yamkix_config,
-):
+) -> None:
     """save_descriptor_to_stream."""
     yamkix_dump_one(
         descriptor.as_yaml,
@@ -41,16 +44,15 @@ def save_descriptor_to_stream(
 
 
 def save_descriptors_to_dir(
-    descriptors,
-    root_directory,
+    descriptors: dict[str, Any],
+    root_directory: Path,
     yaml_instance: YAML,
     yamkix_config: YamkixConfig = default_yamkix_config,
-):
+) -> None:
     """Save input descriptors to files in dir."""
-    for _desc_id, desc in descriptors.items():
-        with open(
-            desc.compute_filename_with_namespace(root_directory),
-            mode="wt",
+    for desc in descriptors.values():
+        with desc.compute_filename_with_namespace(root_directory).open(
+            mode="w",
             encoding="UTF-8",
         ) as out:
             save_descriptor_to_stream(

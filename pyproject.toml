@@ -50,10 +50,6 @@ dev = [
     "tox-uv>=1.23.2",
 ]
 
-[tool.hatch.build.hooks.versioningit-onbuild]
-build-file = "kubesplit/__init__.py"
-source-file = "src/kubesplit/__init__.py"
-
 [tool.hatch.version]
 source = "versioningit"
 
