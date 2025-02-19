@@ -1,8 +1,8 @@
 """Provides a wrapper for a Kubernetes descriptor."""
 
-import os
 from collections.abc import Mapping
 from dataclasses import dataclass
+from pathlib import Path
 from types import MappingProxyType
 from typing import ClassVar
 
@@ -10,7 +10,7 @@ from kubesplit.errors import K8SNamespaceError
 
 
 @dataclass
-class K8SDescriptor:
+class K8SDescriptor:  # pylint: disable=too-many-instance-attributes
     """Kubernetes descriptor."""
 
     name: str
@@ -77,12 +77,8 @@ class K8SDescriptor:
             return f"{K8SDescriptor._order_prefixes[k]}--"
         return ""
 
-    def compute_filename_with_namespace(self, root_directory) -> str:
+    def compute_filename_with_namespace(self, root_directory: Path) -> Path:
         """compute_filename_with_namespace."""
         if self.has_namespace():
-            return os.path.join(
-                root_directory,
-                self.compute_namespace_dirname(),
-                self.compute_filename(),
-            )
-        return os.path.join(root_directory, self.compute_filename())
+            return root_directory / self.compute_namespace_dirname() / self.compute_filename()
+        return root_directory / self.compute_filename()

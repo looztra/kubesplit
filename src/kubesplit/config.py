@@ -17,7 +17,7 @@ class KubesplitIOConfig:
 
     input: str | None
     input_display_name: str
-    output_dir: str | None
+    output_dir: str
 
 
 @dataclass
@@ -45,7 +45,7 @@ def get_io_config_from_args(args: Namespace, show_version: bool) -> KubesplitIOC
         f_input = args.input
         input_display_name = f_input
     if show_version:
-        output_dir = None
+        output_dir = "N/A"
     else:
         if args.output_dir is None:
             raise MissingOutputDirError

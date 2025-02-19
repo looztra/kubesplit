@@ -2,6 +2,7 @@
 
 import logging
 import sys
+from pathlib import Path
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
@@ -109,15 +110,15 @@ def convert_input_to_descriptors(
 
 
 def convert_input_to_files_in_directory(
-    input_name: str,
-    root_directory: str,
+    input_name: Path | None,
+    root_directory: Path,
     prefix_resource_files: bool = True,
     yamkix_config: YamkixConfig = default_yamkix_config,
 ) -> None:
     """convert_input_to_files_in_directory."""
     yaml = get_opinionated_yaml_writer(yamkix_config)
     if input_name is not None:
-        with open(input_name, encoding="UTF-8") as f_input:
+        with input_name.open(encoding="UTF-8") as f_input:
             descriptors = convert_input_to_descriptors(f_input, yaml, prefix_resource_files=prefix_resource_files)
     else:
         descriptors = convert_input_to_descriptors(sys.stdin, yaml, prefix_resource_files=prefix_resource_files)
