@@ -2,11 +2,13 @@
 
 import shutil
 from pathlib import Path
-from typing import Any
+from typing import Any, TextIO
 
 from ruamel.yaml import YAML
 from yamkix.config import YamkixConfig, get_default_yamkix_config
 from yamkix.yamkix import yamkix_dump_one
+
+from kubesplit.k8s_descriptor import K8SDescriptor
 
 default_yaml = YAML(typ="rt")
 default_yamkix_config = get_default_yamkix_config()
@@ -26,11 +28,11 @@ def clean_root_dir(root_directory: Path) -> None:
 
 
 def save_descriptor_to_stream(
-    descriptor,
-    out,
+    descriptor: K8SDescriptor,
+    out: TextIO,
     yaml_instance: YAML,
     yamkix_config: YamkixConfig = default_yamkix_config,
-):
+) -> None:
     """save_descriptor_to_stream."""
     yamkix_dump_one(
         descriptor.as_yaml,
@@ -46,7 +48,7 @@ def save_descriptors_to_dir(
     root_directory: Path,
     yaml_instance: YAML,
     yamkix_config: YamkixConfig = default_yamkix_config,
-):
+) -> None:
     """Save input descriptors to files in dir."""
     for desc in descriptors.values():
         with desc.compute_filename_with_namespace(root_directory).open(

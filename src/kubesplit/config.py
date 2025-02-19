@@ -76,7 +76,7 @@ def print_config(kubesplit_config: KubesplitConfig) -> None:
     io_config = kubesplit_config.io_config
     if io_config.output_dir is None:
         raise SystemExit
-    print(
+    print(  # noqa: T201
         "[kubesplit("
         + __version__
         + ")] Processing: input="

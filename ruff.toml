@@ -4,8 +4,4 @@ extend = "ruff_defaults.toml"
 [lint]
 
 ignore = [
-    "ANN001",
-    "ANN201",
-    "ANN204",
-    "T201",
 ]

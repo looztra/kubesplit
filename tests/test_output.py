@@ -9,7 +9,7 @@ from kubesplit.k8s_descriptor import K8SDescriptor
 from kubesplit.output import save_descriptor_to_stream
 
 
-def test_roundtrip_when_preserve_quotes_true():
+def test_roundtrip_when_preserve_quotes_true() -> None:
     """test_roundtrip_when_preserve_quotes_true."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
@@ -42,12 +42,10 @@ metadata:
         yamkix_config=yamkix_config,
     )
     s_output = output.getvalue()
-    print(f"input  => [{s_input}]")
-    print(f"output => [{s_output}]")
     assert s_output == s_input
 
 
-def test_roundtrip_when_preserve_quotes_false():
+def test_roundtrip_when_preserve_quotes_false() -> None:
     """test_roundtrip_when_preserve_quotes_false."""
     s_input = """---
 apiVersion: extensions/v1beta1 # with comment
@@ -92,13 +90,10 @@ metadata:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print(f"input    => [{s_input}]")
-    print(f"expected => [{s_expected}]")
-    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
-def test_roundtrip_when_dash_inwards_false():
+def test_roundtrip_when_dash_inwards_false() -> None:
     """test_roundtrip_when_dash_inwards_false."""
     s_input = """---
 apiVersion: v1 # with comment
@@ -141,13 +136,10 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print(f"input    => [{s_input}]")
-    print(f"expected => [{s_expected}]")
-    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
-def test_roundtrip_when_dash_inwards_true():
+def test_roundtrip_when_dash_inwards_true() -> None:
     """test_roundtrip_when_dash_inwards_true."""
     s_input = """---
 apiVersion: v1 # with comment
@@ -190,13 +182,10 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print(f"input    => [{s_input}]")
-    print(f"expected => [{s_expected}]")
-    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
-def test_roundtrip_with_unconsistent_comments():
+def test_roundtrip_with_unconsistent_comments() -> None:
     """test_roundtrip_with_unconsistent_comments.
 
     Comments badly placed should be pushed to 1 char after content
@@ -242,13 +231,10 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print(f"input    => [{s_input}]")
-    print(f"expected => [{s_expected}]")
-    print(f"output   => [{s_output}]")
     assert s_output == s_expected
 
 
-def test_roundtrip_with_weird_comments_config():
+def test_roundtrip_with_weird_comments_config() -> None:
     """test_roundtrip_with_weird_comments_config."""
     s_input = """---
 apiVersion: v1    # with comment
@@ -291,7 +277,4 @@ spec:
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
-    print(f"input    => [{s_input}]")
-    print(f"expected => [{s_expected}]")
-    print(f"output   => [{s_output}]")
     assert s_output == s_expected

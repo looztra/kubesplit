@@ -4,7 +4,7 @@ from kubesplit.k8s_descriptor import K8SDescriptor
 from kubesplit.namespaces import get_all_namespaces
 
 
-def test_get_all_namespace():
+def test_get_all_namespace() -> None:
     """test_get_all_namespace."""
     descriptors = {}
     k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace="default", as_yaml="")
@@ -22,7 +22,7 @@ def test_get_all_namespace():
     assert "ns2" in res
 
 
-def test_get_all_namespace_when_no_descriptors():
+def test_get_all_namespace_when_no_descriptors() -> None:
     """test_get_all_namespace_when_no_descriptors."""
     descriptors = {}
     res = get_all_namespaces(descriptors)

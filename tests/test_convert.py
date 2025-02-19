@@ -2,17 +2,15 @@
 
 from io import StringIO
 from textwrap import dedent
-from typing import Any
 
 from ruamel.yaml import YAML
 
-from kubesplit.convert import convert_input_to_descriptors, resource_is_list, resource_is_object
+from kubesplit.convert import StreamTextType, convert_input_to_descriptors, resource_is_list, resource_is_object
 
 default_yaml = YAML(typ="rt")
-StreamTextType = Any
 
 
-def string_to_single_resource(resource_as_string: StreamTextType):
+def string_to_single_resource(resource_as_string: StreamTextType):  # noqa: ANN201
     """Helper to convert a string to a resource."""
     resource_as_string.seek(0)
     return default_yaml.load(resource_as_string.read())
@@ -190,7 +188,7 @@ spec:
     assert res[k].namespace == "yolo"
 
 
-def test_convert_input_to_descriptors_when_input_is_empty():
+def test_convert_input_to_descriptors_when_input_is_empty() -> None:
     """test_convert_input_to_descriptors_when_input_is_empty."""
     sut = StringIO()
     sut.write(
@@ -235,7 +233,7 @@ metadata:
     assert len(res) == 0
 
 
-def test_convert_input_to_descriptors_when_input_is_invalid_no_name():
+def test_convert_input_to_descriptors_when_input_is_invalid_no_name() -> None:
     """test_convert_input_to_descriptors_when_input_is_invalid_no_name."""
     sut = StringIO()
     sut.write(
@@ -336,7 +334,7 @@ metadata:
     assert res[k].namespace is None
 
 
-def test_convert_input_to_descriptors_with_a_single_list():
+def test_convert_input_to_descriptors_with_a_single_list() -> None:
     """test_convert_input_to_descriptors."""
     sut = StringIO()
     sut.write(

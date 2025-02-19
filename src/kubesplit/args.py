@@ -8,7 +8,7 @@ from kubesplit import __version__
 from kubesplit.config import KubesplitConfig, get_config_from_args
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Build the cli args parser."""
     parser = argparse.ArgumentParser(
         description=f"""Kubesplit v{__version__}
