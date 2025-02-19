@@ -58,8 +58,8 @@ def build_parser():
     return parser
 
 
-def parse_cli(args) -> KubesplitConfig:
+def parse_cli(args: list[str]) -> KubesplitConfig:
     """Parse the cli args."""
     parser = build_parser()
-    args = parser.parse_args(args)
-    return get_config_from_args(args, inc_io_config=True)
+    args_as_ns = parser.parse_args(args)
+    return get_config_from_args(args_as_ns)
