@@ -2,6 +2,7 @@
 "lint:all" = [
     "ruff:lint",
     "pylint",
+    "pyright",
 ]
 pylint = [
     "pylint:run",

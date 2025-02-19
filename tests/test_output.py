@@ -31,8 +31,10 @@ metadata:
     yamkix_config = get_yamkix_config_from_default(quotes_preserved=True)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml is not None
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(
@@ -84,8 +86,10 @@ metadata:
     yamkix_config = get_yamkix_config_from_default(quotes_preserved=False)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml is not None
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
@@ -130,8 +134,10 @@ spec:
     yamkix_config = get_yamkix_config_from_default(dash_inwards=False)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
@@ -176,8 +182,10 @@ spec:
     yamkix_config = get_yamkix_config_from_default(dash_inwards=True)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
@@ -225,8 +233,10 @@ spec:
     yamkix_config = get_yamkix_config_from_default(spaces_before_comment=1)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
@@ -271,8 +281,10 @@ spec:
     yamkix_config = get_yamkix_config_from_default(spaces_before_comment=7)
     yaml_instance = get_opinionated_yaml_writer(yamkix_config)
     parsed = yaml_instance.load_all(s_input)
+    as_yaml = None
     for yaml_resource in parsed:
         as_yaml = yaml_resource
+    assert as_yaml
     descriptor = K8SDescriptor(name="tname", kind="ReplicaSet", namespace="tns", as_yaml=as_yaml)
     output = StringIO()
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
