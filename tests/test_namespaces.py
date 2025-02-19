@@ -16,7 +16,7 @@ def test_get_all_namespace():
     descriptors[k8s_ns1_deploy_foo.id] = k8s_ns1_deploy_foo
     descriptors[k8s_ns2_deploy_foo.id] = k8s_ns2_deploy_foo
     res = get_all_namespaces(descriptors)
-    assert len(res) == 3
+    assert len(res) == 3  # noqa: PLR2004
     assert "default" in res
     assert "ns1" in res
     assert "ns2" in res

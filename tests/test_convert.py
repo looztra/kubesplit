@@ -2,21 +2,23 @@
 
 from io import StringIO
 from textwrap import dedent
+from typing import Any
 
 from ruamel.yaml import YAML
 
 from kubesplit.convert import convert_input_to_descriptors, resource_is_list, resource_is_object
 
 default_yaml = YAML(typ="rt")
+StreamTextType = Any
 
 
-def string_to_single_resource(resource_as_string):
+def string_to_single_resource(resource_as_string: StreamTextType):
     """Helper to convert a string to a resource."""
     resource_as_string.seek(0)
     return default_yaml.load(resource_as_string.read())
 
 
-def test_resource_is_list_when_resource_is_empty():
+def test_resource_is_list_when_resource_is_empty() -> None:
     """Test resource_is_list when resource is empty."""
     string = StringIO()
     string.write(
@@ -28,7 +30,7 @@ def test_resource_is_list_when_resource_is_empty():
     assert res is False
 
 
-def test_resource_is_list_when_resource_is_not_a_list():
+def test_resource_is_list_when_resource_is_not_a_list() -> None:
     """Test resource_is_list when resource is not a list."""
     string = StringIO()
     string.write(
@@ -42,7 +44,7 @@ kind: ReplicaSet
     assert res is False
 
 
-def test_resource_is_list_when_resource_is_a_list():
+def test_resource_is_list_when_resource_is_a_list() -> None:
     """Test resource_is_list when resource is a list."""
     string = StringIO()
     string.write(
@@ -71,7 +73,7 @@ def test_resource_is_list_when_resource_is_a_list():
     assert res is True
 
 
-def test_resource_is_list_when_resource_is_a_list_without_items():
+def test_resource_is_list_when_resource_is_a_list_without_items() -> None:
     """Test resource_is_list when resource is a list without items."""
     string = StringIO()
     string.write(
@@ -85,7 +87,7 @@ kind: ConfigMapList
     assert res is True
 
 
-def test_resource_is_object_when_resource_is_a_list():
+def test_resource_is_object_when_resource_is_a_list() -> None:
     """Test resource_is_object when resource is a list."""
     string = StringIO()
     string.write(
@@ -114,7 +116,7 @@ kind: ConfigMapList
     assert res is False
 
 
-def test_resource_is_object_when_resource_is_object():
+def test_resource_is_object_when_resource_is_object() -> None:
     """Test resource_is_object when resource is object."""
     string = StringIO()
     string.write(
@@ -132,7 +134,7 @@ metadata:
     assert res is True
 
 
-def test_resource_is_object_when_resource_is_empty():
+def test_resource_is_object_when_resource_is_empty() -> None:
     """Test resource_is_object when resource is empty."""
     string = StringIO()
     string.write(
@@ -144,7 +146,7 @@ def test_resource_is_object_when_resource_is_empty():
     assert res is False
 
 
-def test_convert_input_to_descriptors():
+def test_convert_input_to_descriptors() -> None:
     """test_convert_input_to_descriptors."""
     sut = StringIO()
     sut.write(
@@ -200,7 +202,7 @@ def test_convert_input_to_descriptors_when_input_is_empty():
     assert len(res) == 0
 
 
-def test_convert_input_to_descriptors_when_input_is_invalid_no_metadata():
+def test_convert_input_to_descriptors_when_input_is_invalid_no_metadata() -> None:
     """test_convert_input_to_descriptors_when_input_is_invalid_no_metadata."""
     sut = StringIO()
     sut.write(
@@ -214,7 +216,7 @@ kind: ReplicaSet
     assert len(res) == 0
 
 
-def test_convert_input_to_descriptors_when_input_is_invalid_no_kind():
+def test_convert_input_to_descriptors_when_input_is_invalid_no_kind() -> None:
     """test_convert_input_to_descriptors_when_input_is_invalid_no_kind."""
     sut = StringIO()
     sut.write(
@@ -252,7 +254,7 @@ metadata:
     assert len(res) == 0
 
 
-def test_convert_input_to_descriptors_when_content_is_mixed():
+def test_convert_input_to_descriptors_when_content_is_mixed() -> None:
     """test_convert_input_to_descriptors_when_content_is_mixed."""
     sut = StringIO()
     sut.write(
@@ -306,10 +308,10 @@ metadata:
     )
     sut.seek(0)
     res = convert_input_to_descriptors(sut)
-    assert len(res) == 2
+    assert len(res) == 2  # noqa: PLR2004
 
 
-def test_convert_input_to_descriptors_when_content_has_no_namespace():
+def test_convert_input_to_descriptors_when_content_has_no_namespace() -> None:
     """test_convert_input_to_descriptors_when_content_has_no_namespace."""
     sut = StringIO()
     sut.write(
