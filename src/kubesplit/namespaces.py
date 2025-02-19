@@ -9,13 +9,13 @@ from kubesplit.k8s_descriptor import K8SDescriptor
 def get_all_namespaces(descriptors: dict[str, K8SDescriptor]) -> set[str]:
     """get_all_namespaces."""
     all_namespaces = set()
-    for _desc_id, descriptor in descriptors.items():
+    for descriptor in descriptors.values():
         if descriptor.has_namespace():
             all_namespaces.add(descriptor.compute_namespace_dirname())
     return all_namespaces
 
 
-def prepare_namespace_directories(root_directory: str, namespaces: list[str]) -> None:
+def prepare_namespace_directories(root_directory: str, namespaces: set[str]) -> None:
     """prepare_namespace_directories."""
     for namespace in namespaces:
         ns_dir = os.path.join(root_directory, namespace)

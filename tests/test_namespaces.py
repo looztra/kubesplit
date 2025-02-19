@@ -6,7 +6,7 @@ from kubesplit.namespaces import get_all_namespaces
 
 def test_get_all_namespace():
     """test_get_all_namespace."""
-    descriptors = dict()
+    descriptors = {}
     k8s_default_svc_dummy = K8SDescriptor(name="dummy", kind="Service", namespace="default", as_yaml="")
     k8s_default_svc_dummy2 = K8SDescriptor(name="dummy2", kind="Service", namespace="default", as_yaml="")
     k8s_ns1_deploy_foo = K8SDescriptor(name="foo", kind="Deployment", namespace="ns1", as_yaml="")
@@ -24,6 +24,6 @@ def test_get_all_namespace():
 
 def test_get_all_namespace_when_no_descriptors():
     """test_get_all_namespace_when_no_descriptors."""
-    descriptors = dict()
+    descriptors = {}
     res = get_all_namespaces(descriptors)
     assert len(res) == 0

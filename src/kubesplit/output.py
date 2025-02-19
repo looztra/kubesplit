@@ -47,7 +47,7 @@ def save_descriptors_to_dir(
     yamkix_config: YamkixConfig = default_yamkix_config,
 ):
     """Save input descriptors to files in dir."""
-    for _desc_id, desc in descriptors.items():
+    for desc in descriptors.values():
         with open(
             desc.compute_filename_with_namespace(root_directory),
             mode="w",

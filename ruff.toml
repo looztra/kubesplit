@@ -4,15 +4,10 @@ extend = "ruff_defaults.toml"
 [lint]
 
 ignore = [
-    "A001",
-    "PT009",
-    "PT027",
     "ANN001",
     "ANN201",
     "ANN204",
-    "TC002",
     "T201",
-    "C408",
     "PTH100",
     "PTH103",
     "PTH110",
@@ -20,13 +15,4 @@ ignore = [
     "PTH113",
     "PTH118",
     "PTH123",
-    "PERF102",
-    "PERF402",
-    "SIM102",
-    "SIM108",
-    "SIM118",
-    "EM101",
-    "EM102",
-    "PLR0912",
-    "PLR0913",
 ]
