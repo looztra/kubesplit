@@ -1,0 +1,7 @@
+---
+globs:
+  - '**/*.md'
+  - '!.venv*/**/*.md'
+  - '!**/.tox/**/*.md'
+  - '!**/.pytest_cache'
+  - '!CHANGELOG.md'
