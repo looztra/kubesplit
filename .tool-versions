@@ -1,4 +1,4 @@
-editorconfig-checker 3.2.0
+editorconfig-checker 3.2.1
 shfmt                3.11.0
 uv                   0.6.6
 shellcheck           0.10.0
