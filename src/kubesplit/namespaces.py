@@ -5,6 +5,8 @@ from pathlib import Path
 
 from kubesplit.k8s_descriptor import K8SDescriptor
 
+LOGGER = logging.getLogger(__name__)
+
 
 def get_all_namespaces(descriptors: dict[str, K8SDescriptor]) -> set[str]:
     """get_all_namespaces."""
@@ -20,5 +22,5 @@ def prepare_namespace_directories(root_directory: Path, namespaces: set[str]) ->
     for namespace in namespaces:
         ns_dir = root_directory / namespace
         if not ns_dir.exists():
-            logging.info("Creating directory [%s]", ns_dir)
+            LOGGER.info("Creating directory [%s]", ns_dir)
             ns_dir.mkdir(parents=True)
