@@ -14,6 +14,7 @@ from kubesplit.k8s_descriptor import K8SDescriptor
 from kubesplit.namespaces import get_all_namespaces, prepare_namespace_directories
 from kubesplit.output import save_descriptors_to_dir
 
+LOGGER = logging.getLogger(__name__)
 default_yamkix_config = get_default_yamkix_config()
 default_yaml = YAML(typ="rt")
 StreamTextType = Any
@@ -137,4 +138,4 @@ def convert_input_to_files_in_directory(
             yamkix_config=yamkix_config,
         )
     else:
-        logging.error("Nothing found in provided input, check for previous errors")
+        LOGGER.error("Nothing found in provided input, check for previous errors")
