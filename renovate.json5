@@ -4,7 +4,7 @@
     "config:recommended"
   ],
   automerge: true,
-  pre-commit: {
+  "pre-commit": {
     enabled: true,
     automerge: true
   },
