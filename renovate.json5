@@ -3,10 +3,13 @@
   "extends": [
     "config:recommended"
   ],
-  "pre-commit": {
-    "enabled": true
+  automerge: true,
+  pre-commit: {
+    enabled: true,
+    automerge: true
   },
   lockFileMaintenance: {
     enabled: true,
+    automerge: true
   },
 }
