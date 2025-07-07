@@ -1,5 +1,5 @@
 editorconfig-checker 3.3.0
-shfmt                3.11.0
+shfmt                3.12.0
 uv                   0.7.19
 shellcheck           0.10.0
 pre-commit           4.2.0
