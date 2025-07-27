@@ -137,6 +137,13 @@ jobs:
           make test
           echo "::endgroup::"
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: generated/junit.xml
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
