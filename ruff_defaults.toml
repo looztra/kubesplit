@@ -16,9 +16,16 @@ ignore = [
     "ISC001", # The following rule may cause conflicts when used with the formatter
 ]
 
-per-file-ignores."**/tests/*" = [
+[lint.per-file-ignores]
+
+"**/tests/*" = [
     "INP001", # INP001: File {filename} is part of an implicit namespace package. Add an __init__.py.
-    "S101",   # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+]
+
+"**/tests/**/*" = [
+    "S101", # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+    "D100", # D100: Missing docstring in public module.
+    "D104", # D104: Missing docstring in public package.
 ]
 
 # Use Google-style docstrings.
