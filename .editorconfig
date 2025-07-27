@@ -73,3 +73,6 @@ max_line_length = unset
 
 [uv.lock]
 max_line_length = unset
+
+[poe_tasks.toml]
+max_line_length = unset
