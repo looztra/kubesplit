@@ -166,13 +166,13 @@ jobs:
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@v4
-        if: ${{ github.event_name == 'push' || inputs.force_release }}
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
         with:
           name: python-package-distributions
           path: dist/
 
       - name: Detect environment
-        if: ${{ github.event_name == 'push' || inputs.force_release }}
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
         id: detect-deploy-env
         run: |
           echo "deploy_env=${{ startsWith(github.ref, 'refs/tags') && 'pypi' || 'testpypi' }}" >> "${GITHUB_OUTPUT}"
@@ -180,7 +180,7 @@ jobs:
   deploy-release:
     name: Deploy Release
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || inputs.force_release }}
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
     environment:
       name: ${{ needs.python-checks.outputs.deploy_env }}
       url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/kubesplit/' || 'https://test.pypi.org/project/kubesplit/' }}
