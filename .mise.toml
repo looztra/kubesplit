@@ -1,6 +1,6 @@
 [tools]
 bats = "1.12.0"
-editorconfig-checker = "3.3.0"
+editorconfig-checker = "3.4.0"
 "pipx:pre-commit" = { version = "4.3.0", uvx_args = "--with pre-commit-uv" }
 "pipx:yamkix" = "0.10.0"
 pre-commit = "4.3.0"
