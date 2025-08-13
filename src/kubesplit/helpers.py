@@ -1,6 +1,9 @@
 """Provide generic helpers."""
 
-from yamkix import __version__ as yamkix_version
+try:
+    from yamkix.__version__ import __version__ as yamkix_version  # pyright: ignore[reportMissingImports]
+except ImportError:
+    from yamkix import __version__ as yamkix_version
 
 from kubesplit import __version__
 
