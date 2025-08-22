@@ -52,23 +52,25 @@ repos:
       - id: yamllint
         args: [--config-data, relaxed, --no-warnings]
 
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.3
+  - repo: https://github.com/looztra/yamkix
+    rev: v0.13.0
     hooks:
-      - id: yamlfmt
-        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '250', --explicit_start]
+      - id: yamkix
+        args: [--no-quotes-preserved]
         exclude: |
           (?x)^(
-              test-assets/.*
+              test-assets/.*|
+              tests/data/.*
           )$
 
   - repo: local
     hooks:
       - id: taplo
         name: Check TOML files are formatted with 'taplo'
-        language: docker_image
-        entry: tamasfe/taplo:0.9.3 format --config .taplo.toml
-        types: [toml]
+        entry: uv run taplo format --config .taplo.toml
+        types: [text]
+        language: system
+        pass_filenames: false
       - id: ruff-format
         name: Check that files are formatted as expected with 'ruff format --check'
         entry: uv run --frozen ruff format --check
