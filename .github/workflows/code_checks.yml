@@ -165,7 +165,7 @@ jobs:
           echo "::endgroup::"
 
       - name: Store the distribution packages
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
         with:
           name: python-package-distributions
@@ -190,7 +190,7 @@ jobs:
       - python-checks
     steps:
       - name: Download the distribution packages
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: python-package-distributions
           path: dist/
