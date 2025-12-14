@@ -53,7 +53,7 @@ repos:
         args: [--config-data, relaxed, --no-warnings]
 
   - repo: https://github.com/looztra/yamkix
-    rev: v0.13.0
+    rev: v0.14.0
     hooks:
       - id: yamkix
         args: [--no-quotes-preserved]
