@@ -4,7 +4,9 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
-from typing import ClassVar
+from typing import Any, ClassVar
+
+from ruamel.yaml.comments import CommentedBase
 
 from kubesplit.errors import K8SNamespaceError
 
@@ -16,7 +18,7 @@ class K8SDescriptor:  # pylint: disable=too-many-instance-attributes
     name: str
     kind: str
     namespace: str | None
-    as_yaml: dict
+    as_yaml: CommentedBase | dict[str, Any]
     use_order_prefix: bool = True
     extension: str = "yml"
     is_list: bool = False

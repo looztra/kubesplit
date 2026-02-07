@@ -2,13 +2,16 @@
 
 import shutil
 from pathlib import Path
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO, cast
 
 from ruamel.yaml import YAML
 from yamkix.config import YamkixConfig, get_default_yamkix_config
 from yamkix.yamkix import yamkix_dump_one
 
 from kubesplit.k8s_descriptor import K8SDescriptor
+
+if TYPE_CHECKING:
+    from ruamel.yaml.comments import CommentedBase
 
 default_yaml = YAML(typ="rt")
 default_yamkix_config = get_default_yamkix_config()
@@ -35,7 +38,7 @@ def save_descriptor_to_stream(
 ) -> None:
     """save_descriptor_to_stream."""
     yamkix_dump_one(
-        descriptor.as_yaml,
+        cast("CommentedBase", descriptor.as_yaml),
         yaml_instance,
         yamkix_config.dash_inwards,
         out,
