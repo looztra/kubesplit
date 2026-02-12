@@ -1,7 +1,7 @@
 [tools]
 bats = "1"
 editorconfig-checker = "3"
-"pipx:pre-commit" = { version = "4", uvx_args = "--with pre-commit-uv" }
+"pipx:pre-commit" = { version = "4.5.1", uvx_args = "--with pre-commit-uv" }
 shellcheck = "0.11"
 shfmt = "3"
 uv = "0.10.2"
