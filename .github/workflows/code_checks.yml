@@ -43,7 +43,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: jdx/mise-action@v3
+      - uses: jdx/mise-action@v4
         with:
           install: true
           cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
@@ -113,7 +113,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: jdx/mise-action@v3
+      - uses: jdx/mise-action@v4
         with:
           install: true
           cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
