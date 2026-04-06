@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/looztra/kubesplit/compare/v0.4.0...v0.5.0) (2026-04-06)
+
+
+### Features
+
+* **cli:** switch to Typer, require yamkix &gt;= 0.14.0 ([#283](https://github.com/looztra/kubesplit/issues/283)) ([8ad5f9f](https://github.com/looztra/kubesplit/commit/8ad5f9f6387f1d9154af8e7ff282fc0fb993d40f))
+
 ## [0.4.0](https://github.com/looztra/kubesplit/compare/v0.3.3...v0.4.0) (2025-07-27)
 
 
