@@ -1,11 +1,10 @@
 """Kubesplit configuration helpers."""
 
 import sys
-from argparse import Namespace
 from dataclasses import dataclass
 
+from yamkix import get_yamkix_config_from_default
 from yamkix.config import YamkixConfig
-from yamkix.config import get_config_from_args as yamkix_get_config_from_args
 
 from kubesplit import __version__
 from kubesplit.errors import MissingOutputDirError
@@ -31,40 +30,63 @@ class KubesplitConfig:
     yamkix_config: YamkixConfig
 
 
-def should_we_show_version(args: Namespace) -> bool:
-    """Should we show version or not?."""
-    return args.version if args.version is not None else False
-
-
-def get_io_config_from_args(args: Namespace, show_version: bool) -> KubesplitIOConfig:
-    """Build a KubesplitIOConfig from parsed args."""
-    input_display_name = "STDIN"
-    if args.input is None or args.input == "-":
+def get_io_config_from_typer_args(
+    input_file: str | None,
+    output_dir: str | None,
+    show_version: bool,
+) -> KubesplitIOConfig:
+    """Build a KubesplitIOConfig from typed CLI args."""
+    if input_file is None or input_file == "-":
         f_input = None
+        input_display_name = "STDIN"
     else:
-        f_input = args.input
+        f_input = input_file
         input_display_name = f_input
     if show_version:
-        output_dir = "N/A"
+        resolved_output_dir = "N/A"
     else:
-        if args.output_dir is None:
+        if output_dir is None:
             raise MissingOutputDirError
-        output_dir = args.output_dir
+        resolved_output_dir = output_dir
     return KubesplitIOConfig(
         input=f_input,
         input_display_name=input_display_name,
-        output_dir=output_dir,
+        output_dir=resolved_output_dir,
     )
 
 
-def get_config_from_args(args: Namespace) -> KubesplitConfig:
-    """Build a KubesplitConfig from parsed args."""
-    show_version: bool = should_we_show_version(args)
-    yamkix_config = yamkix_get_config_from_args(args, inc_io_config=False)
-    io_config = get_io_config_from_args(args, show_version)
+def get_kubesplit_config_from_typer_args(  # noqa: PLR0913
+    input_file: str | None,
+    output_dir: str | None,
+    clean_output_dir: bool,
+    no_resource_prefix: bool,
+    show_version: bool,
+    typ: str,
+    no_explicit_start: bool,
+    explicit_end: bool,
+    no_quotes_preserved: bool,
+    enforce_double_quotes: bool,
+    default_flow_style: bool,
+    no_dash_inwards: bool,
+    spaces_before_comment: int | None,
+    line_width: int,
+) -> KubesplitConfig:
+    """Build a KubesplitConfig from typed Typer CLI arguments."""
+    io_config = get_io_config_from_typer_args(input_file, output_dir, show_version)
+    yamkix_config = get_yamkix_config_from_default(
+        parsing_mode=typ,
+        explicit_start=not no_explicit_start,
+        explicit_end=explicit_end,
+        default_flow_style=default_flow_style,
+        dash_inwards=not no_dash_inwards,
+        quotes_preserved=not no_quotes_preserved,
+        enforce_double_quotes=enforce_double_quotes,
+        spaces_before_comment=spaces_before_comment,
+        line_width=line_width,
+    )
     return KubesplitConfig(
-        clean_output_dir=args.clean_output_dir,
-        prefix_resource_files=not args.no_resource_prefix,
+        clean_output_dir=clean_output_dir,
+        prefix_resource_files=not no_resource_prefix,
         version=show_version,
         yamkix_config=yamkix_config,
         io_config=io_config,

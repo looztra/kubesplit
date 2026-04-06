@@ -249,6 +249,7 @@ wheels = [
 name = "kubesplit"
 source = { editable = "." }
 dependencies = [
+    { name = "typer" },
     { name = "yamkix" },
 ]
 
@@ -269,7 +270,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "yamkix", specifier = ">=0.10.0" }]
+requires-dist = [
+    { name = "typer", specifier = ">=0.24.1" },
+    { name = "yamkix", specifier = ">=0.14.0" },
+]
 
 [package.metadata.requires-dev]
 dev = [

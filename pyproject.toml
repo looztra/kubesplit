@@ -18,7 +18,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "yamkix>=0.10.0",
+    "typer>=0.24.1",
+    "yamkix>=0.14.0",
 ]
 description = "A CLI to split multidoc yaml formatted kubernetes descriptors to a set of single resource files"
 dynamic = [
@@ -33,7 +34,7 @@ requires-python = ">=3.10"
 Repository = "https://github.com/looztra/kubesplit"
 
 [project.scripts]
-kubesplit = "kubesplit.__main__:main"
+kubesplit = "kubesplit._cli:app"
 
 [dependency-groups]
 dev = [
