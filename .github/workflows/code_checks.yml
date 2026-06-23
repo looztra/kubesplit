@@ -51,7 +51,7 @@ jobs:
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.UV_CACHE_DIR }}
           key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
@@ -89,7 +89,7 @@ jobs:
           echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_OUTPUT}"
 
       - name: Restore pre-commit cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pre-commit
           key: pre-commit|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
@@ -121,7 +121,7 @@ jobs:
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: /tmp/.uv-cache
           key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
