@@ -19,7 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "typer>=0.24.1",
-    "yamkix>=0.14.0",
+    "yamkix>=1.0.0",
 ]
 description = "A CLI to split multidoc yaml formatted kubernetes descriptors to a set of single resource files"
 dynamic = [

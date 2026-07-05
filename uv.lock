@@ -514,7 +514,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "typer", specifier = ">=0.24.1" },
-    { name = "yamkix", specifier = ">=0.14.0" },
+    { name = "yamkix", specifier = ">=1.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1498,12 +1498,12 @@ wheels = [
 
 [[package]]
 name = "yamkix"
-version = "0.16.0"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ruamel-yaml" },
     { name = "typer" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/dd/3404af5e86c37ac399cea6a6f656c86ec1fe08c7d7a2c60002c6a0a6767e/yamkix-0.16.0-py3-none-any.whl", hash = "sha256:e598bc29db5db163eef74e5463d8653c14eddad006d8a7f046f71b5f6c574fc0", size = 19577, upload-time = "2026-04-13T10:10:28.687Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/ec/f38401fa5aabaed56deb573842f49d861c277f67116e142ddc262ffe4737/yamkix-1.0.0-py3-none-any.whl", hash = "sha256:a09649180c8bdabc3f1e026c7aa68e3dac2a75d0790de8d92172e6347315009d", size = 20364, upload-time = "2026-07-05T09:31:39.304Z" },
 ]
