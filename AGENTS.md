@@ -23,6 +23,14 @@ This document provides context and instructions for AI agents working on this re
 ### Code Style & Quality
 
 - **Markdown**: Follow GitHub's markdown instructions and `.markdownlint.yaml`.
+- **Documentation**: When a change requires it (new/changed CLI flags, behavior, or
+  concepts), UPDATE the docs. The `docs/` site follows the
+  [Diátaxis](https://diataxis.fr/) framework — place content in the right quadrant:
+  - `docs/tutorials/` — learning-oriented, step-by-step guides.
+  - `docs/how-to/` — task-oriented recipes for a specific goal.
+  - `docs/reference/` — information-oriented, exhaustive descriptions (flags, config).
+  - `docs/explanation/` — understanding-oriented background and rationale.
+  Register new pages in `mkdocs.yml` navigation.
 - **Python**:
   - Follow PEP 8 & PEP 257.
   - **Docstrings**:
@@ -80,5 +88,6 @@ This project uses `poethepoet` for task management. Common tasks:
 1. **Read First**: Check `AGENTS.md` (this file) and `poe_tasks.toml` to understand available tools.
 2. **Verify Often**: Run tests and linters frequently (e.g., after every significant edit).
 3. **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
-4. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
-5. **Finish Clean**: End every session by running `poe style`, `poe lint:all`, `poe test`, `make integration-tests`, and `pre-commit run --all-files`. Linters and both test suites (unit and integration) MUST pass — resolve any issues they surface before considering the work complete.
+4. **Document Changes**: When a change requires it, update `docs/` following the Diátaxis framework (tutorials / how-to / reference / explanation) and register new pages in `mkdocs.yml`.
+5. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
+6. **Finish Clean**: End every session by running `poe style`, `poe lint:all`, `poe test`, `make integration-tests`, and `pre-commit run --all-files`. Linters and both test suites (unit and integration) MUST pass — resolve any issues they surface before considering the work complete.
