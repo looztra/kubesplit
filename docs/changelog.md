@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.0](https://github.com/looztra/kubesplit/compare/v0.5.0...v0.6.0) (2026-07-05)
+
+
+### Features
+
+* **cli:** Add --align-comments and --enforce-block-style yamkix options ([#332](https://github.com/looztra/kubesplit/issues/332)) ([cd09b5f](https://github.com/looztra/kubesplit/commit/cd09b5f5d504e481e61f94b1b6c45c4b94a8efec))
+
+
+### Bug Fixes
+
+* **ci:** guard docs build when previous commit lacks mkdocs.yml ([#331](https://github.com/looztra/kubesplit/issues/331)) ([338bd51](https://github.com/looztra/kubesplit/commit/338bd513f3422af135b784f50e54ad25af002d63))
+
+
+### Documentation
+
+* add Diátaxis documentation with MkDocs and publish workflow ([469f766](https://github.com/looztra/kubesplit/commit/469f766f2603aebd15a251142be72a40ac47c1bd))
+* **mkdocs:** Initialize Diátaxis documentation with MkDocs ([#327](https://github.com/looztra/kubesplit/issues/327)) ([469f766](https://github.com/looztra/kubesplit/commit/469f766f2603aebd15a251142be72a40ac47c1bd))
+
 ## [0.5.0](https://github.com/looztra/kubesplit/compare/v0.4.0...v0.5.0) (2026-04-06)
 
 
