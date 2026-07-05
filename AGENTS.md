@@ -36,6 +36,14 @@ This document provides context and instructions for AI agents working on this re
   - **Markdown Linting**: `pre-commit run --all-files markdownlint-cli2` or `poe lint:all` (if configured)
   - **Type Checking**: `pyright` & `ty`
 - **Pre-check**: always run `poe lint:all` before submitting changes.
+- **End-of-session** (mandatory): before wrapping up any session, ALWAYS run — in order:
+  1. `poe style` — format code (`ruff format`) and TOML (`taplo`).
+  2. `poe lint:all` — run all linters (ruff, pylint, pyright).
+  3. `poe test` — run the unit tests.
+  4. `make integration-tests` — run the integration tests (`pytest -m integration`).
+  5. `pre-commit run --all-files` — run all configured hooks.
+  Linters and both test suites (unit and integration) MUST pass. Fix anything they
+  report and re-run until every step passes clean before considering the work done.
 
 ### Testing
 
@@ -46,14 +54,17 @@ This document provides context and instructions for AI agents working on this re
   - Define fixtures using `@pytest.fixture(name="foo")` explicit naming.
   - Use `pytest.mark.parametrize` with `pytest.param(..., id="...")` for distinct test cases.
 - **Running Tests**:
-  - `pytest` (using `uv` environment)
-  - `poe test`
+  - `pytest` (using `uv` environment) — unit tests only (`integration` marker is deselected by default).
+  - `poe test` — unit tests.
+  - `make integration-tests` — integration tests (`pytest -m integration`; invokes the real `kubesplit` CLI).
+- **Must pass**: linters and BOTH test suites (unit and integration) must pass, and must be checked at the end of every session (see End-of-session below).
 
 ## Task Runner (`poe`)
 
 This project uses `poethepoet` for task management. Common tasks:
 
 - `poe lint:all`: Run all linters (ruff, pyright, pylint, ty).
+- `poe style`: Format code (`ruff format`) and TOML (`taplo`). Run at the end of every session.
 - `poe ruff:lint:fix`: Auto-fix ruff issues.
 - `poe ruff:fmt:run`: Format code.
 - `poe test`: Run tests.
@@ -70,3 +81,4 @@ This project uses `poethepoet` for task management. Common tasks:
 2. **Verify Often**: Run tests and linters frequently (e.g., after every significant edit).
 3. **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
 4. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
+5. **Finish Clean**: End every session by running `poe style`, `poe lint:all`, `poe test`, `make integration-tests`, and `pre-commit run --all-files`. Linters and both test suites (unit and integration) MUST pass — resolve any issues they surface before considering the work complete.
