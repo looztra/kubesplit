@@ -1133,7 +1133,8 @@
 </ul>
 <p>Descriptors are keyed by an id built from <code>namespace + kind + name</code>, so two resources that differ only by namespace never collide, and a resource appearing twice in the input is de-duplicated (last one wins).</p>
 <h2 id="why-kubesplit-reuses-yamkix">Why kubesplit reuses yamkix<a class="headerlink" href="#why-kubesplit-reuses-yamkix" title="Permanent link">&para;</a></h2>
-<p>Kubesplit does not implement its own YAML writer. It formats every output file with <a href="https://github.com/looztra/yamkix">yamkix</a>, which is why the CLI exposes yamkix's styling options (<code>--no-explicit-start</code>, <code>--no-dash-inwards</code>, <code>--no-quotes-preserved</code>, <code>--line-width</code>, …). This keeps the two tools consistent: the formatting you get from <code>yamkix</code> on a single file is the formatting kubesplit gives each resource it extracts.</p>
+<p>Kubesplit does not implement its own YAML writer. It formats every output file with <a href="https://github.com/looztra/yamkix">yamkix</a>, which is why the CLI exposes yamkix's styling options (<code>--no-explicit-start</code>, <code>--no-dash-inwards</code>, <code>--no-quotes-preserved</code>, <code>--line-width</code>, <code>--enforce-block-style</code>, <code>--align-comments</code>, …). This keeps the two tools consistent: the formatting you get from <code>yamkix</code> on a single file is the formatting kubesplit gives each resource it extracts.</p>
+<p>There is one subtlety. Yamkix applies whole-document transforms — enforcing block style and aligning end-of-line comments — inside its <code>yamkix_dump_all</code> entry point. Kubesplit does <strong>not</strong> go through <code>yamkix_dump_all</code>: it classifies the stream itself and writes one descriptor at a time through <code>yamkix_dump_one</code>. So kubesplit applies those two transforms to each descriptor just before dumping it, in the same order yamkix does (block style first, then comment alignment), so the result matches what yamkix would produce.</p>
 <p>See the <a href="../ecosystem/">Ecosystem</a> page for how kubesplit, yamkix, kustomize and helm fit together.</p>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1161,7 +1162,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 09:58:34 UTC">2026-07-05 09:58:34</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 12:50:48 UTC">2026-07-05 12:50:48</span>
   </span>
 
     

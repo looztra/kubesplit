@@ -625,6 +625,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#force-block-style-everywhere-enforce-block-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force block style everywhere (--enforce-block-style)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#line-width" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -640,6 +651,17 @@
     <span class="md-ellipsis">
       
         Comment spacing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#align-end-of-line-comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Align end-of-line comments
       
     </span>
   </a>
@@ -1075,6 +1097,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#force-block-style-everywhere-enforce-block-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force block style everywhere (--enforce-block-style)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#line-width" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1090,6 +1123,17 @@
     <span class="md-ellipsis">
       
         Comment spacing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#align-end-of-line-comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Align end-of-line comments
       
     </span>
   </a>
@@ -1182,23 +1226,54 @@
 <p class="admonition-title">Note</p>
 <p>In the default <code>rt</code> (round-trip) parsing mode, <code>ruamel.yaml</code> remembers the style of each collection it parsed, so <code>--default-flow-style</code> mostly affects collections that carry no such memory. Existing block-style content generally stays block style.</p>
 </div>
+<h2 id="force-block-style-everywhere-enforce-block-style">Force block style everywhere (<code>--enforce-block-style</code>)<a class="headerlink" href="#force-block-style-everywhere-enforce-block-style" title="Permanent link">&para;</a></h2>
+<p>Because <code>rt</code> mode remembers the original style, an input that already contains inline (flow-style) collections keeps them. Use <code>-B/--enforce-block-style</code> to rewrite every flow-style map/list into block style, regardless of how it was written:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--enforce-block-style
+</span></code></pre></div>
+<p>Input with an inline <code>data</code> map:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">key1</span><span class="p">:</span><span class="w"> </span><span class="nv">value1</span><span class="p p-Indicator">,</span><span class="nt"> key2</span><span class="p">:</span><span class="w"> </span><span class="nv">value2</span><span class="p p-Indicator">}</span>
+</span></code></pre></div>
+<p>Output with <code>--enforce-block-style</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">key1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">value1</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">key2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">value2</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>--enforce-block-style</code> overrides <code>--default-flow-style</code> (everything ends up block style). Empty collections (<code>[]</code> and <code>{}</code>) are kept as-is, since block style has no representation for them. This option only applies in the default <code>rt</code> parsing mode.</p>
+</div>
 <h2 id="line-width">Line width<a class="headerlink" href="#line-width" title="Permanent link">&para;</a></h2>
 <p>The maximum line width defaults to <code>2048</code> (effectively "don't wrap"). Lower it with <code>-w/--line-width</code> if you want yamkix to fold long lines:</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--line-width<span class="w"> </span><span class="m">80</span>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--line-width<span class="w"> </span><span class="m">80</span>
 </span></code></pre></div>
 <h2 id="comment-spacing">Comment spacing<a class="headerlink" href="#comment-spacing" title="Permanent link">&para;</a></h2>
 <p>By default, end-of-line comments are left where they are. Use <code>-s/--spaces-before-comment</code> to normalize the number of spaces between content and a trailing comment:</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--spaces-before-comment<span class="w"> </span><span class="m">2</span>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--spaces-before-comment<span class="w"> </span><span class="m">2</span>
 </span></code></pre></div>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extensions/v1beta1</span><span class="w">  </span><span class="c1"># exactly two spaces before the comment</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extensions/v1beta1</span><span class="w">  </span><span class="c1"># exactly two spaces before the comment</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><code>-s</code> is <code>--spaces-before-comment</code> in kubesplit (an integer), <strong>not</strong> a "stdout" flag. Kubesplit has no <code>STDOUT</code> mode — see <a href="../split-descriptors/">Split descriptors</a>.</p>
 </div>
+<h2 id="align-end-of-line-comments">Align end-of-line comments<a class="headerlink" href="#align-end-of-line-comments" title="Permanent link">&para;</a></h2>
+<p>Use <code>-a/--align-comments</code> to line up trailing (end-of-line) comments within each map/list to a common column:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--align-comments
+</span></code></pre></div>
+<p>Input:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">short</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a</span><span class="w"> </span><span class="c1"># first</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">a_longer_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">b</span><span class="w"> </span><span class="c1"># second</span>
+</span></code></pre></div>
+<p>Output with <code>--align-comments</code>:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">data</span><span class="p">:</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">short</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a</span><span class="w">        </span><span class="c1"># first</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">a_longer_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">b</span><span class="w"> </span><span class="c1"># second</span>
+</span></code></pre></div>
+<p>Comments are aligned to the widest line <strong>within the same map or list</strong>, so nested blocks are aligned independently. Combine it with <code>-s/--spaces-before-comment</code> to also control the gap before short comments.</p>
 <h2 id="parser-mode-keep-or-drop-comments">Parser mode: keep or drop comments<a class="headerlink" href="#parser-mode-keep-or-drop-comments" title="Permanent link">&para;</a></h2>
 <p>The parser mode is <code>rt</code> (round-trip) by default, which <strong>preserves comments</strong>. Switch to <code>-t safe/--typ safe</code> to drop all comments:</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--typ<span class="w"> </span>safe
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>all-in-one.yml<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>--typ<span class="w"> </span>safe
 </span></code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1225,7 +1300,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 09:58:34 UTC">2026-07-05 09:58:34</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 12:50:48 UTC">2026-07-05 12:50:48</span>
   </span>
 
     

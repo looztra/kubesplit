@@ -1166,6 +1166,20 @@
 <td>enable the default (JSON-like) flow style.</td>
 </tr>
 <tr>
+<td><code>--enforce-block-style</code></td>
+<td><code>-B</code></td>
+<td>flag</td>
+<td>off</td>
+<td>convert flow-style (JSON-like) maps and lists to block style. Overrides <code>--default-flow-style</code>. Empty collections (<code>[]</code>/<code>{}</code>) are kept as-is.</td>
+</tr>
+<tr>
+<td><code>--align-comments</code></td>
+<td><code>-a</code></td>
+<td>flag</td>
+<td>off</td>
+<td>align EOL comments within each dict/list to the maximum column.</td>
+</tr>
+<tr>
 <td><code>--no-dash-inwards</code></td>
 <td><code>-d</code></td>
 <td>flag</td>
@@ -1209,6 +1223,8 @@
 <li><code>explicit_start = True</code> (<code>---</code> added)</li>
 <li><code>explicit_end = False</code></li>
 <li><code>default_flow_style = False</code></li>
+<li><code>enforce_block_style = False</code></li>
+<li><code>align_comments = False</code></li>
 <li><code>dash_inwards = True</code></li>
 <li><code>quotes_preserved = True</code></li>
 <li><code>enforce_double_quotes = False</code></li>
@@ -1247,15 +1263,19 @@
 </span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>│                                             with -q.                  │
 </span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│ --default-flow-style     -f                 enable the default flow   │
 </span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│                                             style.                    │
-</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│ --no-dash-inwards        -d                 dash at sequence level.   │
-</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│ --spaces-before-comment  -s      INTEGER    spaces between comments   │
-</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│                                             and content.              │
-</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│ --line-width             -w      INTEGER    maximum line width.       │
-</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│                                             [default: 2048]           │
-</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│ --version                -v                 show kubesplit version.   │
-</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│ --help                   -h                 Show this message and     │
-</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>│                                             exit.                     │
-</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>╰──────────────────────────────────────────────────────────────────────╯
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│ --enforce-block-style    -B                 convert flow-style to     │
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│                                             block style.             │
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│ --align-comments         -a                 align EOL comments to     │
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│                                             max column.              │
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│ --no-dash-inwards        -d                 dash at sequence level.   │
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│ --spaces-before-comment  -s      INTEGER    spaces between comments   │
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│                                             and content.              │
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>│ --line-width             -w      INTEGER    maximum line width.       │
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>│                                             [default: 2048]           │
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>│ --version                -v                 show kubesplit version.   │
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>│ --help                   -h                 Show this message and     │
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>│                                             exit.                     │
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>╰──────────────────────────────────────────────────────────────────────╯
 </span></code></pre></div>
 <p>Run <code>kubesplit --help</code> locally for the authoritative, full-width output.</p>
 
@@ -1278,7 +1298,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 09:58:34 UTC">2026-07-05 09:58:34</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 12:50:48 UTC">2026-07-05 12:50:48</span>
   </span>
 
     
