@@ -20,7 +20,9 @@ pyright = [
 "ruff:lint:fix" = "ruff check --fix"
 style = [
     "ruff:fmt:run",
+    "taplo",
 ]
+taplo = "taplo format --config .taplo.toml"
 test = "pytest"
 "test:cov" = [
     "pytest:cov",
