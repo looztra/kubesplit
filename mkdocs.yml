@@ -1,0 +1,97 @@
+---
+site_name: Kubesplit
+site_url: https://looztra.github.io/kubesplit/
+site_description: Split multidoc YAML Kubernetes descriptors into a set of single-resource files.
+repo_url: https://github.com/looztra/kubesplit
+edit_uri: edit/main/docs/
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - content.action.edit
+    - content.code.copy
+
+validation:
+  omitted_files: warn
+  absolute_links: warn # Or 'relative_to_docs' - new in MkDocs 1.6
+  unrecognized_links: warn
+  anchors: warn # New in MkDocs 1.6
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - sane_lists
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [std, py]
+          options:
+            docstring_style: google
+            separate_signature: true
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            extensions:
+              - griffe_pydantic:
+                schema: true
+              - griffe_typingdoc
+              - griffe_warnings_deprecated
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: iso_datetime
+  - redirects:
+      redirect_maps:
+        install.md: how-to/install.md
+        usage.md: how-to/split-descriptors.md
+nav:
+  - Home: index.md
+  - Tutorials:
+      - Getting started: tutorials/getting-started.md
+  - How-to guides:
+      - Install: how-to/install.md
+      - Split descriptors: how-to/split-descriptors.md
+      - Organize the output: how-to/organize-output.md
+      - Control quotes: how-to/control-quotes.md
+      - Tune the YAML formatting: how-to/tune-yaml-formatting.md
+      - Use with Kustomize and Helm: how-to/integrate-kustomize-helm.md
+  - Reference:
+      - CLI options: reference/cli.md
+      - File naming and layout: reference/file-naming.md
+      - Public API: reference/api.md
+      - Changelog: changelog.md
+  - Explanation:
+      - How kubesplit works: explanation/how-it-works.md
+      - Ecosystem: explanation/ecosystem.md
+  - Contributing: contributing.md
+watch:
+  - src

@@ -1,0 +1,102 @@
+---
+name: Push documentation to GH pages
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force_publish:
+        description: force docs to be published
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}-checks
+  cancel-in-progress: true
+
+env:
+  UV_LINK_MODE: copy
+  UV_PYTHON_PREFERENCE: only-managed
+  UV_CACHE_DIR: /tmp/.uv-cache
+  MISE_INSTALL_FROM_GITHUB: 1
+  # The following repository variables control mise-action caching across jobs:
+  # - MISE_CACHE_ENABLED: set to 'false' to disable mise action caching; defaults to 'true' when unset
+  # - MISE_CACHE_KEY_PREFIX: prefix used for cache keys so different workflows can share/segregate caches
+
+permissions:
+  contents: write
+jobs:
+  push-docs:
+    name: Push documentation to GH pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v4
+        with:
+          install: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
+          version: ${{ vars.MISE_VERSION }}
+
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Restore uv cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Setup venv
+        run: |
+          uv python install
+          uv sync --group docs
+
+      - name: Set cache id for mkdocs-material assets
+        run: |
+          echo "cache_id=$(date --utc '+%V')" >> "${GITHUB_ENV}"
+
+      - uses: actions/cache@v6
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: ~/.cache
+          restore-keys: |
+            mkdocs-material-
+
+      - name: Build docs at previous commit
+        run: |
+          git checkout HEAD^
+          uv run mkdocs build --site-dir generated/mkdocs/previous
+
+      - name: Build docs at last main commit
+        run: |
+          git checkout main
+          uv run mkdocs build --site-dir generated/mkdocs/current
+
+      - name: Detect if docs have changed
+        id: detect-docs-changed
+        run: |
+          echo "::group::detect diff"
+          docs_changed=0
+          if ! diff -r generated/mkdocs/previous generated/mkdocs/current; then
+            docs_changed=1
+          fi
+          echo "docs_changed=$docs_changed" >> "${GITHUB_OUTPUT}"
+
+      - name: Push docs to gh-pages
+        if: steps.detect-docs-changed.outputs.docs_changed == '1' || inputs.force_publish
+        run: |
+          uv run mkdocs gh-deploy --force

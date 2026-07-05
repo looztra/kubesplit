@@ -54,3 +54,5 @@ coverage.xml
 .vscode/
 
 generated/
+# mkdocs
+site/
