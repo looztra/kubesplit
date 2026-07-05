@@ -42,7 +42,9 @@ Descriptors are keyed by an id built from `namespace + kind + name`, so two reso
 
 ## Why kubesplit reuses yamkix
 
-Kubesplit does not implement its own YAML writer. It formats every output file with [yamkix](https://github.com/looztra/yamkix), which is why the CLI exposes yamkix's styling options (`--no-explicit-start`, `--no-dash-inwards`, `--no-quotes-preserved`, `--line-width`, …). This keeps the two tools consistent: the formatting you get from `yamkix` on a single file is the formatting kubesplit gives each resource it extracts.
+Kubesplit does not implement its own YAML writer. It formats every output file with [yamkix](https://github.com/looztra/yamkix), which is why the CLI exposes yamkix's styling options (`--no-explicit-start`, `--no-dash-inwards`, `--no-quotes-preserved`, `--line-width`, `--enforce-block-style`, `--align-comments`, …). This keeps the two tools consistent: the formatting you get from `yamkix` on a single file is the formatting kubesplit gives each resource it extracts.
+
+There is one subtlety. Yamkix applies whole-document transforms — enforcing block style and aligning end-of-line comments — inside its `yamkix_dump_all` entry point. Kubesplit does **not** go through `yamkix_dump_all`: it classifies the stream itself and writes one descriptor at a time through `yamkix_dump_one`. So kubesplit applies those two transforms to each descriptor just before dumping it, in the same order yamkix does (block style first, then comment alignment), so the result matches what yamkix would produce.
 
 See the [Ecosystem](ecosystem.md) page for how kubesplit, yamkix, kustomize and helm fit together.
 

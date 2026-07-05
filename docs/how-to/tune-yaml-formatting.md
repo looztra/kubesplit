@@ -55,6 +55,31 @@ kubesplit --input all-in-one.yml --output out --default-flow-style
 !!! note
     In the default `rt` (round-trip) parsing mode, `ruamel.yaml` remembers the style of each collection it parsed, so `--default-flow-style` mostly affects collections that carry no such memory. Existing block-style content generally stays block style.
 
+## Force block style everywhere (`--enforce-block-style`)
+
+Because `rt` mode remembers the original style, an input that already contains inline (flow-style) collections keeps them. Use `-B/--enforce-block-style` to rewrite every flow-style map/list into block style, regardless of how it was written:
+
+```shell
+kubesplit --input all-in-one.yml --output out --enforce-block-style
+```
+
+Input with an inline `data` map:
+
+```yaml
+data: {key1: value1, key2: value2}
+```
+
+Output with `--enforce-block-style`:
+
+```yaml
+data:
+  key1: value1
+  key2: value2
+```
+
+!!! note
+    `--enforce-block-style` overrides `--default-flow-style` (everything ends up block style). Empty collections (`[]` and `{}`) are kept as-is, since block style has no representation for them. This option only applies in the default `rt` parsing mode.
+
 ## Line width
 
 The maximum line width defaults to `2048` (effectively "don't wrap"). Lower it with `-w/--line-width` if you want yamkix to fold long lines:
@@ -77,6 +102,32 @@ apiVersion: extensions/v1beta1  # exactly two spaces before the comment
 
 !!! warning
     `-s` is `--spaces-before-comment` in kubesplit (an integer), **not** a "stdout" flag. Kubesplit has no `STDOUT` mode — see [Split descriptors](split-descriptors.md).
+
+## Align end-of-line comments
+
+Use `-a/--align-comments` to line up trailing (end-of-line) comments within each map/list to a common column:
+
+```shell
+kubesplit --input all-in-one.yml --output out --align-comments
+```
+
+Input:
+
+```yaml
+data:
+  short: a # first
+  a_longer_key: b # second
+```
+
+Output with `--align-comments`:
+
+```yaml
+data:
+  short: a        # first
+  a_longer_key: b # second
+```
+
+Comments are aligned to the widest line **within the same map or list**, so nested blocks are aligned independently. Combine it with `-s/--spaces-before-comment` to also control the gap before short comments.
 
 ## Parser mode: keep or drop comments
 
