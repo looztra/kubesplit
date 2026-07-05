@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, TextIO, cast
 
 from ruamel.yaml import YAML
+from yamkix.comments import align_comments
 from yamkix.config import YamkixConfig, get_default_yamkix_config
+from yamkix.helpers import convert_flow_to_block_style
 from yamkix.yamkix import yamkix_dump_one
 
 from kubesplit.k8s_descriptor import K8SDescriptor
@@ -37,8 +39,16 @@ def save_descriptor_to_stream(
     yamkix_config: YamkixConfig = default_yamkix_config,
 ) -> None:
     """save_descriptor_to_stream."""
+    single_item = cast("CommentedBase", descriptor.as_yaml)
+    # kubesplit dumps each descriptor through yamkix_dump_one directly (it does not
+    # go through yamkix_dump_all), so the block-style and comment-alignment transforms
+    # that yamkix_dump_all applies must be replicated here, in the same order.
+    if yamkix_config.enforce_block_style:
+        convert_flow_to_block_style(data=single_item)
+    if yamkix_config.align_comments:
+        align_comments(data=single_item)
     yamkix_dump_one(
-        cast("CommentedBase", descriptor.as_yaml),
+        single_item,
         yaml_instance,
         yamkix_config.dash_inwards,
         out,

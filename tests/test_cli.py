@@ -47,6 +47,8 @@ def test_missing_output_dir_exits_nonzero() -> None:
         pytest.param(["-t", "safe"], id="typ-safe"),
         pytest.param(["-w", "120"], id="line-width"),
         pytest.param(["-E"], id="enforce-double-quotes"),
+        pytest.param(["-B"], id="enforce-block-style"),
+        pytest.param(["-a"], id="align-comments"),
     ],
 )
 def test_all_flags_accepted(tmp_path: Path, extra_args: list[str]) -> None:
@@ -105,6 +107,24 @@ def test_typ_safe_sets_parsing_mode(tmp_path: Path) -> None:
         runner.invoke(app, ["-o", str(output_dir), "-t", "safe"])
     config = mock_split.call_args[0][0]
     assert config.yamkix_config.parsing_mode == "safe"
+
+
+def test_enforce_block_style_flag_sets_config(tmp_path: Path) -> None:
+    """-B/--enforce-block-style sets enforce_block_style=True in the yamkix config."""
+    output_dir = tmp_path / "out"
+    with patch("kubesplit._cli.split_input_to_files") as mock_split:
+        runner.invoke(app, ["-o", str(output_dir), "-B"])
+    config = mock_split.call_args[0][0]
+    assert config.yamkix_config.enforce_block_style is True
+
+
+def test_align_comments_flag_sets_config(tmp_path: Path) -> None:
+    """-a/--align-comments sets align_comments=True in the yamkix config."""
+    output_dir = tmp_path / "out"
+    with patch("kubesplit._cli.split_input_to_files") as mock_split:
+        runner.invoke(app, ["-o", str(output_dir), "-a"])
+    config = mock_split.call_args[0][0]
+    assert config.yamkix_config.align_comments is True
 
 
 def test_spaces_before_comment_short_flag(tmp_path: Path) -> None:

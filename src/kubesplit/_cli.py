@@ -119,6 +119,23 @@ def main(  # noqa: PLR0913
             help="enable the default flow style (Off by default).",
         ),
     ] = False,
+    enforce_block_style: Annotated[
+        bool,
+        typer.Option(
+            "-B",
+            "--enforce-block-style",
+            help="convert flow-style (JSON-like) maps and lists to block style."
+            " Overrides --default-flow-style. Empty collections ([] and {}) are kept as-is.",
+        ),
+    ] = False,
+    align_comments: Annotated[
+        bool,
+        typer.Option(
+            "-a",
+            "--align-comments",
+            help="align EOL comments within each dict/list to the maximum column.",
+        ),
+    ] = False,
     no_dash_inwards: Annotated[
         bool,
         typer.Option(
@@ -168,6 +185,8 @@ def main(  # noqa: PLR0913
         no_quotes_preserved=no_quotes_preserved,
         enforce_double_quotes=enforce_double_quotes,
         default_flow_style=default_flow_style,
+        enforce_block_style=enforce_block_style,
+        align_comments=align_comments,
         no_dash_inwards=no_dash_inwards,
         spaces_before_comment=spaces_before_comment,
         line_width=line_width,

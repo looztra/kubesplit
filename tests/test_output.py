@@ -290,3 +290,91 @@ spec:
     save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
     s_output = output.getvalue()
     assert s_output == s_expected
+
+
+def test_roundtrip_enforce_block_style_converts_flow_collections() -> None:
+    """--enforce-block-style converts flow-style (JSON-like) collections to block style."""
+    s_input = """---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: ns
+data: {key1: value1, key2: value2}
+"""
+    s_expected = """---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: ns
+data:
+  key1: value1
+  key2: value2
+"""
+    yamkix_config = get_yamkix_config_from_default(enforce_block_style=True)
+    yaml_instance = get_opinionated_yaml_writer(yamkix_config)
+    as_yaml = None
+    for yaml_resource in yaml_instance.load_all(s_input):
+        as_yaml = yaml_resource
+    assert as_yaml is not None
+    descriptor = K8SDescriptor(name="cm", kind="ConfigMap", namespace="ns", as_yaml=as_yaml)
+    output = StringIO()
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
+    assert output.getvalue() == s_expected
+
+
+def test_roundtrip_without_enforce_block_style_keeps_flow_collections() -> None:
+    """Without --enforce-block-style, flow-style collections are preserved as-is."""
+    s_input = """---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: ns
+data: {key1: value1, key2: value2}
+"""
+    yamkix_config = get_yamkix_config_from_default(enforce_block_style=False)
+    yaml_instance = get_opinionated_yaml_writer(yamkix_config)
+    as_yaml = None
+    for yaml_resource in yaml_instance.load_all(s_input):
+        as_yaml = yaml_resource
+    assert as_yaml is not None
+    descriptor = K8SDescriptor(name="cm", kind="ConfigMap", namespace="ns", as_yaml=as_yaml)
+    output = StringIO()
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
+    assert output.getvalue() == s_input
+
+
+def test_roundtrip_align_comments_aligns_eol_comments() -> None:
+    """--align-comments aligns EOL comments within each dict/list to the maximum column."""
+    s_input = """---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: ns
+data:
+  short: a # first
+  a_longer_key: b # second
+"""
+    s_expected = """---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: ns
+data:
+  short: a        # first
+  a_longer_key: b # second
+"""
+    yamkix_config = get_yamkix_config_from_default(align_comments=True)
+    yaml_instance = get_opinionated_yaml_writer(yamkix_config)
+    as_yaml = None
+    for yaml_resource in yaml_instance.load_all(s_input):
+        as_yaml = yaml_resource
+    assert as_yaml is not None
+    descriptor = K8SDescriptor(name="cm", kind="ConfigMap", namespace="ns", as_yaml=as_yaml)
+    output = StringIO()
+    save_descriptor_to_stream(descriptor, output, yaml_instance, yamkix_config=yamkix_config)
+    assert output.getvalue() == s_expected

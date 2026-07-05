@@ -67,6 +67,8 @@ def get_kubesplit_config_from_typer_args(  # noqa: PLR0913
     no_quotes_preserved: bool,
     enforce_double_quotes: bool,
     default_flow_style: bool,
+    enforce_block_style: bool,
+    align_comments: bool,
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
     line_width: int,
@@ -78,6 +80,8 @@ def get_kubesplit_config_from_typer_args(  # noqa: PLR0913
         explicit_start=not no_explicit_start,
         explicit_end=explicit_end,
         default_flow_style=default_flow_style,
+        enforce_block_style=enforce_block_style,
+        align_comments=align_comments,
         dash_inwards=not no_dash_inwards,
         quotes_preserved=not no_quotes_preserved,
         enforce_double_quotes=enforce_double_quotes,
@@ -117,6 +121,10 @@ def print_config(kubesplit_config: KubesplitConfig) -> None:
         + str(kubesplit_config.yamkix_config.explicit_end)
         + ", default_flow_style="
         + str(kubesplit_config.yamkix_config.default_flow_style)
+        + ", enforce_block_style="
+        + str(kubesplit_config.yamkix_config.enforce_block_style)
+        + ", align_comments="
+        + str(kubesplit_config.yamkix_config.align_comments)
         + ", quotes_preserved="
         + str(kubesplit_config.yamkix_config.quotes_preserved)
         + ", dash_inwards="
