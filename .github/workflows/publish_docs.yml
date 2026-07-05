@@ -79,7 +79,15 @@ jobs:
       - name: Build docs at previous commit
         run: |
           git checkout HEAD^
-          uv run mkdocs build --site-dir generated/mkdocs/previous
+          if [ -f mkdocs.yml ]; then
+            uv run mkdocs build --site-dir generated/mkdocs/previous
+          else
+            # No mkdocs.yml at the previous commit (e.g. the commit that first
+            # introduced the docs). Leave "previous" empty so the diff below
+            # treats every page as new and publishes.
+            echo "No mkdocs.yml at previous commit — skipping previous build"
+            mkdir -p generated/mkdocs/previous
+          fi
 
       - name: Build docs at last main commit
         run: |
