@@ -10,3 +10,4 @@ include $(LOCAL_MK_ROOT)/python-base-venv.mk
 include $(LOCAL_MK_ROOT)/python-uv-venv.mk
 include $(LOCAL_MK_ROOT)/python-base-app.mk
 include $(LOCAL_MK_ROOT)/python-uv-app.mk
+include $(LOCAL_MK_ROOT)/project.mk
