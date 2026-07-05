@@ -76,3 +76,6 @@ max_line_length = unset
 
 [poe_tasks.toml]
 max_line_length = unset
+
+[pytest.ini]
+max_line_length = unset

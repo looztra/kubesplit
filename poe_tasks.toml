@@ -2,6 +2,7 @@
 "lint:all" = [
     "ruff:fmt:check",
     "ruff:lint",
+    "ty",
     "pylint",
     "pyright",
 ]
@@ -20,8 +21,14 @@ pyright = [
 "ruff:lint:fix" = "ruff check --fix"
 style = [
     "ruff:fmt:run",
+    "taplo",
 ]
+taplo = "taplo format --config .taplo.toml"
 test = "pytest"
 "test:cov" = [
     "pytest:cov",
 ]
+ty = [
+    "ty:run",
+]
+"ty:run" = "ty check"

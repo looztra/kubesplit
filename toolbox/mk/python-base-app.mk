@@ -1,6 +1,5 @@
 # APP_MODULE is APP_NAME unless set elsewhere
 APP_MODULE          ?= $(shell echo $(APP_NAME)| tr - _ )
-IT_TESTS_TARGET     ?= .
 
 .PHONY: clean
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
@@ -40,7 +39,7 @@ unit-tests: tests ## Wrapper, same as the 'tests' target
 .PHONY: integration-tests
 integration-tests: ## ▶ Run integration tests (if any)
 	@echo "+ $@"
-	cd $(IT_TESTS_TARGET); bats .
+	@$(MAKE) --no-print-directory $(INTEGRATION_TESTS_TARGETS)
 
 .PHONY: integration-test
 integration-test: integration-tests ## Wrapper, same as the 'integration-tests' target

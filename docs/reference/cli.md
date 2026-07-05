@@ -24,6 +24,8 @@ kubesplit [OPTIONS]
 | `--no-quotes-preserved` | `-q` | flag | off | quotes are preserved by default; this removes unnecessary ones. |
 | `--enforce-double-quotes` | `-E` | flag | off | when `--no-quotes-preserved` is set, re-quote with double quotes instead of single. |
 | `--default-flow-style` | `-f` | flag | off | enable the default (JSON-like) flow style. |
+| `--enforce-block-style` | `-B` | flag | off | convert flow-style (JSON-like) maps and lists to block style. Overrides `--default-flow-style`. Empty collections (`[]`/`{}`) are kept as-is. |
+| `--align-comments` | `-a` | flag | off | align EOL comments within each dict/list to the maximum column. |
 | `--no-dash-inwards` | `-d` | flag | off | dashes are pushed inwards by default; this keeps them at the sequence level. |
 | `--spaces-before-comment` | `-s` | INTEGER | `None` | number of spaces between content and a trailing comment. If unset, comments are left as is. |
 | `--line-width` | `-w` | INTEGER | `2048` | maximum line width. |
@@ -38,6 +40,8 @@ Running `kubesplit -o out` (the only required option) applies:
 - `explicit_start = True` (`---` added)
 - `explicit_end = False`
 - `default_flow_style = False`
+- `enforce_block_style = False`
+- `align_comments = False`
 - `dash_inwards = True`
 - `quotes_preserved = True`
 - `enforce_double_quotes = False`
@@ -78,6 +82,10 @@ Running `kubesplit -o out` (the only required option) applies:
 │                                             with -q.                  │
 │ --default-flow-style     -f                 enable the default flow   │
 │                                             style.                    │
+│ --enforce-block-style    -B                 convert flow-style to     │
+│                                             block style.             │
+│ --align-comments         -a                 align EOL comments to     │
+│                                             max column.              │
 │ --no-dash-inwards        -d                 dash at sequence level.   │
 │ --spaces-before-comment  -s      INTEGER    spaces between comments   │
 │                                             and content.              │
