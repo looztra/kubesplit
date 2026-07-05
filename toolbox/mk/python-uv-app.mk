@@ -4,6 +4,7 @@ UV_STYLE_SCRIPT_NAME               ?= style
 STYLE_TARGETS                      ?= style-uv-default
 LINT_TARGETS                       ?= lint-uv-default
 TESTS_TARGETS                      ?= tests-uv-default
+INTEGRATION_TESTS_TARGETS          ?= integration-tests-uv-default
 DIST_TARGETS                       ?= dist-uv-default
 DIST_UPLOAD_TARGETS                ?= dist-upload-uv-default
 TWINE_UPLOAD_TARGET                ?= dist/*.whl
@@ -41,6 +42,11 @@ tests-with-coverage: check-uv check-prerequisites-pytest ## ▶ Run tests with c
 .PHONY: tests-uv-default
 tests-uv-default: tests-with-coverage ## Run tests (defaults to tests-with-coverage)
 	@echo "+ $@"
+
+.PHONY: integration-tests-uv-default
+integration-tests-uv-default: check-uv check-prerequisites-pytest ## ▶ Run integration tests (marker 'integration')
+	@echo "+ $@"
+	@uv run $(UV_RUN_OPTIONS) pytest -m integration
 
 .PHONY: dist-uv-default
 dist-uv-default: SHELL := $(WHICH_BASH)

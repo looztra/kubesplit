@@ -28,6 +28,11 @@ ignore = [
     "D104", # D104: Missing docstring in public package.
 ]
 
+"**/tests/integration/*" = [
+    "S603", # S603: subprocess call. We invoke our own CLI with a fixed argv, not untrusted input.
+    "PLR0913", # PLR0913: E2E tests legitimately take many fixtures + parametrize arguments.
+]
+
 # Use Google-style docstrings.
 [lint.pydocstyle]
 convention = "google"

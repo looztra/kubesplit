@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feature-demo
+data:
+  short: a # first
+  a_longer_key: b # second
+  inline:
+    x: 1
+    y: 2
