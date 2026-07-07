@@ -3,7 +3,7 @@ editorconfig-checker = "3"
 "pipx:pre-commit" = { version = "4.6.0", uvx_args = "--with pre-commit-uv" }
 shellcheck = "0.11"
 shfmt = "3"
-uv = "0.11.26"
+uv = "0.11.27"
 
 [settings]
 idiomatic_version_file_enable_tools = [
