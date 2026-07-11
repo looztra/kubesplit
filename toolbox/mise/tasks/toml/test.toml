@@ -1,0 +1,25 @@
+[test]
+description = "Run tests with coverage via poe (same as 'make test')"
+run = "uv run --frozen poe pytest:cov"
+
+["test:fast"]
+description = "Run unit tests quickly, no coverage, integration tests excluded"
+run = "uv run --frozen pytest -m 'not integration'"
+
+["test:integration"]
+description = "Run integration tests (same as 'make integration-tests')"
+run = "uv run --frozen pytest -m integration"
+
+["test:python-versions"]
+description = "Run tests for all supported python versions with tox"
+run = "uv run tox run"
+
+["test:all"]
+# Sequential on purpose: the suites share generated/ artifacts and tox
+# rebuilds environments, so they must not run concurrently.
+description = "Run all test suites"
+run = [
+    "mise run test",
+    "mise run test:integration",
+    "mise run test:python-versions",
+]

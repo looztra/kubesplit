@@ -1,0 +1,7 @@
+["precommit:install"]
+description = "Install the pre-commit hooks (same as 'make precommit-install')"
+run = "pre-commit install"
+
+["precommit:run"]
+description = "Run the pre-commit hooks on all files (same as 'make precommit-run')"
+run = "pre-commit run --show-diff-on-failure --color=always --all-files"

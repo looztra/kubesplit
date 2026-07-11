@@ -12,4 +12,16 @@
     enabled: true,
     automerge: true
   },
+  packageRules: [
+    {
+      matchManagers: [
+        "pep621",
+        "pip_requirements",
+        "uv",
+        "github-actions",
+        "pre-commit"
+      ],
+      minimumReleaseAge: "7 days"
+    }
+  ],
 }

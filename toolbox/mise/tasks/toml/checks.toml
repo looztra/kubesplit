@@ -1,0 +1,7 @@
+["check:actionlint"]
+description = "Lint the GitHub Actions workflows with actionlint"
+run = "actionlint"
+
+["check:zizmor"]
+description = "Audit the GitHub Actions workflows with zizmor"
+run = "zizmor .github/"

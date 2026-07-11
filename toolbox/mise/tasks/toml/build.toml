@@ -1,0 +1,3 @@
+[dist]
+description = "Build the python wheel(s) (same as 'make dist')"
+run = "uv build --wheel --all"
