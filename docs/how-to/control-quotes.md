@@ -86,7 +86,11 @@ kubesplit --input replicaset.yml --output out --no-quotes-preserved --enforce-do
     number_single_quotes: "1"
 ```
 
-`-E` has no effect without `-q` (there is nothing to re-quote when quotes are preserved).
+## Troubleshooting
+
+### `-E/--enforce-double-quotes` has no effect
+
+`-E` only changes how values are **re**-quoted, so it requires `-q/--no-quotes-preserved`. Without `-q`, quotes are preserved as-is and there is nothing to re-quote.
 
 ## Next steps
 

@@ -23,7 +23,7 @@ Kubesplit reads from `STDIN`, so it composes with any tool that emits a multidoc
 - **Helm** — `helm template … | kubesplit -i - -o generated/prod`
 - **kubectl** — `kubectl kustomize … | kubesplit -i - -o generated/prod`
 
-The typical motivation is **reviewability and GitOps**: instead of committing (or reviewing) one enormous rendered manifest, you commit a stable tree of small files. A change to one resource shows up as a change to one file, and the `NN--` [order prefixes](../reference/file-naming.md#order-prefixes) let `kubectl apply -f generated/ --recursive` apply resources in dependency order.
+The typical motivation is **reviewability and GitOps**: instead of committing (or reviewing) one enormous rendered manifest, you commit a stable tree of small files. A change to one resource shows up as a change to one file, and the `NN--` [order prefixes](../reference/file-naming.md#order-prefixes) let `kubectl apply -f generated/ --recursive` apply resources in dependency order. And because every file is normalized by [yamkix](https://github.com/looztra/yamkix), unrelated formatting noise stays out of your diffs.
 
 See [Use with Kustomize and Helm](../how-to/integrate-kustomize-helm.md) for ready-to-run pipelines.
 

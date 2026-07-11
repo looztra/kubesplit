@@ -44,11 +44,7 @@ out
 3 directories, 16 files
 ```
 
-## Why the number prefixes?
-
-The `00`, `01`, `20`, `30`… prefixes are **apply-order weights** derived from the resource `kind`. Namespaces come first (`00`), RBAC next (`01`–`05`), config and storage in the middle (`10`–`13`), workloads (`20`–`25`), then networking (`30`–`42`). Applying the files in lexical order (which is what `kubectl apply -f out/ --recursive` does) therefore respects the usual dependency order.
-
-The full prefix table lives in [File naming and layout](../reference/file-naming.md#order-prefixes).
+The `00`, `01`, `20`, `30`… prefixes are **apply-order weights** derived from the resource `kind`, so applying the files in lexical order (which is what `kubectl apply -f out/ --recursive` does) respects the usual dependency order. The full weight table lives in [File naming and layout](../reference/file-naming.md#order-prefixes), and the reasoning behind it in [How kubesplit works](../explanation/how-it-works.md#how-the-namespace-and-file-name-are-chosen).
 
 ## Drop the prefixes with `--no-resource-prefix`
 

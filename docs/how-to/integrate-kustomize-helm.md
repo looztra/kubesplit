@@ -36,13 +36,8 @@ kustomize build overlays/prod | kubesplit -q -c -i - -o generated/prod
 !!! warning
     `--clean-output-dir` recursively deletes the output directory before writing. Point it only at a directory dedicated to generated output.
 
-## Why this is useful
-
-- **Reviewable diffs** — a change to one resource touches one file, instead of a diff buried in a 2000-line render.
-- **Apply order** — the default `NN--` [file-name prefixes](../reference/file-naming.md#order-prefixes) let `kubectl apply -f generated/prod/ --recursive` apply namespaces and RBAC before workloads.
-- **Consistent formatting** — every file is normalized by [yamkix](https://github.com/looztra/yamkix), so unrelated formatting noise stays out of your diffs.
-
 ## Next steps
 
 - Tune the emitted YAML in [Tune the YAML formatting](tune-yaml-formatting.md).
 - Understand the resource detection and ordering in [How kubesplit works](../explanation/how-it-works.md).
+- Read why teams split their renders (reviewable diffs, apply order, consistent formatting) in [Ecosystem](../explanation/ecosystem.md).
