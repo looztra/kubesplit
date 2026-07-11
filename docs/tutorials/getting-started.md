@@ -16,10 +16,10 @@ Check that it works:
 kubesplit --version
 ```
 
-You should see the kubesplit version, along with the version of [yamkix](https://github.com/looztra/yamkix) it embeds:
+You should see the kubesplit version, along with the version of [yamkix](https://github.com/looztra/yamkix) it embeds (your versions may differ):
 
 ```text
-kubesplit v0.5.0 (yamkix v0.16.0)
+kubesplit v0.6.0 (yamkix v1.1.0)
 ```
 
 Other installation methods (`pip`, Docker, `mise`) are described in the [installation how-to guide](../how-to/install.md).
@@ -66,7 +66,7 @@ kubesplit --input all-in-one.yml --output out
 `kubesplit` prints its configuration and a short summary to `stderr`:
 
 ```text
-[kubesplit(0.5.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=False, prefix_resource_files=True, typ=rt, ...
+[kubesplit(0.6.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=False, prefix_resource_files=True, typ=rt, ...
 Found [2] valid / [0] lists / [0] invalid / [0] empty resources
 ```
 

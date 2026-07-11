@@ -46,21 +46,26 @@ kubesplit --input all-in-one.yml --output out --clean-output-dir
 !!! warning
     `--clean-output-dir` **recursively deletes** the target directory before regenerating it. Point it only at a directory you own and that contains nothing but generated output.
 
-## Understand the console summary
+## Check the console summary
 
 While processing, kubesplit prints its resolved configuration and a resource count to `stderr`:
 
 ```text
-[kubesplit(0.5.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=True, prefix_resource_files=True, typ=rt, explicit_start=True, ...
+[kubesplit(0.6.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=True, prefix_resource_files=True, typ=rt, explicit_start=True, ...
 Found [16] valid / [0] lists / [1] invalid / [2] empty resources
 ```
 
-The counts tell you what kubesplit did with each document in the stream:
+Verify that the **valid** count matches the number of resources you expect: invalid and empty documents are skipped silently, not written. What each count means is explained in [How kubesplit works](../explanation/how-it-works.md#how-each-document-is-classified).
 
-- **valid** — recognized single resources, one file each.
-- **lists** — `*List` resources (e.g. `ConfigMapList`), written as a single file each (see [File naming and layout](../reference/file-naming.md#lists)).
-- **invalid** — documents that don't look like Kubernetes resources; **ignored**.
-- **empty** — empty documents (e.g. a trailing `---`); **ignored**.
+## Troubleshooting
+
+### The run fails and no files are written
+
+The input contains a YAML syntax error. Kubesplit reports the parser error and produces **no** output rather than a partial result — fix the input (or the tool that renders it) and re-run.
+
+### The `invalid` count is not zero
+
+Some documents in the stream don't look like Kubernetes resources; they are skipped. If a resource you expected is missing from the output, check that it has both a `kind` and a `.metadata.name`.
 
 ## Next steps
 
