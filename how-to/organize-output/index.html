@@ -547,17 +547,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-the-number-prefixes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why the number prefixes?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#drop-the-prefixes-with-no-resource-prefix" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1020,17 +1009,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-the-number-prefixes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why the number prefixes?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#drop-the-prefixes-with-no-resource-prefix" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1112,9 +1090,7 @@
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>3 directories, 16 files
 </span></code></pre></div>
-<h2 id="why-the-number-prefixes">Why the number prefixes?<a class="headerlink" href="#why-the-number-prefixes" title="Permanent link">&para;</a></h2>
-<p>The <code>00</code>, <code>01</code>, <code>20</code>, <code>30</code>… prefixes are <strong>apply-order weights</strong> derived from the resource <code>kind</code>. Namespaces come first (<code>00</code>), RBAC next (<code>01</code>–<code>05</code>), config and storage in the middle (<code>10</code>–<code>13</code>), workloads (<code>20</code>–<code>25</code>), then networking (<code>30</code>–<code>42</code>). Applying the files in lexical order (which is what <code>kubectl apply -f out/ --recursive</code> does) therefore respects the usual dependency order.</p>
-<p>The full prefix table lives in <a href="../../reference/file-naming/#order-prefixes">File naming and layout</a>.</p>
+<p>The <code>00</code>, <code>01</code>, <code>20</code>, <code>30</code>… prefixes are <strong>apply-order weights</strong> derived from the resource <code>kind</code>, so applying the files in lexical order (which is what <code>kubectl apply -f out/ --recursive</code> does) respects the usual dependency order. The full weight table lives in <a href="../../reference/file-naming/#order-prefixes">File naming and layout</a>, and the reasoning behind it in <a href="../../explanation/how-it-works/#how-the-namespace-and-file-name-are-chosen">How kubesplit works</a>.</p>
 <h2 id="drop-the-prefixes-with-no-resource-prefix">Drop the prefixes with <code>--no-resource-prefix</code><a class="headerlink" href="#drop-the-prefixes-with-no-resource-prefix" title="Permanent link">&para;</a></h2>
 <p>If you don't need an apply order (for example when files feed a GitOps tool that resolves ordering itself), use <code>-p/--no-resource-prefix</code>:</p>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubesplit<span class="w"> </span>--input<span class="w"> </span>test-assets/source/all-in-one.yml<span class="w"> </span><span class="se">\</span>
@@ -1166,7 +1142,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 10:07:24 UTC">2026-07-05 10:07:24</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 11, 2026 21:53:19 UTC">2026-07-11 21:53:19</span>
   </span>
 
     

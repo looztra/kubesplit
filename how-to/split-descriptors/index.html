@@ -541,13 +541,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#understand-the-console-summary" class="md-nav__link">
+  <a href="#check-the-console-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understand the console summary
+        Check the console summary
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-run-fails-and-no-files-are-written" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The run fails and no files are written
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-invalid-count-is-not-zero" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The invalid count is not zero
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1053,13 +1092,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#understand-the-console-summary" class="md-nav__link">
+  <a href="#check-the-console-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understand the console summary
+        Check the console summary
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-run-fails-and-no-files-are-written" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The run fails and no files are written
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-invalid-count-is-not-zero" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The invalid count is not zero
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1130,18 +1208,17 @@
 <p class="admonition-title">Warning</p>
 <p><code>--clean-output-dir</code> <strong>recursively deletes</strong> the target directory before regenerating it. Point it only at a directory you own and that contains nothing but generated output.</p>
 </div>
-<h2 id="understand-the-console-summary">Understand the console summary<a class="headerlink" href="#understand-the-console-summary" title="Permanent link">&para;</a></h2>
+<h2 id="check-the-console-summary">Check the console summary<a class="headerlink" href="#check-the-console-summary" title="Permanent link">&para;</a></h2>
 <p>While processing, kubesplit prints its resolved configuration and a resource count to <code>stderr</code>:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[kubesplit(0.5.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=True, prefix_resource_files=True, typ=rt, explicit_start=True, ...
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[kubesplit(0.6.0)] Processing: input=all-in-one.yml, output_dir=out, clean_output_dir=True, prefix_resource_files=True, typ=rt, explicit_start=True, ...
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Found [16] valid / [0] lists / [1] invalid / [2] empty resources
 </span></code></pre></div>
-<p>The counts tell you what kubesplit did with each document in the stream:</p>
-<ul>
-<li><strong>valid</strong> — recognized single resources, one file each.</li>
-<li><strong>lists</strong> — <code>*List</code> resources (e.g. <code>ConfigMapList</code>), written as a single file each (see <a href="../../reference/file-naming/#lists">File naming and layout</a>).</li>
-<li><strong>invalid</strong> — documents that don't look like Kubernetes resources; <strong>ignored</strong>.</li>
-<li><strong>empty</strong> — empty documents (e.g. a trailing <code>---</code>); <strong>ignored</strong>.</li>
-</ul>
+<p>Verify that the <strong>valid</strong> count matches the number of resources you expect: invalid and empty documents are skipped silently, not written. What each count means is explained in <a href="../../explanation/how-it-works/#how-each-document-is-classified">How kubesplit works</a>.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="the-run-fails-and-no-files-are-written">The run fails and no files are written<a class="headerlink" href="#the-run-fails-and-no-files-are-written" title="Permanent link">&para;</a></h3>
+<p>The input contains a YAML syntax error. Kubesplit reports the parser error and produces <strong>no</strong> output rather than a partial result — fix the input (or the tool that renders it) and re-run.</p>
+<h3 id="the-invalid-count-is-not-zero">The <code>invalid</code> count is not zero<a class="headerlink" href="#the-invalid-count-is-not-zero" title="Permanent link">&para;</a></h3>
+<p>Some documents in the stream don't look like Kubernetes resources; they are skipped. If a resource you expected is missing from the output, check that it has both a <code>kind</code> and a <code>.metadata.name</code>.</p>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Change file names and grouping in <a href="../organize-output/">Organize the output</a>.</li>
@@ -1167,7 +1244,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 10:07:24 UTC">2026-07-05 10:07:24</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 11, 2026 21:53:19 UTC">2026-07-11 21:53:19</span>
   </span>
 
     

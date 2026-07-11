@@ -653,17 +653,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-this-is-useful" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why this is useful
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1053,17 +1042,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-this-is-useful" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why this is useful
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1122,16 +1100,11 @@
 <p class="admonition-title">Warning</p>
 <p><code>--clean-output-dir</code> recursively deletes the output directory before writing. Point it only at a directory dedicated to generated output.</p>
 </div>
-<h2 id="why-this-is-useful">Why this is useful<a class="headerlink" href="#why-this-is-useful" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Reviewable diffs</strong> — a change to one resource touches one file, instead of a diff buried in a 2000-line render.</li>
-<li><strong>Apply order</strong> — the default <code>NN--</code> <a href="../../reference/file-naming/#order-prefixes">file-name prefixes</a> let <code>kubectl apply -f generated/prod/ --recursive</code> apply namespaces and RBAC before workloads.</li>
-<li><strong>Consistent formatting</strong> — every file is normalized by <a href="https://github.com/looztra/yamkix">yamkix</a>, so unrelated formatting noise stays out of your diffs.</li>
-</ul>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Tune the emitted YAML in <a href="../tune-yaml-formatting/">Tune the YAML formatting</a>.</li>
 <li>Understand the resource detection and ordering in <a href="../../explanation/how-it-works/">How kubesplit works</a>.</li>
+<li>Read why teams split their renders (reviewable diffs, apply order, consistent formatting) in <a href="../../explanation/ecosystem/">Ecosystem</a>.</li>
 </ul>
 
 
@@ -1153,7 +1126,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 5, 2026 10:07:24 UTC">2026-07-05 10:07:24</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="July 11, 2026 21:53:19 UTC">2026-07-11 21:53:19</span>
   </span>
 
     
