@@ -37,7 +37,12 @@ jobs:
       - name: Checkout current branch
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          # Full history is required: this job checks out HEAD^ and main to
+          # diff the docs builds, and the git-revision-date-localized mkdocs
+          # plugin needs the commit history to render accurate page dates.
           fetch-depth: 0
+          # Credentials must be persisted: `mkdocs gh-deploy` pushes to gh-pages.
+          persist-credentials: true # zizmor: ignore[artipacked]
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:

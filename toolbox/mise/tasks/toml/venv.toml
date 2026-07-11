@@ -1,0 +1,18 @@
+["venv:setup"]
+description = "Setup the virtual env (same as 'make setup-venv')"
+run = "uv sync --frozen --all-packages --keyring-provider subprocess"
+
+["venv:lock"]
+description = "Refresh the lock file (same as 'make generate-lock-file')"
+run = "uv lock --keyring-provider subprocess"
+
+["venv:upgrade"]
+description = "Upgrade dependencies in uv.lock and the venv (same as 'make upgrade-dependencies')"
+run = "uv sync --upgrade --all-packages --keyring-provider subprocess"
+
+["venv:recreate"]
+description = "Delete and recreate the virtual env (same as 'make recreate-venv')"
+run = [
+    "rm -rf .venv",
+    "uv sync --frozen --all-packages --keyring-provider subprocess",
+]

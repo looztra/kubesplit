@@ -18,6 +18,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}-checks
   cancel-in-progress: true
@@ -41,7 +44,7 @@ jobs:
       - name: Checkout current branch
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
@@ -97,7 +100,7 @@ jobs:
       - name: Run pre-commit checks
         run: |
           echo "::group::Run pre-commit checks"
-          pre-commit run --all-files --show-diff-on-failure
+          mise run precommit:run
           echo "::endgroup::"
 
   python-checks:
@@ -105,22 +108,36 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deploy_env: ${{ steps.detect-deploy-env.outputs.deploy_env }}
+      is_release: ${{ steps.detect-release.outputs.is_release }}
     needs:
       - pre-commit
     steps:
+      - name: Detect release run
+        id: detect-release
+        env:
+          IS_RELEASE: ${{ ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release) && 'true' || 'false' }}
+        run: |
+          echo "is_release=${IS_RELEASE}" >> "${GITHUB_OUTPUT}"
+
       - name: Checkout Code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          # Full history is required: versioningit computes the version
+          # of the built distribution from git tags and commit distance.
           fetch-depth: 0
+          persist-credentials: false
 
+      # Caches are disabled on release runs so that a poisoned cache entry
+      # cannot influence the distribution published to (Test)PyPI.
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
           install: true
-          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache: ${{ steps.detect-release.outputs.is_release == 'true' && 'false' || vars.MISE_CACHE_ENABLED || 'true' }}
           cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
+        if: steps.detect-release.outputs.is_release != 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /tmp/.uv-cache
@@ -132,15 +149,15 @@ jobs:
       - name: Setup venv
         run: |
           uv python install
-          make setup-venv
+          mise run venv:setup
 
       - name: Python checks
         run: |
-          echo "::group::make lint"
-          make lint
+          echo "::group::mise run lint"
+          mise run lint
           echo "::endgroup::"
-          echo "::group::make test"
-          make test
+          echo "::group::mise run test"
+          mise run test
           echo "::endgroup::"
 
       - name: Upload test results to Codecov
@@ -148,8 +165,8 @@ jobs:
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: generated/junit.xml
-          report-type: test_results
+          files: generated/junit.xml
+          report_type: test_results
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
@@ -158,8 +175,8 @@ jobs:
 
       - name: Run Integration tests
         run: |
-          echo "::group::make integration-tests"
-          make integration-tests
+          echo "::group::mise run test:integration"
+          mise run test:integration
           echo "::endgroup::"
 
       - name: Minimize uv cache
@@ -167,19 +184,19 @@ jobs:
 
       - name: Check we can build the distribution
         run: |
-          echo "::group::make dist"
-          make dist
+          echo "::group::mise run dist"
+          mise run dist
           echo "::endgroup::"
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+        if: steps.detect-release.outputs.is_release == 'true'
         with:
           name: python-package-distributions
           path: dist/
 
       - name: Detect environment
-        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+        if: steps.detect-release.outputs.is_release == 'true'
         id: detect-deploy-env
         run: |
           echo "deploy_env=${{ startsWith(github.ref, 'refs/tags') && 'pypi' || 'testpypi' }}" >> "${GITHUB_OUTPUT}"
@@ -187,7 +204,7 @@ jobs:
   deploy-release:
     name: Deploy Release
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+    if: needs.python-checks.outputs.is_release == 'true'
     environment:
       name: ${{ needs.python-checks.outputs.deploy_env }}
       url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/kubesplit/' || 'https://test.pypi.org/project/kubesplit/' }}
@@ -203,6 +220,6 @@ jobs:
           path: dist/
 
       - name: Publish package distributions to TestPyPI
-        uses: pypa/gh-action-pypi-publish@ba38be9e461d3875417946c167d0b5f3d385a247 # unstable/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}

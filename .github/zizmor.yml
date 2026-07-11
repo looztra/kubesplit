@@ -1,0 +1,11 @@
+---
+# zizmor configuration — https://docs.zizmor.sh/configuration/
+rules:
+  cache-poisoning:
+    # code_checks.yml publishes release artifacts to (Test)PyPI, which makes
+    # zizmor flag every cache-enabled job in it. The only job on the release
+    # path (python-checks, which builds the published dist/) disables all
+    # caches on release runs; the caches of the other jobs cannot reach the
+    # published artifacts.
+    ignore:
+      - code_checks.yml

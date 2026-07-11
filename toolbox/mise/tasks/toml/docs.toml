@@ -1,0 +1,7 @@
+["docs:build"]
+description = "Build the documentation (same as 'make build-docs')"
+run = "uv run mkdocs build --site-dir generated/mkdocs/HEAD"
+
+["docs:serve"]
+description = "Serve the documentation locally (same as 'make serve-docs')"
+run = "uv run mkdocs serve"

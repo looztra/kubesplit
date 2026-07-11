@@ -1,0 +1,11 @@
+[lint]
+description = "Run all linters (ruff, ty, pylint, pyright) via poe (same as 'make lint')"
+run = "uv run --frozen poe lint:all"
+
+["lint:fast"]
+description = "Run ruff check only (same as 'make fast-lint')"
+run = "uv run --frozen ruff check"
+
+[style]
+description = "Run all formatters via poe (same as 'make style')"
+run = "uv run --frozen poe style"
