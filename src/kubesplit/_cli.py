@@ -36,7 +36,7 @@ class SupportedYamlParserMode(str, Enum):
 
 
 @app.command()
-def main(  # noqa: PLR0913
+def main(  # noqa: PLR0913, PLR0917
     input_file: Annotated[
         str | None,
         typer.Option(
