@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://looztra.github.io/kubesplit/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/changelog/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/contributing/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/explanation/ecosystem/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/explanation/how-it-works/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/control-quotes/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/install/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/integrate-kustomize-helm/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/organize-output/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/split-descriptors/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/how-to/tune-yaml-formatting/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/reference/api/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/reference/cli/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/reference/file-naming/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/kubesplit/tutorials/getting-started/</loc>
-         <lastmod>2026-07-11</lastmod>
+         <lastmod>2026-07-25</lastmod>
     </url>
 </urlset>
