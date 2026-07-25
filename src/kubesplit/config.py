@@ -55,7 +55,7 @@ def get_io_config_from_typer_args(
     )
 
 
-def get_kubesplit_config_from_typer_args(  # noqa: PLR0913
+def get_kubesplit_config_from_typer_args(  # noqa: PLR0913, PLR0917
     input_file: str | None,
     output_dir: str | None,
     clean_output_dir: bool,
