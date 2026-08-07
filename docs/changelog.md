@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.1](https://github.com/looztra/kubesplit/compare/v0.6.0...v0.6.1) (2026-08-07)
+
+
+### Documentation
+
+* **diataxis:** refine docs to strictly follow Diátaxis categories ([#341](https://github.com/looztra/kubesplit/issues/341)) ([f9cecf6](https://github.com/looztra/kubesplit/commit/f9cecf6a6c680e06e7cd9b4dd2887685fc462d3d))
+
+
+### Continuous Integration
+
+* **workflows:** harden workflows with zizmor, add CodeQL and mise tasks ([#339](https://github.com/looztra/kubesplit/issues/339)) ([8dbf1a4](https://github.com/looztra/kubesplit/commit/8dbf1a496df2a9df98657ac29ef9c9d4070575e2))
+
 ## [0.6.0](https://github.com/looztra/kubesplit/compare/v0.5.0...v0.6.0) (2026-07-05)
 
 
