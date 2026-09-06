@@ -1,10 +1,10 @@
 # Agent Instructions
 
-This document provides context and instructions for AI agents working on this repository (`yamkix`).
+This document provides context and instructions for AI agents working on this repository (`kubesplit`).
 
 ## Project Overview
 
-- **Repository**: [looztra/yamkix](https://github.com/looztra/yamkix)
+- **Repository**: [looztra/kubesplit](https://github.com/looztra/kubesplit)
 - **Language**: Python (managed via `uv`)
 - **Main Branch**: `main`
 
@@ -79,9 +79,15 @@ This project uses `poethepoet` for task management. Common tasks:
 
 ## Specific Implementation Details
 
-- **Configuration**: Managed in `src/yamkix/config.py`.
-- **CLI**: Implemented using `typer` in `src/yamkix/_cli.py`.
-- **YAML Handling**: Uses `ruamel.yaml` in `src/yamkix/yamkix.py` and `src/yamkix/yaml_writer.py`.
+- **Configuration**: Managed in `src/kubesplit/config.py`.
+- **CLI**: Implemented using `typer` in `src/kubesplit/_cli.py`.
+- **Conversion**: Multidoc YAML input is split into per-resource descriptors in
+  `src/kubesplit/convert.py`, wrapped by `K8SDescriptor` in `k8s_descriptor.py`,
+  grouped by namespace in `namespaces.py`, and written to disk by `output.py`.
+- **YAML Formatting**: Delegates the opinionated `ruamel.yaml` output to the
+  external [`yamkix`](https://github.com/looztra/yamkix) library
+  (`yamkix.config`, `yamkix.yaml_writer`, `yamkix.comments`) — a project
+  dependency, not part of this codebase.
 
 ## General Guidelines for Agents
 
