@@ -5,7 +5,7 @@ editorconfig-checker = "4.0.1"
 shellcheck = "0.11"
 shfmt = "3"
 taplo = "0.10"
-uv = "0.12.13"
+uv = "0.12.15"
 zizmor = "1.30.1"
 
 [settings]
