@@ -17,7 +17,6 @@
       matchManagers: [
         "pep621",
         "pip_requirements",
-        "uv",
         "github-actions",
         "pre-commit"
       ],
