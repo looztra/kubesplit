@@ -20,6 +20,10 @@ env:
   UV_LINK_MODE: copy
   UV_PYTHON_PREFERENCE: only-managed
   UV_CACHE_DIR: /tmp/.uv-cache
+  # Keep uv-managed Python interpreters inside the mise data dir so that they are
+  # saved and restored together with the mise cache. Otherwise, on a cache hit, the
+  # 'pipx:pre-commit' tool venv points to an interpreter that was not restored.
+  UV_PYTHON_INSTALL_DIR: /home/runner/.local/share/mise/uv-python
   MISE_INSTALL_FROM_GITHUB: 1
   # The following repository variables control mise-action caching across jobs:
   # - MISE_CACHE_ENABLED: set to 'false' to disable mise action caching; defaults to 'true' when unset
@@ -48,7 +52,7 @@ jobs:
         with:
           install: true
           cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
-          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v1'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Configure Git Credentials
