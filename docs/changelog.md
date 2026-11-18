@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.1](https://github.com/looztra/kubesplit/compare/v0.6.0...v0.6.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* **ci:** cache uv-managed Python with the mise cache ([#459](https://github.com/looztra/kubesplit/issues/459)) ([94eee9c](https://github.com/looztra/kubesplit/commit/94eee9cb06dbe568c918fb3ffecfca1b374ab323))
+* **pre-commit:** drop stray .git suffix from yamllint repo url ([#402](https://github.com/looztra/kubesplit/issues/402)) ([59cdbbd](https://github.com/looztra/kubesplit/commit/59cdbbd191cfdcc6585a5991b954cb0ece03359d))
+* **renovate:** remove invalid uv manager from packageRules ([#458](https://github.com/looztra/kubesplit/issues/458)) ([83b16fc](https://github.com/looztra/kubesplit/commit/83b16fcba5a507069d1ff6fbfc14bb5e579d1aa5)), closes [#457](https://github.com/looztra/kubesplit/issues/457)
+
+
+### Documentation
+
+* **diataxis:** refine docs to strictly follow Diátaxis categories ([#341](https://github.com/looztra/kubesplit/issues/341)) ([f9cecf6](https://github.com/looztra/kubesplit/commit/f9cecf6a6c680e06e7cd9b4dd2887685fc462d3d))
+
+
+### Continuous Integration
+
+* **checks:** split jobs and add finalizer like yamkix ([#467](https://github.com/looztra/kubesplit/issues/467)) ([1f65303](https://github.com/looztra/kubesplit/commit/1f65303b0fe93f0b2915e3e6a19475728c4f633d))
+* **workflows:** harden workflows with zizmor, add CodeQL and mise tasks ([#339](https://github.com/looztra/kubesplit/issues/339)) ([8dbf1a4](https://github.com/looztra/kubesplit/commit/8dbf1a496df2a9df98657ac29ef9c9d4070575e2))
+
 ## [0.6.0](https://github.com/looztra/kubesplit/compare/v0.5.0...v0.6.0) (2026-07-05)
 
 
