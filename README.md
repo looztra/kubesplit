@@ -1,6 +1,7 @@
 # kubesplit
 
 [![Pypi](https://img.shields.io/pypi/v/kubesplit.svg)](https://pypi.python.org/pypi/kubesplit)
+[![Python versions](https://img.shields.io/pypi/pyversions/kubesplit.svg)](https://pypi.python.org/pypi/kubesplit)
 [![codecov](https://codecov.io/github/looztra/kubesplit/graph/badge.svg?token=ZK8IEI6VOS)](https://codecov.io/github/looztra/kubesplit)
 [![Docs](https://img.shields.io/badge/docs-github.io-blue)](https://looztra.github.io/kubesplit/)
 
