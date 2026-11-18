@@ -202,14 +202,11 @@ jobs:
       url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/kubesplit/' || 'https://test.pypi.org/project/kubesplit/' }}
     permissions:
       id-token: write
-    # Every check must pass before anything is published, now that the checks
-    # run as parallel jobs instead of gating 'python-checks'.
+    # 'finalizer' gates the release on every check job ('alls-green' fails when
+    # any of them fails); 'python-checks' is listed for its outputs.
     needs:
-      - hk
+      - finalizer
       - python-checks
-      - mkdocs
-      - integration-tests
-      - python-versions
     steps:
       - name: Download the distribution packages
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
