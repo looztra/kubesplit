@@ -31,8 +31,8 @@ env:
   UV_CACHE_DIR: /tmp/.uv-cache
   # Keep uv-managed Python interpreters inside the mise data dir so that they are
   # saved and restored together with the mise cache. Otherwise, on a cache hit, the
-  # 'pipx:pre-commit' tool venv points to an interpreter that was not restored.
-  # Bump the mise and pre-commit cache key prefixes whenever this location changes.
+  # 'pypi:yamllint' tool venv points to an interpreter that was not restored.
+  # Bump the mise cache key prefix whenever this location changes.
   UV_PYTHON_INSTALL_DIR: /home/runner/.local/share/mise/uv-python
   MISE_INSTALL_FROM_GITHUB: 1
   # The following repository variables control mise-action caching across jobs:
@@ -40,8 +40,8 @@ env:
   # - MISE_CACHE_KEY_PREFIX: prefix used for cache keys so different workflows can share/segregate caches
 
 jobs:
-  pre-commit:
-    name: Pre-commit
+  hk:
+    name: hk hooks
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -55,7 +55,7 @@ jobs:
         with:
           install: true
           cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
-          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v1'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v2'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
@@ -91,21 +91,16 @@ jobs:
       - name: Minimize uv cache
         run: uv cache prune --ci
 
-      - name: Detect Python version
-        id: detect-python-version
-        run: |
-          echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_OUTPUT}"
-
-      - name: Restore pre-commit cache
+      - name: Restore prek cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-v1|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          path: ~/.cache/prek
+          key: prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: Run pre-commit checks
+      - name: Run hk hooks
         run: |
-          echo "::group::Run pre-commit checks"
-          mise run precommit:run
+          echo "::group::Run hk hooks"
+          mise run hk:check
           echo "::endgroup::"
 
   python-checks:
@@ -115,7 +110,7 @@ jobs:
       deploy_env: ${{ steps.detect-deploy-env.outputs.deploy_env }}
       is_release: ${{ steps.detect-release.outputs.is_release }}
     needs:
-      - pre-commit
+      - hk
     steps:
       - name: Detect release run
         id: detect-release
@@ -138,7 +133,7 @@ jobs:
         with:
           install: true
           cache: ${{ steps.detect-release.outputs.is_release == 'true' && 'false' || vars.MISE_CACHE_ENABLED || 'true' }}
-          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v1'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v2'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache

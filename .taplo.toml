@@ -3,6 +3,11 @@ include = [
     "**/*.toml.jinja",
 ]
 
+exclude = [
+    ".tox/**",
+    ".venv/**",
+]
+
 [formatting]
 
 align_comments = true

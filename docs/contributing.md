@@ -9,7 +9,8 @@
 ### Optional
 
 - [mise](https://mise.jdx.dev/)
-- [Pre-Commit](https://pre-commit.com/#install)
+- [hk](https://hk.jdx.dev/)
+- [prek](https://prek.j178.dev/)
 - [shfmt](https://github.com/mvdan/sh)
 - [shellcheck](https://github.com/koalaman/shellcheck)
 - [editorconfig-checker](https://github.com/editorconfig-checker/editorconfig-checker)
@@ -46,10 +47,10 @@ The documentation is written with [MkDocs](https://www.mkdocs.org/) and the
 [Diátaxis](https://diataxis.fr/) framework. It is published to GitHub Pages on
 every push to `main`.
 
-### Pre-Commit
+### Git hooks (hk)
 
-- If you want to run pre-commit before each commit, run once `make precommit-install`
-- If you don't want to configure a pre-commit hook (your choice, pre-commit is run by the CICD anyway), you can run it when you want, use `make precommit-run`
+- To run the hooks before each commit, run `make hk-install` once
+- To run them on demand instead (CI runs them anyway), use `make hk-check`, or `make hk-fix` to apply the fixes
 
 ### Configure your editor
 

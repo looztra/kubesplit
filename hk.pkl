@@ -1,0 +1,68 @@
+amends "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Builtins.pkl"
+
+// Migrated from .pre-commit-config.yaml (same layout as looztra/yamkix).
+
+// .pre-commit-config.yaml is kept on purpose: prek runs the precommit() steps below (no hk builtin).
+local function precommit(hook: String, stage: String): Step = new {
+  check = "prek run --hook-stage \(stage) \(hook)" + (if (stage == "commit-msg" || stage == "prepare-commit-msg")
+    " --commit-msg-filename {{commit_msg_file}}"
+  else if (stage == "pre-commit" || stage == "pre-push" || stage == "manual")
+    " --files {{files}}"
+  else
+    "")
+  // pre-commit hooks may modify files in either mode
+  fix = check
+  check_first = false
+  // prek applies the hook's own file filters
+  allow_binary = true
+  allow_symlinks = true
+}
+
+// Like pre-commit, report every failing step instead of stopping at the first
+fail_fast = false
+
+steps {
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  // no hk builtin for check-yaml from https://github.com/pre-commit/pre-commit-hooks
+  ["check-yaml"] = precommit("check-yaml", "pre-commit")
+  // no hk builtin for check-toml from https://github.com/pre-commit/pre-commit-hooks
+  ["check-toml"] = precommit("check-toml", "pre-commit")
+  // no hk builtin for check-json from https://github.com/pre-commit/pre-commit-hooks
+  ["check-json"] = precommit("check-json", "pre-commit")
+  // no hk builtin for check-json5 from https://gitlab.com/bmares/check-json5
+  ["check-json5"] = precommit("check-json5", "pre-commit")
+  ["check-xml"] = Builtins.xmllint
+  ["check-added-large-files"] = Builtins.check_added_large_files
+  ["check-case-conflict"] = Builtins.check_case_conflict
+  ["check-merge-conflict"] = (Builtins.check_merge_conflict) {
+    // RST title over/underlines ("=======") are flagged as conflict markers by the builtin
+    exclude = "HISTORY.rst"
+  }
+  ["detect-private-key"] = Builtins.detect_private_key
+  ["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs
+  ["end-of-file-fixer"] = Builtins.newlines
+  // markdownlint-cli2 (not Builtins.markdown_lint, which runs markdownlint v1 and ignores .markdownlint-cli2.yaml)
+  ["markdownlint-cli2"] {
+    glob = List("**/*.md")
+    exclude = "docs/changelog.md"
+    check = "markdownlint-cli2 {{files}}"
+    fix = "markdownlint-cli2 --fix {{files}}"
+  }
+  ["shellcheck"] = Builtins.shellcheck
+  ["shfmt"] = Builtins.shfmt
+  // Builtins.yamllint hardcodes --strict; this repo lints with the relaxed ruleset
+  ["yamllint"] = (Builtins.yamllint) {
+    check = "yamllint --config-data relaxed --no-warnings {{files}}"
+  }
+  // no hk builtin for yamkix from https://github.com/looztra/yamkix
+  ["yamkix"] = precommit("yamkix", "pre-commit")
+  ["editorconfig"] = Builtins.editorconfig_checker
+  ["taplo"] = Builtins.taplo_format
+  ["ruff-format"] {
+    check = "uv run --frozen ruff format --check"
+  }
+  ["ruff-check"] {
+    check = "uv run --frozen ruff check"
+  }
+}
