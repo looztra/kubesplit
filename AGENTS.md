@@ -41,7 +41,7 @@ This document provides context and instructions for AI agents working on this re
 - **Tools**:
   - **Linting**: `ruff check` (or `poe ruff:lint`)
   - **Formatting**: `ruff format` (or `poe ruff:fmt:run`)
-  - **Markdown Linting**: `pre-commit run --all-files markdownlint-cli2` or `poe lint:all` (if configured)
+  - **Markdown Linting**: `hk check --all --step markdownlint-cli2` or `poe lint:all` (if configured)
   - **Type Checking**: `pyright` & `ty`
 - **Pre-check**: always run `poe lint:all` before submitting changes.
 - **End-of-session** (mandatory): before wrapping up any session, ALWAYS run — in order:
@@ -49,7 +49,7 @@ This document provides context and instructions for AI agents working on this re
   2. `poe lint:all` — run all linters (ruff, pylint, pyright).
   3. `poe test` — run the unit tests.
   4. `make integration-tests` — run the integration tests (`pytest -m integration`).
-  5. `pre-commit run --all-files` — run all configured hooks.
+  5. `hk check --all` — run all configured git hooks (hk, with prek for the hooks listed in `.pre-commit-config.yaml`).
   Linters and both test suites (unit and integration) MUST pass. Fix anything they
   report and re-run until every step passes clean before considering the work done.
 
@@ -96,4 +96,4 @@ This project uses `poethepoet` for task management. Common tasks:
 3. **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
 4. **Document Changes**: When a change requires it, update `docs/` following the Diátaxis framework (tutorials / how-to / reference / explanation) and register new pages in `mkdocs.yml`.
 5. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
-6. **Finish Clean**: End every session by running `poe style`, `poe lint:all`, `poe test`, `make integration-tests`, and `pre-commit run --all-files`. Linters and both test suites (unit and integration) MUST pass — resolve any issues they surface before considering the work complete.
+6. **Finish Clean**: End every session by running `poe style`, `poe lint:all`, `poe test`, `make integration-tests`, and `hk check --all`. Linters and both test suites (unit and integration) MUST pass — resolve any issues they surface before considering the work complete.

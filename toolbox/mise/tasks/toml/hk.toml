@@ -1,0 +1,11 @@
+["hk:install"]
+description = "Install the hk git hooks (same as 'make hk-install')"
+run = "hk install"
+
+["hk:check"]
+description = "Run all hk hooks in check mode on all files (same as 'make hk-check')"
+run = "hk check --all"
+
+["hk:fix"]
+description = "Run all hk hooks in fix mode on all files (same as 'make hk-fix')"
+run = "hk fix --all"

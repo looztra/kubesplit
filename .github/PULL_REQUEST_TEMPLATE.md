@@ -30,4 +30,4 @@ make integration-tests
 - [ ] `poe test` (unit tests) passes
 - [ ] `make integration-tests` passes
 - [ ] Docs updated under `docs/` (tutorials/how-to/reference/explanation) and registered in `mkdocs.yml`, if this changes CLI flags, behavior, or concepts
-- [ ] `pre-commit run --all-files` passes
+- [ ] `hk check --all` passes

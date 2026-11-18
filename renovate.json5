@@ -8,6 +8,23 @@
     enabled: true,
     automerge: true
   },
+  customManagers: [
+    {
+      // hk.pkl pins the hk pkl package in its `amends`/`import` URLs
+      customType: "regex",
+      description: "Update the hk pkl package version in hk.pkl",
+      managerFilePatterns: [
+        "/(^|/)hk\\.pkl$/"
+      ],
+      matchStrings: [
+        "package://github\\.com/jdx/hk/releases/download/v(?<currentValue>[^/]+)/hk@[^#]+#"
+      ],
+      autoReplaceStringTemplate: "package://github.com/jdx/hk/releases/download/v{{{newValue}}}/hk@{{{newValue}}}#",
+      depNameTemplate: "jdx/hk",
+      datasourceTemplate: "github-releases",
+      extractVersionTemplate: "^v(?<version>.*)$"
+    }
+  ],
   lockFileMaintenance: {
     enabled: true,
     automerge: true
@@ -18,7 +35,8 @@
         "pep621",
         "pip_requirements",
         "github-actions",
-        "pre-commit"
+        "pre-commit",
+        "custom.regex"
       ],
       minimumReleaseAge: "7 days"
     }
