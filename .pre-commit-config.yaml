@@ -16,7 +16,7 @@ repos:
       - id: check-json5
 
   - repo: https://github.com/looztra/yamkix
-    rev: v1.2.1
+    rev: v1.2.2
     hooks:
       - id: yamkix
         args: [--no-quotes-preserved, --silent]
